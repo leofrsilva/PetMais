@@ -107,6 +107,7 @@ class _AdocaoPageState extends ModularState<AdocaoPage, AdocaoController>
                         Modular.to.pop();
                         controller.home.setOffline();
                         controller.removerUsuarioLocalmente();
+                        Modular.to.pushNamedAndRemoveUntil("/auth", (_) => false);
                       });
                     } else {
                       Modular.to.pushNamedAndRemoveUntil("/auth", (_) => false);

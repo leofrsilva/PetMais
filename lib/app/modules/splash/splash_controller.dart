@@ -29,7 +29,7 @@ abstract class _SplashControllerBase with Store {
       if (user != null) {
         _recuperarUsuario(user);
       } else {
-        _homeScreen();
+        _authScreen();
       }
     });
   }
@@ -57,23 +57,29 @@ abstract class _SplashControllerBase with Store {
     if (result["Result"] == "Found User") {
       UsuarioModel user = UsuarioModel.fromMap(json.decode(result["User"]));
       auth.setUser(user);
+      _homeScreen();
     }
-    if (result["Result"] == "Falha na Conexão") {
+    else if (result["Result"] == "Falha na Conexão") {
       FlushbarHelper.createError(
         duration: Duration(milliseconds: 1775),
         title: "Error",
         message: "Falha na Conexão",
       )..show(context).then((_) {
-          _homeScreen();
+          _authScreen();
         });
-    } else if (result["Result"] == "Found User") {
-      _homeScreen();
     } else if (result["Result"] == "Not Found User") {
-      _homeScreen();
+      _authScreen();
     }
     else{
-      _homeScreen();
+      _authScreen();
     }
+  }
+
+  void _authScreen() {
+    Modular.to.pushNamedAndRemoveUntil(
+      "/auth",
+      (_) => false,
+    );
   }
 
   void _homeScreen() {

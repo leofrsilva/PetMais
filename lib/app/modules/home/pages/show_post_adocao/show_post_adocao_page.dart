@@ -41,6 +41,7 @@ class _ShowPostAdocaoPageState extends State<ShowPostAdocaoPage> {
   String sexo;
   Widget upd = Container();
   Widget delete = Container();
+  Widget btnEntrarEmContato = Container();
 
   @override
   void initState() {
@@ -66,6 +67,25 @@ class _ShowPostAdocaoPageState extends State<ShowPostAdocaoPage> {
         icon: Icon(Icons.delete_outline, color: Colors.white),
         onPressed: widget.onPressedDel,
       );
+    }
+
+    if(usuario != null){
+      if(post.idDono != usuario.usuarioInfoModel.id){
+        btnEntrarEmContato = Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 10),
+                        child: CustomButton(
+                          text: "ENTRAR EM CONTATO",
+                          corText: Colors.white,
+                          elevation: 0.0,
+                          width: size.width * 0.75,
+                          decoration: kDecorationContainerGradient,
+                          onPressed: () {
+                            Modular.to.pop(true);
+                          },
+                        ),
+                      );
+      }
+      
     }
 
     return Material(
@@ -225,23 +245,8 @@ class _ShowPostAdocaoPageState extends State<ShowPostAdocaoPage> {
                 ),
               ),
             ),
-            if (usuario != null)
-              post.idDono != usuario.usuarioInfoModel.id
-                  ? Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10),
-                      child: CustomButton(
-                        text: "ENTRAR EM CONTATO",
-                        corText: Colors.white,
-                        elevation: 0.0,
-                        width: size.width * 0.75,
-                        decoration: kDecorationContainerGradient,
-                        onPressed: () {
-                          Modular.to.pop(true);                          
-                          
-                        },
-                      ),
-                    )
-                  : Container(),
+            btnEntrarEmContato,
+               
           ],
         ),
       ),

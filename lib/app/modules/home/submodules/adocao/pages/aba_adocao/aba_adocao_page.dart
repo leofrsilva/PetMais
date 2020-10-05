@@ -167,10 +167,17 @@ class _AbaAdocaoPageState
                                                                 postAdotation:
                                                                     post,
                                                                 usuarioModel: controller
+                                                                            .adocao
+                                                                            .auth
+                                                                            .usuario
+                                                                            .usuarioInfoModel
+                                                                            .id !=
+                                                                        null
+                                                                    ? controller
                                                                         .adocao
                                                                         .auth
-                                                                        ?.usuario ??
-                                                                    null,
+                                                                        .usuario
+                                                                    : null,
                                                               ),
                                                             );
                                                           },
