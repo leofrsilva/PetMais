@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "1066456056195",
+    "firebase_url": "https://petchat-78c8d.firebaseio.com",
+    "project_id": "petchat-78c8d",
+    "storage_bucket": "petchat-78c8d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1066456056195:android:77038e5f1b8b6aac07f6b6",
+        "android_client_info": {
+          "package_name": "br.potatocompany.petmais"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1066456056195-enmcpg4c26td0velt26p4dgtm802lbv1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "br.potatocompany.petmais",
+            "certificate_hash": "f86f4815d543cd490b066693a04820b96c8a7225"
+          }
+        },
+        {
+          "client_id": "1066456056195-8tpqntcdqvv691nfseqiv7vbidqs7jr2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBBPZAcPkLSGREsc0wzTNRUlUr6jDYlDkc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1066456056195-8tpqntcdqvv691nfseqiv7vbidqs7jr2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
