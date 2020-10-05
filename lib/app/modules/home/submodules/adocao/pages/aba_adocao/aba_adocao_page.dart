@@ -22,6 +22,13 @@ class AbaAdocaoPage extends StatefulWidget {
 
 class _AbaAdocaoPageState
     extends ModularState<AbaAdocaoPage, AbaAdocaoController> {
+  Future<void> _onRefreshAdoption() async {
+    setState(() {
+      controller.recuperarAdocoes();
+    });
+    return;
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -141,88 +148,92 @@ class _AbaAdocaoPageState
                                             ? size.height * 0.793 -
                                                 size.height * 0.25
                                             : size.height * 0.793,
-                                        child: SingleChildScrollView(
-                                          child: Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.start,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.stretch,
-                                            children: posts.map((post) {
-                                              //i++;
-                                              return Column(
-                                                children: <Widget>[
-                                                  PostAdotation(
-                                                    postAdotationModel: post,
-                                                    onTap: () async {
-                                                      if (post.petImages
-                                                              .imgPrincipal !=
-                                                          null) {
-                                                        // _showAdocao(size, post, imageAdocao[index]);
-                                                        await Modular.to
-                                                            .showDialog(
-                                                          builder: (context) {
-                                                            return Center(
-                                                              child:
-                                                                  ShowPostAdocaoPage(
-                                                                postAdotation:
-                                                                    post,
-                                                                usuarioModel: controller
-                                                                            .adocao
-                                                                            .auth
-                                                                            .usuario
-                                                                            .usuarioInfoModel
-                                                                            .id !=
-                                                                        null
-                                                                    ? controller
-                                                                        .adocao
-                                                                        .auth
-                                                                        .usuario
-                                                                    : null,
-                                                              ),
-                                                            );
-                                                          },
-                                                        ).then((value) {
-                                                          if (value is bool &&
-                                                              value == true) {
-                                                            UsuarioChatModel
-                                                                usuarioChat =
-                                                                UsuarioChatModel(
-                                                              identifier:
-                                                                  post.idDono,
-                                                              name:
-                                                                  post.nomeDono,
-                                                              image: post.imgDono !=
-                                                                      "No Photo"
-                                                                  ? UsuarioRemoteRepository
-                                                                          .URL +
-                                                                      "/files/" +
-                                                                      post.imgDono
-                                                                  : "No Photo",
-                                                            );
-                                                            controller.adocao
-                                                                .tabController
-                                                                .animateTo(1);
-                                                            Future.delayed(
-                                                                Duration(
-                                                                  milliseconds:
-                                                                      200,
-                                                                ), () {
-                                                              bool viewed =
-                                                                  false;
-                                                              Modular.to.pushNamed(
-                                                                  "/home/chat/$viewed",
-                                                                  arguments:
-                                                                      usuarioChat);
-                                                            });
-                                                          }
-                                                        });
-                                                      }
-                                                    },
-                                                  ),
-                                                  Divider(),
-                                                ],
-                                              );
-                                            }).toList(),
+                                        child: RefreshIndicator(
+                                          color: DefaultColors.primary,
+                                          onRefresh: _onRefreshAdoption,
+                                          child: SingleChildScrollView(
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.stretch,
+                                              children: posts.map((post) {
+                                                //i++;
+                                                return Column(
+                                                  children: <Widget>[
+                                                    PostAdotation(
+                                                      postAdotationModel: post,
+                                                      onTap: () async {
+                                                        if (post.petImages
+                                                                .imgPrincipal !=
+                                                            null) {
+                                                          // _showAdocao(size, post, imageAdocao[index]);
+                                                          await Modular.to
+                                                              .showDialog(
+                                                            builder: (context) {
+                                                              return Center(
+                                                                child:
+                                                                    ShowPostAdocaoPage(
+                                                                  postAdotation:
+                                                                      post,
+                                                                  usuarioModel: controller
+                                                                              .adocao
+                                                                              .auth
+                                                                              .usuario
+                                                                              .usuarioInfoModel
+                                                                              .id !=
+                                                                          null
+                                                                      ? controller
+                                                                          .adocao
+                                                                          .auth
+                                                                          .usuario
+                                                                      : null,
+                                                                ),
+                                                              );
+                                                            },
+                                                          ).then((value) {
+                                                            if (value is bool &&
+                                                                value == true) {
+                                                              UsuarioChatModel
+                                                                  usuarioChat =
+                                                                  UsuarioChatModel(
+                                                                identifier:
+                                                                    post.idDono,
+                                                                name: post
+                                                                    .nomeDono,
+                                                                image: post.imgDono !=
+                                                                        "No Photo"
+                                                                    ? UsuarioRemoteRepository
+                                                                            .URL +
+                                                                        "/files/" +
+                                                                        post.imgDono
+                                                                    : "No Photo",
+                                                              );
+                                                              controller.adocao
+                                                                  .tabController
+                                                                  .animateTo(1);
+                                                              Future.delayed(
+                                                                  Duration(
+                                                                    milliseconds:
+                                                                        200,
+                                                                  ), () {
+                                                                bool viewed =
+                                                                    false;
+                                                                Modular.to.pushNamed(
+                                                                    "/home/chat/$viewed",
+                                                                    arguments:
+                                                                        usuarioChat);
+                                                              });
+                                                            }
+                                                          });
+                                                        }
+                                                      },
+                                                    ),
+                                                    Divider(),
+                                                  ],
+                                                );
+                                              }).toList(),
+                                            ),
                                           ),
                                         ),
                                       );
