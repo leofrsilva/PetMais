@@ -200,6 +200,7 @@ class _DrawerMenuPageState
                 controller.setSair(true);
                 controller.animationDrawer.closeDrawer();
                 controller.exitApp();
+                Modular.to.pushNamedAndRemoveUntil("/auth", (_) => false);
               },
             ),
           ],
