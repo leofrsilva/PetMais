@@ -16,84 +16,99 @@ class PostAdotation extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     String sexo = postAdotationModel.sexo == "M" ? "Macho" : "Fêmea";
-    return InkWell(
-      onTap: this.onTap,
+    return Material(
       child: Container(
         height: size.height * 0.211,
         margin: const EdgeInsets.all(12),
-        child: Row(
-          children: <Widget>[
-            _imagePost(postAdotationModel.petImages.imgPrincipal),
-            SizedBox(width: 20),
-            Container(
-              width: size.width - 194,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Row(
-                    children: <Widget>[
-                      Expanded(
-                        child: Text(
-                          postAdotationModel.nome,
-                          style: kLabelTitleStyle,
-                        ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: <Widget>[
-                      Expanded(
-                        child: Text(
-                          postAdotationModel.raca != "null"
-                              ? postAdotationModel.especie +
-                                  " - " +
-                                  postAdotationModel.raca +
-                                  " | " +
-                                  sexo
-                              : postAdotationModel.especie + " | " + sexo,
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: DefaultColors.secondarySmooth,
-                            fontFamily: "Changa",
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 6),
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      Expanded(
-                        child: Text(
-                          postAdotationModel.descricao,
-                          maxLines: 3,
-                          style: TextStyle(
-                            fontSize: 13,
-                            color: DefaultColors.background,
-                            fontFamily: "OpenSans",
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 4),
-                  Align(
-                    alignment: AlignmentDirectional.bottomEnd,
-                    child: Text(
-                      postAdotationModel.dataRegistro,
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontFamily: "RussoOne",
-                        color: DefaultColors.secondarySmooth,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+          color: Colors.white,
+          boxShadow: <BoxShadow>[
+            BoxShadow(
+              color: DefaultColors.primarySmooth,
+              offset: Offset(3.5, 3.5),
+              blurRadius: 2.0,
             ),
           ],
+        ),
+        child: InkWell(
+          onTap: this.onTap,
+          borderRadius: BorderRadius.circular(20),
+          child: Row(
+            children: <Widget>[
+              _imagePost(postAdotationModel.petImages.imgPrincipal),
+              SizedBox(width: 20),
+              Container(
+                padding: const EdgeInsets.only(right: 8),
+                width: size.width - 194,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Row(
+                      children: <Widget>[
+                        Expanded(
+                          child: Text(
+                            postAdotationModel.nome,
+                            style: kLabelTitleStyle,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: <Widget>[
+                        Expanded(
+                          child: Text(
+                            postAdotationModel.raca != "null"
+                                ? postAdotationModel.especie +
+                                    " - " + 
+                                    postAdotationModel.raca +
+                                    "\n" +
+                                    sexo
+                                : postAdotationModel.especie + " | " + sexo,
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: DefaultColors.secondarySmooth,
+                              fontFamily: "Changa",
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 6),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Expanded(
+                          child: Text(
+                            postAdotationModel.descricao,
+                            maxLines: 3,
+                            style: TextStyle(
+                              fontSize: 13,
+                              color: Colors.black26,
+                              fontFamily: "OpenSans",
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 4),
+                    Align(
+                      alignment: AlignmentDirectional.bottomEnd,
+                      child: Text(
+                        postAdotationModel.dataRegistro,
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontFamily: "RussoOne",
+                          color: DefaultColors.secondarySmooth,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

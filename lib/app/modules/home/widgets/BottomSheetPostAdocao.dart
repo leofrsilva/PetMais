@@ -1,21 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_modular/flutter_modular.dart';
 import 'package:petmais/app/modules/home/widgets/carousel/carousel_pro.dart';
-import 'package:petmais/app/shared/models/usuario/usuario_chat_model.dart';
+import 'package:petmais/app/shared/models/post_adocao/post_adocao_model.dart';
 import 'package:petmais/app/shared/models/usuario/usuario_model.dart';
 import 'package:petmais/app/shared/utils/colors.dart';
-import 'package:petmais/app/shared/models/post_adocao/post_adocao_model.dart';
 import 'package:petmais/app/shared/utils/font_style.dart';
 import 'package:petmais/app/shared/widgets/CustomButton.dart';
 
-class ShowPostAdocaoPage extends StatefulWidget {
+class BottomSheetPostAdocao extends StatefulWidget {
   final PostAdocaoModel postAdotation;
   final UsuarioModel usuarioModel;
   final bool isUpd;
   final bool isDelete;
   final Function onPressedUpd;
   final Function onPressedDel;
-  ShowPostAdocaoPage({
+  BottomSheetPostAdocao({
     this.postAdotation,
     this.usuarioModel,
     this.isUpd = false,
@@ -25,10 +23,10 @@ class ShowPostAdocaoPage extends StatefulWidget {
   });
 
   @override
-  _ShowPostAdocaoPageState createState() => _ShowPostAdocaoPageState();
+  _BottomSheetPostAdocaoState createState() => _BottomSheetPostAdocaoState();
 }
 
-class _ShowPostAdocaoPageState extends State<ShowPostAdocaoPage> {
+class _BottomSheetPostAdocaoState extends State<BottomSheetPostAdocao> {
   final TextStyle styleInf = TextStyle(
     color: DefaultColors.secondarySmooth,
     fontFamily: "Changa",
@@ -69,57 +67,31 @@ class _ShowPostAdocaoPageState extends State<ShowPostAdocaoPage> {
       );
     }
 
-    if(usuario != null){
-      if(post.idDono != usuario.usuarioInfoModel.id){
+    if (usuario != null) {
+      if (post.idDono != usuario.usuarioInfoModel.id) {
         btnEntrarEmContato = Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 10),
-                        child: CustomButton(
-                          text: "ENTRAR EM CONTATO",
-                          corText: Colors.white,
-                          elevation: 0.0,
-                          width: size.width * 0.75,
-                          decoration: kDecorationContainerGradient,
-                          onPressed: () {
-                            Modular.to.pop(true);
-                          },
-                        ),
-                      );
+          padding: const EdgeInsets.symmetric(vertical: 10),
+          child: CustomButton(
+            text: "ENTRAR EM CONTATO",
+            corText: Colors.white,
+            elevation: 0.0,
+            width: size.width * 0.75,
+            decoration: kDecorationContainerGradient,
+            onPressed: () {
+              Navigator.of(context).pop(true);
+            },
+          ),
+        );
       }
-      
     }
 
-    return Material(
-      borderRadius: BorderRadius.circular(20),
-      child: Container(
-        width: size.width * 0.88,
-        height: size.height * 0.92,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
-        ),
+    return Container(
+      height: size.height * 0.955,
+      color: Colors.white,
+      child: SingleChildScrollView(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
+          children: [
             Container(
-              height: 50,
-              width: size.width * 0.88,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                    colors: [
-                      DefaultColors.secondary,
-                      DefaultColors.primary,
-                    ],
-                    begin: AlignmentDirectional.topStart,
-                    end: AlignmentDirectional.bottomEnd,
-                    stops: [
-                      -0.2,
-                      1.0,
-                    ]),
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(20),
-                  topRight: Radius.circular(20),
-                ),
-              ),
-              // alignment: AlignmentDirectional.centerStart,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
@@ -127,13 +99,14 @@ class _ShowPostAdocaoPageState extends State<ShowPostAdocaoPage> {
                     child: Stack(
                       children: <Widget>[
                         Container(
+                          height: 50,
                           alignment: Alignment.center,
                           padding: const EdgeInsets.symmetric(horizontal: 20),
                           child: Text(
                             post.nome,
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                              color: Colors.white,
+                              color: Colors.black26,
                               fontWeight: FontWeight.w500,
                               fontFamily: "OpenSans",
                               fontSize: 20,
@@ -148,9 +121,9 @@ class _ShowPostAdocaoPageState extends State<ShowPostAdocaoPage> {
                             ),
                           ),
                           child: IconButton(
-                            icon: Icon(Icons.close, color: Colors.white),
+                            icon: Icon(Icons.close, color: Colors.black26),
                             onPressed: () {
-                              Modular.to.pop(false);
+                              Navigator.of(context).pop(false);
                             },
                           ),
                         ),
@@ -171,10 +144,9 @@ class _ShowPostAdocaoPageState extends State<ShowPostAdocaoPage> {
               ),
             ),
             Container(
-              width: size.width * 0.88,
+              width: size.width,
               height: size.height * 0.4,
-              color: DefaultColors.others.withOpacity(0.5),
-              child: Carousel(
+              child: Carousel(              
                 autoplay: false,
                 dotSize: 8,
                 dotBgColor: Colors.transparent,
@@ -241,7 +213,6 @@ class _ShowPostAdocaoPageState extends State<ShowPostAdocaoPage> {
               ),
             ),
             btnEntrarEmContato,
-               
           ],
         ),
       ),
@@ -253,6 +224,7 @@ class _ShowPostAdocaoPageState extends State<ShowPostAdocaoPage> {
 
     return listUrlImage.where((url) => url != "No Photo").map((url) {
       return Container(
+        margin: const EdgeInsets.all(8.0),
         height: 250,
         decoration: BoxDecoration(
           image: DecorationImage(
