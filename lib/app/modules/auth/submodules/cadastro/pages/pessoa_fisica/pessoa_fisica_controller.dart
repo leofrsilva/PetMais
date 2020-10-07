@@ -5,6 +5,7 @@ import 'package:flushbar/flushbar_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
@@ -76,10 +77,30 @@ abstract class _PessoaFisicaControllerBase extends Disposable with Store {
       imageSelected = await _picker.getImage(source: ImageSource.gallery);
     }
     if (imageSelected != null) {
-      await _treatImage(File(imageSelected.path)).then((File auxImage) {
-        setImage(File(imageSelected.path));
-        setCompressedImage(auxImage);
-      });
+      File img = File(imageSelected.path);
+      File auxImage = await ImageCropper.cropImage(
+          sourcePath: img.path,
+          aspectRatio: CropAspectRatio(ratioX: 1, ratioY: 1),
+          compressQuality: 95,          
+          cropStyle: CropStyle.circle,
+          compressFormat: ImageCompressFormat.jpg,
+          androidUiSettings: AndroidUiSettings(
+            toolbarTitle: 'Recortar',
+            toolbarColor: DefaultColors.primary,
+            toolbarWidgetColor: Colors.grey,
+            activeControlsWidgetColor: Colors.grey,
+            initAspectRatio: CropAspectRatioPreset.original,
+            lockAspectRatio: false,
+          ),
+          iosUiSettings: IOSUiSettings(
+            minimumAspectRatio: 1.0,
+          ));
+      if (auxImage != null) {
+        await _treatImage(auxImage).then((File imgFile) {
+          setImage(imgFile);
+          setCompressedImage(imgFile);
+        });
+      }
     }
   }
 
@@ -93,11 +114,13 @@ abstract class _PessoaFisicaControllerBase extends Disposable with Store {
       emailUser += letra.toString();
     }
 
-    Img.Image image = Img.decodeImage(fileImage.readAsBytesSync());
-    Img.Image smallerImg = Img.copyResize(image, width: 500);
+    // Img.Image image = Img.decodeImage(fileImage.readAsBytesSync());
+    // Img.Image smallerImg = Img.copyResize(image, width: 500);
 
+    // File compressImg = new File("$path/image_$emailUser.jpg")
+    //   ..writeAsBytesSync(Img.encodeJpg(smallerImg, quality: 10));
     File compressImg = new File("$path/image_$emailUser.jpg")
-      ..writeAsBytesSync(Img.encodeJpg(smallerImg, quality: 10));
+      ..writeAsBytesSync(fileImage.readAsBytesSync().toList());
     return compressImg;
   }
 
@@ -201,15 +224,17 @@ abstract class _PessoaFisicaControllerBase extends Disposable with Store {
       //* Start Loading
       this.showLoadin();
       this.cadastroController.setUsuarioInfoModel = usuarioInfo;
-      await this.cadastroController.cadastrar(this.compressedImage, true).then((String result) {
-        if (result == "Falha no Envio" || result == "Not Send"){
+      await this
+          .cadastroController
+          .cadastrar(this.compressedImage, true)
+          .then((String result) {
+        if (result == "Falha no Envio" || result == "Not Send") {
           //? Mensagem de Erro
           FlushbarHelper.createError(
             duration: Duration(milliseconds: 1500),
             message: "Erro ao Enviar Imagem!",
           )..show(this.context);
-        }
-        else if (result == "Registered") {
+        } else if (result == "Registered") {
           this.cadastroController.changePage(3);
         } else if (result == "Falha na Conexão") {
           //? Mensagem de Erro
@@ -275,9 +300,9 @@ abstract class _PessoaFisicaControllerBase extends Disposable with Store {
     focusSobrenome.dispose();
     focusData.dispose();
     focusTelefone.dispose();
-    if(image != null){
+    if (image != null) {
       image.delete();
-      compressedImage.delete(); 
+      compressedImage.delete();
     }
   }
 }

@@ -88,28 +88,26 @@ abstract class _PerfilControllerBase with Store {
     }
     if (imageSelected != null) {
       File img = File(imageSelected.path);
-      // File auxImage = await _treatImage(File(imageSelected.path));
       File auxImage = await ImageCropper.cropImage(
-        sourcePath: img.path,
-        aspectRatio: CropAspectRatio(ratioX: 1, ratioY: 1),
-        compressQuality: 100,
-        maxWidth: 500,
-        maxHeight: 500,
-        cropStyle: CropStyle.circle,
-        compressFormat: ImageCompressFormat.jpg,
-    
-        androidUiSettings: AndroidUiSettings(
+          sourcePath: img.path,
+          aspectRatio: CropAspectRatio(ratioX: 1, ratioY: 1),
+          compressQuality: 95,
+          cropStyle: CropStyle.circle,
+          compressFormat: ImageCompressFormat.jpg,
+          androidUiSettings: AndroidUiSettings(
             toolbarTitle: 'Recortar',
             toolbarColor: DefaultColors.primary,
             toolbarWidgetColor: Colors.grey,
             activeControlsWidgetColor: Colors.grey,
             initAspectRatio: CropAspectRatioPreset.original,
-            lockAspectRatio: false,),
-        iosUiSettings: IOSUiSettings(
-          minimumAspectRatio: 1.0,
-        )
-      );
-      return await _treatImage(auxImage);
+            lockAspectRatio: false,
+          ),
+          iosUiSettings: IOSUiSettings(
+            minimumAspectRatio: 1.0,
+          ));
+      if (auxImage != null) {
+        return await _treatImage(auxImage);
+      }
     }
     return null;
   }
@@ -134,9 +132,6 @@ abstract class _PerfilControllerBase with Store {
     } else {
       this.isDeleteImgDepreciada = true;
     }
-
-    // Img.Image image = Img.decodeImage(fileImage.readAsBytesSync());
-    // Img.Image smallerImg = Img.copyResize(image, width: 500);
 
     File compressImg = new File("$path/image_$emailUser")
       ..writeAsBytesSync(fileImage.readAsBytesSync().toList());
