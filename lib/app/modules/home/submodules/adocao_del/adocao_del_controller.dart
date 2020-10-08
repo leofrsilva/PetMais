@@ -51,24 +51,27 @@ abstract class _AdocaoDelControllerBase with Store {
   }
 
   void showLoading() {
-    Modular.to.showDialog(builder: (_) {
-      return AlertDialog(
-        backgroundColor: Colors.transparent,
-        elevation: 0.0,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(15.0),
-        ),
-        content: Center(
-          child: Container(
-            color: Colors.transparent,
-            height: 40,
-            width: 40,
-            child: CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation(DefaultColors.primarySmooth),
+    Modular.to.showDialog(
+        barrierDismissible: false,
+        builder: (_) {
+          return AlertDialog(
+            backgroundColor: Colors.transparent,
+            elevation: 0.0,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15.0),
             ),
-          ),
-        ),
-      );
-    });
+            content: Center(
+              child: Container(
+                color: Colors.transparent,
+                height: 40,
+                width: 40,
+                child: CircularProgressIndicator(
+                  valueColor:
+                      AlwaysStoppedAnimation(DefaultColors.primarySmooth),
+                ),
+              ),
+            ),
+          );
+        });
   }
 }

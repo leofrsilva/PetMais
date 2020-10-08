@@ -224,37 +224,35 @@ abstract class _LoginControllerBase extends Disposable with Store {
   @action
   Future logar() async {
     if (formKey.currentState.validate()) {
-      
-        this.setError(false);
-        this.setLoading(true);
+      this.setError(false);
+      this.setLoading(true);
 
-        await authController
-            .entrar(
-          email: this.emailController.text.trim().toLowerCase(),
-          senha: this.senhaController.text.trim(),
-        )
-            .then((String result) {
-          this.setLoading(false);
-          if (result == "Falha na Conexão") {
-            //? Mensagem de Erro
-            FlushbarHelper.createError(
-              duration: Duration(milliseconds: 1750),
-              message: "Erro na Conexão!",
-            )..show(this.context);
-          }
-          if (result == "Found User") {
-            //? Direcionar para tela Princiapl
-            _signMainScreen();
-          } else if (result == "Not Found User") {
-            //? Dados do Login Incorreto
-            FlushbarHelper.createInformation(
-              duration: Duration(milliseconds: 1750),
-              title: "Autenticação",
-              message: "Email ou Senha Incorreta!",
-            )..show(this.context);
-          }
-        });
-      
+      await authController
+          .entrar(
+        email: this.emailController.text.trim().toLowerCase(),
+        senha: this.senhaController.text.trim(),
+      )
+          .then((String result) {
+        this.setLoading(false);
+        if (result == "Falha na Conexão") {
+          //? Mensagem de Erro
+          FlushbarHelper.createError(
+            duration: Duration(milliseconds: 1750),
+            message: "Erro na Conexão!",
+          )..show(this.context);
+        }
+        if (result == "Found User") {
+          //? Direcionar para tela Princiapl
+          _signMainScreen();
+        } else if (result == "Not Found User") {
+          //? Dados do Login Incorreto
+          FlushbarHelper.createInformation(
+            duration: Duration(milliseconds: 1750),
+            title: "Autenticação",
+            message: "Email ou Senha Incorreta!",
+          )..show(this.context);
+        }
+      });
     } else {
       this.setError(true);
       this.setLoading(false);
@@ -311,25 +309,28 @@ abstract class _LoginControllerBase extends Disposable with Store {
   }
 
   void showLoading() {
-    Modular.to.showDialog(builder: (_) {
-      return AlertDialog(
-        backgroundColor: Colors.transparent,
-        elevation: 0.0,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(15.0),
-        ),
-        content: Center(
-          child: Container(
-            color: Colors.transparent,
-            height: 40,
-            width: 40,
-            child: CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation(DefaultColors.primarySmooth),
+    Modular.to.showDialog(
+        barrierDismissible: false,
+        builder: (_) {
+          return AlertDialog(
+            backgroundColor: Colors.transparent,
+            elevation: 0.0,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15.0),
             ),
-          ),
-        ),
-      );
-    });
+            content: Center(
+              child: Container(
+                color: Colors.transparent,
+                height: 40,
+                width: 40,
+                child: CircularProgressIndicator(
+                  valueColor:
+                      AlwaysStoppedAnimation(DefaultColors.primarySmooth),
+                ),
+              ),
+            ),
+          );
+        });
   }
 
   @override

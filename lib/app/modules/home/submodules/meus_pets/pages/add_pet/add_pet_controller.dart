@@ -462,34 +462,36 @@ abstract class _AddPetControllerBase extends Disposable with Store {
   }
 
   showLoading() {
-    Modular.to.showDialog(builder: (_) {
-      return AlertDialog(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(15.0),
-        ),
-        content: Container(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              CircularProgressIndicator(
-                valueColor:
-                    AlwaysStoppedAnimation<Color>(DefaultColors.secondary),
+    Modular.to.showDialog(
+        barrierDismissible: false,
+        builder: (_) {
+          return AlertDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15.0),
+            ),
+            content: Container(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  CircularProgressIndicator(
+                    valueColor:
+                        AlwaysStoppedAnimation<Color>(DefaultColors.secondary),
+                  ),
+                  SizedBox(height: 15.0),
+                  Text(
+                    "Carregando ...",
+                    style: TextStyle(
+                      color: DefaultColors.secondary,
+                      fontFamily: "Changa",
+                      fontSize: 24,
+                    ),
+                  ),
+                ],
               ),
-              SizedBox(height: 15.0),
-              Text(
-                "Carregando ...",
-                style: TextStyle(
-                  color: DefaultColors.secondary,
-                  fontFamily: "Changa",
-                  fontSize: 24,
-                ),
-              ),
-            ],
-          ),
-        ),
-      );
-    });
+            ),
+          );
+        });
   }
 
   @override

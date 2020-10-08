@@ -187,33 +187,35 @@ abstract class _PerfilPetControllerBase extends Disposable with Store {
   }
 
   void showLoading() {
-    Modular.to.showDialog(builder: (_) {
-      return AlertDialog(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(15.0),
-        ),
-        content: Container(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation(DefaultColors.secondary),
+    Modular.to.showDialog(
+        barrierDismissible: false,
+        builder: (_) {
+          return AlertDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15.0),
+            ),
+            content: Container(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation(DefaultColors.secondary),
+                  ),
+                  SizedBox(height: 15.0),
+                  Text(
+                    "Carregando ...",
+                    style: TextStyle(
+                      color: DefaultColors.secondary,
+                      fontFamily: "Changa",
+                      fontSize: 24,
+                    ),
+                  ),
+                ],
               ),
-              SizedBox(height: 15.0),
-              Text(
-                "Carregando ...",
-                style: TextStyle(
-                  color: DefaultColors.secondary,
-                  fontFamily: "Changa",
-                  fontSize: 24,
-                ),
-              ),
-            ],
-          ),
-        ),
-      );
-    });
+            ),
+          );
+        });
   }
 
   Future<PostAdocaoModel> recuperarPetAdocao() async {
@@ -238,8 +240,7 @@ abstract class _PerfilPetControllerBase extends Disposable with Store {
         descricao: adocao["descricao"],
       );
       return postAdocao;
-    }
-    else{
+    } else {
       return null;
     }
   }
