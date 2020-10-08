@@ -214,7 +214,7 @@ abstract class _UpdatePetImagesControllerBase extends Disposable with Store {
       File img = File(imageSelected.path);
       File auxImage = await ImageCropper.cropImage(
           sourcePath: img.path,
-          aspectRatio: CropAspectRatio(ratioX: 1, ratioY: 1),
+          // aspectRatio: CropAspectRatio(ratioX: 1, ratioY: 1),
           compressQuality: 95,
           cropStyle: CropStyle.circle,
           compressFormat: ImageCompressFormat.jpg,
