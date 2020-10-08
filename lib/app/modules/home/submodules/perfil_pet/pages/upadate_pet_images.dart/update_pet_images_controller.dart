@@ -11,7 +11,6 @@ import 'package:petmais/app/shared/models/pet/pet_images_model.dart';
 import 'package:petmais/app/shared/utils/colors.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
-import 'package:image/image.dart' as Img;
 import 'package:petmais/app/shared/utils/font_style.dart';
 
 import '../../perfil_pet_controller.dart';

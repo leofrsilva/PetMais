@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flushbar/flushbar_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
@@ -8,10 +6,8 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import 'package:mobx/mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:petmais/app/modules/home/home_controller.dart';
 import 'package:petmais/app/shared/models/pet/pet_model.dart';
-import 'package:image/image.dart' as Img;
 import 'package:petmais/app/shared/models/usuario/usuario_model.dart';
 import 'package:petmais/app/shared/repository/adocao_remote/adocao_remote_repository.dart';
 import 'package:petmais/app/shared/repository/pet_remote/pet_remote_repository.dart';

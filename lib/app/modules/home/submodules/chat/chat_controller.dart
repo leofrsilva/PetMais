@@ -4,6 +4,8 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mobx/mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -15,8 +17,8 @@ import 'package:petmais/app/modules/home/submodules/chat/utils/date_now.dart';
 import 'package:petmais/app/shared/models/usuario/usuario_chat_model.dart';
 import 'package:petmais/app/shared/repository/usuario_remote/usuario_remote_repository.dart';
 import 'package:petmais/app/shared/stores/auth/auth_store.dart';
-import 'package:image/image.dart' as Img;
 import 'package:http_parser/http_parser.dart';
+import 'package:petmais/app/shared/utils/colors.dart';
 
 part 'chat_controller.g.dart';
 
@@ -187,8 +189,25 @@ abstract class _ChatControllerBase extends Disposable with Store {
     }
     this.setSelectedImage(false);
     if (imageSelected != null) {
+      File img = File(imageSelected.path);
+      File auxImage = await ImageCropper.cropImage(
+          sourcePath: img.path,
+          compressQuality: 95,
+          cropStyle: CropStyle.rectangle,
+          compressFormat: ImageCompressFormat.jpg,
+          androidUiSettings: AndroidUiSettings(
+            toolbarTitle: 'Recortar',
+            toolbarColor: DefaultColors.primary,
+            toolbarWidgetColor: Colors.grey,
+            activeControlsWidgetColor: Colors.grey,
+            initAspectRatio: CropAspectRatioPreset.original,
+            lockAspectRatio: false,
+          ),
+          iosUiSettings: IOSUiSettings(
+            minimumAspectRatio: 1.0,
+          ));
       this.setLoading(true);
-      _sendImage(File(imageSelected.path));
+      _sendImage(auxImage);
     }
   }
 
@@ -201,12 +220,11 @@ abstract class _ChatControllerBase extends Disposable with Store {
       String path = tempDir.path;
       //? String title = _titleController.text;
       String rand = DateTime.now().millisecondsSinceEpoch.toString();
-
-      Img.Image image = Img.decodeImage(fileImage.readAsBytesSync());
-      Img.Image smallerImg = Img.copyResize(image, width: 500);
+      // Img.Image image = Img.decodeImage(fileImage.readAsBytesSync());
+      // Img.Image smallerImg = Img.copyResize(image, width: 500);
 
       File compressImg = new File("$path/image_$rand.jpg")
-        ..writeAsBytesSync(Img.encodeJpg(smallerImg, quality: 10));
+        ..writeAsBytesSync(fileImage.readAsBytesSync().toList());
 
       if (compressImg != null) {
         String urlImage = UsuarioRemoteRepository.URL +

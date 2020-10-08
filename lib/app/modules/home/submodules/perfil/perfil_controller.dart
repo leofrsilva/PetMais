@@ -19,7 +19,6 @@ import 'package:petmais/app/shared/repository/pet_remote/pet_remote_repository.d
 import 'package:petmais/app/shared/repository/usuario_remote/usuario_remote_repository.dart';
 import 'package:petmais/app/shared/utils/colors.dart';
 import '../../home_controller.dart';
-import 'package:image/image.dart' as Img;
 
 part 'perfil_controller.g.dart';
 

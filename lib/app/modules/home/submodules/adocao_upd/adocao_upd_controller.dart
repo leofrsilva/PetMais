@@ -1,4 +1,3 @@
-import 'dart:io';
 
 import 'package:flushbar/flushbar_helper.dart';
 import 'package:flutter/material.dart';
@@ -8,12 +7,10 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import 'package:mobx/mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:petmais/app/modules/home/submodules/add_adocao/models/adocao/adocao_model.dart';
 import 'package:petmais/app/shared/models/post_adocao/post_adocao_model.dart';
 import 'package:petmais/app/shared/repository/adocao_remote/adocao_remote_repository.dart';
 import 'package:petmais/app/shared/utils/colors.dart';
-import 'package:image/image.dart' as Img;
 
 part 'adocao_upd_controller.g.dart';
 
