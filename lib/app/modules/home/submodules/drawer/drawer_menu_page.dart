@@ -148,9 +148,9 @@ class _DrawerMenuPageState
             _tilesImage(
               title: "ADOÇÂO",
               url: "assets/images/btnAdocao.png",
-              selected: controller.opSelected == 0 ? true : false,
+              selected: controller.opSelected == 1 ? true : false,
               onTap: () {
-                controller.setOpSelected(0);
+                controller.setOpSelected(1);
                 controller.animationDrawer.closeDrawer();
               },
             ),
@@ -158,24 +158,15 @@ class _DrawerMenuPageState
             _tilesImage(
               title: "PET SHOP",
               url: "assets/images/btnPetShop.png",
-              selected: controller.opSelected == -1 ? true : false,
+              selected: controller.opSelected == 0 ? true : false,
               onTap: () {
-                // controller.setOpSelected(0);
-                // controller.animationDrawer.closeDrawer();
+                controller.setOpSelected(0);
+                controller.animationDrawer.closeDrawer();
               },
             ),
             _tiles(
               title: "PERFIL",
               icon: Icons.account_circle,
-              selected: controller.opSelected == 1 ? true : false,
-              onTap: () {
-                controller.setOpSelected(1);
-                controller.animationDrawer.closeDrawer();
-              },
-            ),
-            _tiles(
-              title: "MEUS PETS",
-              icon: Icons.pets,
               selected: controller.opSelected == 2 ? true : false,
               onTap: () {
                 controller.setOpSelected(2);
@@ -183,11 +174,20 @@ class _DrawerMenuPageState
               },
             ),
             _tiles(
+              title: "MEUS PETS",
+              icon: Icons.pets,
+              selected: controller.opSelected == 3 ? true : false,
+              onTap: () {
+                controller.setOpSelected(3);
+                controller.animationDrawer.closeDrawer();
+              },
+            ),
+            _tiles(
               title: "USUÁRIOS",
               icon: Icons.search,
-              selected: controller.opSelected == 3 ? true : false,
+              selected: controller.opSelected == 4 ? true : false,
               onTap: () async {
-                controller.setOpSelected(3);
+                controller.setOpSelected(4);
                 controller.animationDrawer.closeDrawer();
               },
             ),

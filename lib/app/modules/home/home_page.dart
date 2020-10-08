@@ -111,8 +111,7 @@ class _HomePageState extends ModularState<HomePage, HomeController> with Widgets
                        addAutomaticKeepAlives: false,
                        addRepaintBoundaries: false,
                        addSemanticIndexes: false,                       
-                     ),
-                     
+                     ),                     
                     // children: controller.modulesScreen,
                   ),
                 ),

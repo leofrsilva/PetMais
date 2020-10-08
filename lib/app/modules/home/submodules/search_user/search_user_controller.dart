@@ -50,6 +50,6 @@ abstract class _SearchUserControllerBase with Store {
   }
 
   void exit(){
-    this._homeController.changePage(0);
+    this._homeController.changePage(1);
   }
 }

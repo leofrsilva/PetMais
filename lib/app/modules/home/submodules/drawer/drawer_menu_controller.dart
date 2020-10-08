@@ -46,7 +46,7 @@ abstract class _DrawerMenuControllerBase with Store {
 
   Future exitApp() async {
     this._homeController.exit().then((value) {
-      this._homeController.changePage(0);
+      this._homeController.changePage(1);
       Modular.to.showDialog(builder: (_) {
         return AlertDialog(
           backgroundColor: Colors.transparent,

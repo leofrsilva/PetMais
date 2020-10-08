@@ -158,7 +158,7 @@ class _PerfilPageState extends ModularState<PerfilPage, PerfilController> {
               child: IconButton(
                 icon: Icon(Icons.pets, color: DefaultColors.secondary),
                 onPressed: () {
-                  controller.home.changePage(2);
+                  controller.home.changePage(3);
                 },
               ),
             ),

@@ -10,6 +10,7 @@ import 'package:petmais/app/shared/stores/auth/auth_store.dart';
 import 'submodules/adocao/adocao_module.dart';
 import 'submodules/meus_pets/meus_pets_module.dart';
 import 'submodules/perfil/perfil_module.dart';
+import 'submodules/pet_shop/pet_shop_module.dart';
 import 'submodules/search_user/search_user_module.dart';
 
 part 'home_controller.g.dart';
@@ -28,13 +29,13 @@ abstract class _HomeControllerBase extends Disposable with Store {
   PageController pageController;
   _HomeControllerBase(this._authStore, this._animationDrawerController,
       this._firestoreChatRepository) {
-    pageController = PageController(initialPage: 0, keepPage: false);
+    pageController = PageController(initialPage: 1, keepPage: false);
   }
 
   double get maxExtentPages => this.pageController.position.maxScrollExtent;
 
   @observable
-  double screen = 0;
+  double screen = 1;
 
   @action
   setScreen(double value) => this.screen = value;
@@ -54,6 +55,7 @@ abstract class _HomeControllerBase extends Disposable with Store {
   }
 
   List<Widget> modulesScreen = <Widget>[
+    RouterOutlet(module: PetShopModule()),
     RouterOutlet(module: AdocaoModule()),
     RouterOutlet(module: PerfilModule()),
     RouterOutlet(module: MeusPetsModule()),

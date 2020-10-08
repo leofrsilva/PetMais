@@ -15,6 +15,10 @@ class DefaultColors {
   static final Color primarySmooth = Color(0xff66FFB3).withOpacity(0.5);
   static final Color secondary = Color(0xff00B0B8);
   static final Color secondarySmooth =  Color(0xff00B0B8).withOpacity(0.5);
+
+  static final Color tertiary = Color(0xffffff75);
+  static final Color tertiarySmooth =  Color(0xffffff75).withOpacity(0.5);
+
   static final Color background = Color(0xff21eb13);
   static final Color backgroundSmooth = Color(0xff6aed61).withOpacity(0.75);
   static final Color error = Color(0xffcf6679);
