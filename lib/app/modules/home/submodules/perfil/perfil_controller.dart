@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flushbar/flushbar_helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mobx/mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -86,8 +87,27 @@ abstract class _PerfilControllerBase with Store {
       imageSelected = await _picker.getImage(source: ImageSource.gallery);
     }
     if (imageSelected != null) {
-      File auxImage = await _treatImage(File(imageSelected.path));
-      return auxImage;
+      File img = File(imageSelected.path);
+      File auxImage = await ImageCropper.cropImage(
+          sourcePath: img.path,
+          // aspectRatio: CropAspectRatio(ratioX: 1, ratioY: 1),
+          compressQuality: 95,
+          cropStyle: CropStyle.circle,
+          compressFormat: ImageCompressFormat.jpg,
+          androidUiSettings: AndroidUiSettings(
+            toolbarTitle: 'Recortar',
+            toolbarColor: DefaultColors.primary,
+            toolbarWidgetColor: Colors.grey,
+            activeControlsWidgetColor: Colors.grey,
+            initAspectRatio: CropAspectRatioPreset.original,
+            lockAspectRatio: false,
+          ),
+          iosUiSettings: IOSUiSettings(
+            minimumAspectRatio: 1.0,
+          ));
+      if (auxImage != null) {
+        return await _treatImage(auxImage);
+      }
     }
     return null;
   }
@@ -113,11 +133,8 @@ abstract class _PerfilControllerBase with Store {
       this.isDeleteImgDepreciada = true;
     }
 
-    Img.Image image = Img.decodeImage(fileImage.readAsBytesSync());
-    Img.Image smallerImg = Img.copyResize(image, width: 500);
-
     File compressImg = new File("$path/image_$emailUser")
-      ..writeAsBytesSync(Img.encodeJpg(smallerImg, quality: 10));
+      ..writeAsBytesSync(fileImage.readAsBytesSync().toList());
     return compressImg;
   }
 

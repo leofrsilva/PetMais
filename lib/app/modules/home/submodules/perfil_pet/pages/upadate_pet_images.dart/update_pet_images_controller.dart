@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flushbar/flushbar_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mobx/mobx.dart';
 import 'package:network_to_file_image/network_to_file_image.dart';
@@ -188,15 +189,17 @@ abstract class _UpdatePetImagesControllerBase extends Disposable with Store {
 
     int index = this.totalImg;
     File imagem = await _captureFoto(op);
-    File tmpImagem = await _treatImage(imagem, index + 1);
-    Map<String, dynamic> map = {
-      "widget": FileImage(imagem),
-      "url": tmpImagem.path,
-      "file": tmpImagem,
-    };
-    bool isImgExist = this.listImages.contains(map);
-    if (!isImgExist) {
-      this.addItem(map);
+    if (imagem != null) {
+      File tmpImagem = await _treatImage(imagem, index + 1);
+      Map<String, dynamic> map = {
+        "widget": FileImage(imagem),
+        "url": tmpImagem.path,
+        "file": tmpImagem,
+      };
+      bool isImgExist = this.listImages.contains(map);
+      if (!isImgExist) {
+        this.addItem(map);
+      }
     }
   }
 
@@ -208,7 +211,27 @@ abstract class _UpdatePetImagesControllerBase extends Disposable with Store {
       imageSelected = await _picker.getImage(source: ImageSource.gallery);
     }
     if (imageSelected != null) {
-      return File(imageSelected.path);
+      File img = File(imageSelected.path);
+      File auxImage = await ImageCropper.cropImage(
+          sourcePath: img.path,
+          // aspectRatio: CropAspectRatio(ratioX: 1, ratioY: 1),
+          compressQuality: 95,
+          cropStyle: CropStyle.circle,
+          compressFormat: ImageCompressFormat.jpg,
+          androidUiSettings: AndroidUiSettings(
+            toolbarTitle: 'Recortar',
+            toolbarColor: DefaultColors.primary,
+            toolbarWidgetColor: Colors.grey,
+            activeControlsWidgetColor: Colors.grey,
+            initAspectRatio: CropAspectRatioPreset.original,
+            lockAspectRatio: false,
+          ),
+          iosUiSettings: IOSUiSettings(
+            minimumAspectRatio: 1.0,
+          ));
+      if (auxImage != null) {
+        return auxImage;
+      }
     }
     return null;
   }
@@ -240,11 +263,8 @@ abstract class _UpdatePetImagesControllerBase extends Disposable with Store {
       }
     }
 
-    Img.Image image = Img.decodeImage(fileImage.readAsBytesSync());
-    Img.Image smallerImg = Img.copyResize(image, width: 500);
-
     File compressImg = new File("$path/$caminho")
-      ..writeAsBytesSync(Img.encodeJpg(smallerImg, quality: 10));
+      ..writeAsBytesSync(fileImage.readAsBytesSync().toList());
     print(compressImg.toString());
     return compressImg;
   }

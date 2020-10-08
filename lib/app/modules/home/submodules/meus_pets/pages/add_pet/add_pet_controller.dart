@@ -2,6 +2,7 @@ import 'dart:collection';
 import 'dart:io';
 
 import 'package:flushbar/flushbar_helper.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:petmais/app/modules/home/submodules/add_adocao/models/adocao/adocao_model.dart';
 import 'package:petmais/app/shared/models/pet/pet_images_model.dart';
 import 'package:petmais/app/shared/models/pet/pet_model.dart';
@@ -179,9 +180,29 @@ abstract class _AddPetControllerBase extends Disposable with Store {
       imageSelected = await _picker.getImage(source: ImageSource.gallery);
     }
     if (imageSelected != null) {
-      await _treatImage(File(imageSelected.path)).then((File auxImage) {
-        this.addItem(auxImage);
-      });
+      File img = File(imageSelected.path);
+      File auxImage = await ImageCropper.cropImage(
+          sourcePath: img.path,
+          // aspectRatio: CropAspectRatio(ratioX: 1, ratioY: 1),
+          compressQuality: 95,
+          cropStyle: CropStyle.circle,
+          compressFormat: ImageCompressFormat.jpg,
+          androidUiSettings: AndroidUiSettings(
+            toolbarTitle: 'Recortar',
+            toolbarColor: DefaultColors.primary,
+            toolbarWidgetColor: Colors.grey,
+            activeControlsWidgetColor: Colors.grey,
+            initAspectRatio: CropAspectRatioPreset.original,
+            lockAspectRatio: false,
+          ),
+          iosUiSettings: IOSUiSettings(
+            minimumAspectRatio: 1.0,
+          ));
+      if (auxImage != null) {
+        await _treatImage(auxImage).then((File imgFile) {
+          this.addItem(imgFile);
+        });
+      }
     }
   }
 
@@ -192,11 +213,8 @@ abstract class _AddPetControllerBase extends Disposable with Store {
     String id = this.usuario.usuarioInfoModel.id.toString();
     String rand = DateTime.now().millisecondsSinceEpoch.toString();
 
-    Img.Image image = Img.decodeImage(fileImage.readAsBytesSync());
-    Img.Image smallerImg = Img.copyResize(image, width: 500);
-
     File compressImg = new File("$path/image_$id" + "_$rand.jpg")
-      ..writeAsBytesSync(Img.encodeJpg(smallerImg, quality: 10));
+      ..writeAsBytesSync(fileImage.readAsBytesSync().toList());
     print(compressImg.toString());
     return compressImg;
   }

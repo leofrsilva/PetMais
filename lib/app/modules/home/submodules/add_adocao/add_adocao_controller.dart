@@ -160,24 +160,6 @@ abstract class _AddAdocaoControllerBase extends Disposable with Store {
       );
       //* Start Loading
       this.showLoading();
-      // bool isImage = false;
-      // if (this.typeImg == "File") {
-      //   isImage = true;
-      //   await this
-      //       ._adocaoRemoteRepository
-      //       .uploadImageAdocao(this.tmpImage)
-      //       .then((Map<String, dynamic> result) {
-      //     if (result["Result"] == "Falha no Envio") {
-      //       Modular.to.pop();
-      //       //? Mensagem de Erro
-      //       FlushbarHelper.createError(
-      //         duration: Duration(milliseconds: 1500),
-      //         message: "Erro na Conexão!",
-      //       )..show(this.context);
-      //       return;
-      //     }
-      //   });
-      // }
       await this
           ._adocaoRemoteRepository
           .registerAdocao(adocaoModel)
@@ -208,28 +190,6 @@ abstract class _AddAdocaoControllerBase extends Disposable with Store {
     } else {
       setError(true);
     }
-    // if (_descricaoController.text.isNotEmpty) {
-    //   if (_pet != null) {
-    //     _verificarEmail();
-    //     _verificarTelefone();
-    //     if (_emailController.text.isNotEmpty &&
-    //         _phoneController.text.isNotEmpty) {
-    //       _sendForAdocao();
-    //     }
-    //   } else {
-    //     final snack = NotificationSnack.snackBarError(
-    //       text: "Algum Pet deve ser selecionado!",
-    //       textColor: Colors.red.withOpacity(0.55),
-    //     );
-    //     _scaffoldKey.currentState.showSnackBar(snack);
-    //   }
-    // } else {
-    //   final snack = NotificationSnack.snackBarError(
-    //     text: "A descrição deve ser preenchida!",
-    //     textColor: Colors.red.withOpacity(0.55),
-    //   );
-    //   _scaffoldKey.currentState.showSnackBar(snack);
-    // }
   }
 
   //* Formatar Data
