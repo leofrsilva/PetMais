@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:petmais/app/modules/home/widgets/carousel/carousel_pro.dart';
 import 'package:petmais/app/shared/models/post_adocao/post_adocao_model.dart';
 import 'package:petmais/app/shared/models/usuario/usuario_model.dart';
@@ -29,6 +30,12 @@ class BottomSheetPostAdocao extends StatefulWidget {
 class _BottomSheetPostAdocaoState extends State<BottomSheetPostAdocao> {
   final TextStyle styleInf = TextStyle(
     color: DefaultColors.secondarySmooth,
+    fontFamily: "Changa",
+    fontSize: 16,
+  );
+
+  final TextStyle styleInfAux = TextStyle(
+    color: Colors.white,
     fontFamily: "Changa",
     fontSize: 16,
   );
@@ -99,7 +106,7 @@ class _BottomSheetPostAdocaoState extends State<BottomSheetPostAdocao> {
                     child: Stack(
                       children: <Widget>[
                         Container(
-                          height: 50,
+                          height: size.height * 0.07,
                           alignment: Alignment.center,
                           padding: const EdgeInsets.symmetric(horizontal: 20),
                           child: Text(
@@ -114,6 +121,7 @@ class _BottomSheetPostAdocaoState extends State<BottomSheetPostAdocao> {
                           ),
                         ),
                         Container(
+                          height: size.height * 0.07,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.only(
                               topLeft: Radius.circular(20),
@@ -146,7 +154,7 @@ class _BottomSheetPostAdocaoState extends State<BottomSheetPostAdocao> {
             Container(
               width: size.width,
               height: size.height * 0.4,
-              child: Carousel(              
+              child: Carousel(
                 autoplay: false,
                 dotSize: 8,
                 dotBgColor: Colors.transparent,
@@ -156,60 +164,111 @@ class _BottomSheetPostAdocaoState extends State<BottomSheetPostAdocao> {
               ),
             ),
             Container(
-              height: usuario != null
-                  ? size.height * 0.8 - (size.height * 0.4 + 50)
-                  : size.height * 0.4,
+              // height: usuario != null
+              //     ? size.height * 0.8 - (size.height * 0.4 + 50)
+              //     : size.height * 0.4,
               padding:
                   const EdgeInsets.symmetric(vertical: 4.0, horizontal: 10.0),
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Row(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Row(
+                    children: <Widget>[
+                      Expanded(
+                        child: Text(
+                          post.nome,
+                          style: TextStyle(
+                            color: DefaultColors.secondary,
+                            fontSize: 18,
+                            fontFamily: "RussoOne",
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(children: <Widget>[
+                    Expanded(
+                      child: Text(post.descricao, style: styleInf),
+                    ),
+                  ]),
+                  Divider(color: DefaultColors.primary, height: 3),
+                  _customContainer(
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
                         Expanded(
-                          child: Text(post.nome, style: styleInf),
+                          child:
+                              Text(post.especie + "\n" + raca, style: styleInf),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                          child: Icon(
+                            sexo == "Macho"
+                                ? FontAwesomeIcons.mars
+                                : FontAwesomeIcons.venus,
+                            color: DefaultColors.secondary,
+                            size: 28,
+                          ),
                         ),
                       ],
                     ),
-                    Row(children: <Widget>[
-                      Expanded(
-                          child: Text(
-                              post.especie + " - " + raca + " | " + sexo,
-                              style: styleInf)),
-                    ]),
-                    post.dataNascimento != null
-                        ? Row(children: <Widget>[
-                            Expanded(
-                              child: Text(post.dataNascimento, style: styleInf),
+                  ),
+                  post.dataNascimento != null
+                      ? Row(children: <Widget>[
+                          Expanded(
+                            child: Text(post.dataNascimento, style: styleInf),
+                          ),
+                        ])
+                      : Container(),
+                  Divider(color: DefaultColors.primary, height: 3),
+                  //* Info Contato Dono
+                  _customContainer(
+                    child: Column(
+                      children: [
+                        Row(children: <Widget>[
+                          Padding(
+                            padding:
+                                const EdgeInsets.only(left: 4.0, right: 6.0),
+                            child: Icon(
+                              FontAwesomeIcons.phoneSquare,
+                              color: DefaultColors.secondary,
+                              size: 22,
                             ),
-                          ])
-                        : Container(),
-                    Divider(),
-                    Row(children: <Widget>[
-                      Expanded(
-                        child: Text(post.descricao, style: styleInf),
-                      ),
-                    ]),
-                    Divider(),
-                    Row(children: <Widget>[
-                      Expanded(
-                        child: Text(post.numeroTelefone, style: styleInf),
-                      ),
-                    ]),
-                    Row(children: <Widget>[
-                      Expanded(
-                        child: Text(post.email, style: styleInf),
-                      ),
-                    ]),
-                    Row(children: <Widget>[
-                      Expanded(
-                        child: Text("Data de publicação: " + post.dataRegistro,
-                            style: styleInf),
-                      ),
-                    ]),
-                  ],
-                ),
+                          ),
+                          Expanded(
+                            child: Text(post.numeroTelefone, style: styleInf),
+                          ),
+                        ]),
+                        Row(children: <Widget>[
+                          Padding(
+                            padding:
+                                const EdgeInsets.only(left: 4.0, right: 6.0),
+                            child: Icon(
+                              FontAwesomeIcons.at,
+                              color: DefaultColors.secondary,
+                              size: 22,
+                            ),
+                          ),
+                          Expanded(
+                            child: Text(post.email, style: styleInf),
+                          ),
+                        ]),
+                        Row(children: <Widget>[
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                              child: Text(
+                                post.dataRegistro,
+                                textAlign: TextAlign.end,
+                                style: styleInf,
+                              ),
+                            ),
+                          ),
+                        ]),
+                      ],
+                    ),
+                  ),
+                ],
               ),
             ),
             btnEntrarEmContato,
@@ -221,18 +280,39 @@ class _BottomSheetPostAdocaoState extends State<BottomSheetPostAdocao> {
 
   List<Widget> _getListaImagens() {
     List<String> listUrlImage = post.petImages.listImages;
-
     return listUrlImage.where((url) => url != "No Photo").map((url) {
-      return Container(
-        margin: const EdgeInsets.all(8.0),
-        height: 250,
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: NetworkImage(url),
-            fit: BoxFit.cover,
+      return Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: Material(
+          elevation: 4.0,
+          borderRadius: BorderRadius.circular(10),
+          child: Container(
+            height: 250,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              image: DecorationImage(
+                image: NetworkImage(url),
+                fit: BoxFit.cover,
+              ),
+            ),
           ),
         ),
       );
     }).toList();
+  }
+
+  Widget _customContainer({Widget child}) {
+    return Container(
+      padding: const EdgeInsets.only(
+        left: 8,
+        top: 4.0,
+        bottom: 4.0,
+      ),
+      decoration: BoxDecoration(
+        color: DefaultColors.secondarySmooth.withOpacity(0.25),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: child,
+    );
   }
 }
