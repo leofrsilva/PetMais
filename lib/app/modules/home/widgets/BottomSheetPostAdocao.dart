@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:petmais/app/modules/home/submodules/add_adocao/models/adocao/adocao_model.dart';
 import 'package:petmais/app/modules/home/widgets/carousel/carousel_pro.dart';
 import 'package:petmais/app/shared/models/post_adocao/post_adocao_model.dart';
 import 'package:petmais/app/shared/models/usuario/usuario_model.dart';
@@ -40,10 +42,65 @@ class _BottomSheetPostAdocaoState extends State<BottomSheetPostAdocao> {
     fontSize: 16,
   );
 
+  void _getYearAnimal() {
+    if (post.dataNascimento != null) {
+      print(post.dataNascimento);
+      String dataPost = "";
+      List nums = post.dataNascimento.split("/");
+      nums.reversed.forEach((n) {
+        dataPost += n;
+      });
+      final dataNow = DateTime.now();
+      final dataNasc = DateTime.parse(dataPost);
+      int yearDiff = dataNow.year - dataNasc.year;
+      int monthDiff = dataNow.month - dataNasc.month;
+      int dayDiff = dataNow.day - dataNasc.day;
+      String strYear = yearDiff == 0
+          ? ""
+          : yearDiff.abs() == 1
+              ? "${yearDiff.abs()} Ano"
+              : "${yearDiff.abs()} Anos";
+      String strMonth = "";
+      String strDay = "";
+
+      if (monthDiff < 0) {
+        if (dayDiff < 0) {
+          strMonth = dataNow.month == 1
+              ? "${dataNow.month} Mês"
+              : "${dataNow.month} Meses";
+          yearDiff = yearDiff - 1;
+          strYear = yearDiff == 0
+              ? ""
+              : yearDiff == 1 ? "$yearDiff Ano" : "$yearDiff Anos";
+        }
+      } else if (monthDiff > 0) {
+        strMonth = monthDiff == 1 ? "$monthDiff Mês" : "$monthDiff Meses";
+        if (dayDiff < 0) {
+          monthDiff = monthDiff - 1;
+          strMonth = yearDiff == 0
+              ? ""
+              : monthDiff == 1 ? "$monthDiff Mês" : "$monthDiff Meses";
+        }
+      } else {
+        if (dayDiff == 0) {
+          strDay = "1 dia";
+        } else if (dayDiff > 0) {
+          strDay = "$dayDiff dias";
+        }
+      }
+
+      this.idade = strYear + " " + strMonth + " " + strDay;
+
+    } else {
+      this.idade = "";
+    }
+  }
+
   PostAdocaoModel post;
   UsuarioModel usuario;
   String raca;
   String sexo;
+  String idade;
   Widget upd = Container();
   Widget delete = Container();
   Widget btnEntrarEmContato = Container();
@@ -55,6 +112,7 @@ class _BottomSheetPostAdocaoState extends State<BottomSheetPostAdocao> {
     usuario = widget.usuarioModel ?? null;
     raca = post.raca != null ? post.raca : " Raça não Informada";
     sexo = post.sexo == "M" ? "Macho" : "Fêmea";
+    _getYearAnimal();
   }
 
   @override
@@ -63,21 +121,36 @@ class _BottomSheetPostAdocaoState extends State<BottomSheetPostAdocao> {
 
     if (widget.isUpd) {
       upd = IconButton(
-        icon: Icon(Icons.edit, color: Colors.white),
-        onPressed: widget.onPressedUpd,
+        icon: Icon(Icons.edit, color: DefaultColors.primary),
+        onPressed: () async {
+          await Modular.to
+              .pushNamed(
+            "/home/adocaoUpd",
+            arguments: post,
+          )
+              .then((dynamic adocaoModel) {
+            if (adocaoModel != null && (adocaoModel is AdocaoModel)) {
+              setState(() {
+                post.email = adocaoModel.email;
+                post.numeroTelefone = adocaoModel.numeroTelefone;
+                post.descricao = adocaoModel.descricao;
+              });
+            }
+          });
+        },
       );
     }
     if (widget.isDelete) {
       delete = IconButton(
-        icon: Icon(Icons.delete_outline, color: Colors.white),
+        icon: Icon(Icons.delete_outline, color: DefaultColors.primary),
         onPressed: widget.onPressedDel,
       );
     }
 
     if (usuario != null) {
       if (post.idDono != usuario.usuarioInfoModel.id) {
-        btnEntrarEmContato = Padding(
-          padding: const EdgeInsets.symmetric(vertical: 10),
+        btnEntrarEmContato = Align(
+          alignment: Alignment.center,
           child: CustomButton(
             text: "ENTRAR EM CONTATO",
             corText: Colors.white,
@@ -95,78 +168,59 @@ class _BottomSheetPostAdocaoState extends State<BottomSheetPostAdocao> {
     return Container(
       height: size.height * 0.955,
       color: Colors.white,
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            Container(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Expanded(
-                    child: Stack(
-                      children: <Widget>[
-                        Container(
-                          height: size.height * 0.07,
-                          alignment: Alignment.center,
-                          padding: const EdgeInsets.symmetric(horizontal: 20),
-                          child: Text(
-                            post.nome,
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: Colors.black26,
-                              fontWeight: FontWeight.w500,
-                              fontFamily: "OpenSans",
-                              fontSize: 20,
-                            ),
-                          ),
-                        ),
-                        Container(
-                          height: size.height * 0.07,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(20),
-                              topRight: Radius.circular(20),
-                            ),
-                          ),
-                          child: IconButton(
-                            icon: Icon(Icons.close, color: Colors.black26),
-                            onPressed: () {
-                              Navigator.of(context).pop(false);
-                            },
-                          ),
-                        ),
-                        Align(
-                          alignment: Alignment.centerRight,
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: <Widget>[
-                              this.upd,
-                              this.delete,
-                            ],
-                          ),
-                        ),
-                      ],
+      child: Column(
+        children: [
+          Container(
+            height: size.height * 0.065,
+            margin: EdgeInsets.only(bottom: size.height * 0.005),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 3),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(20),
+                      topRight: Radius.circular(20),
                     ),
                   ),
-                ],
-              ),
+                  child: IconButton(
+                    icon: Icon(Icons.close,
+                        color: DefaultColors.primary, size: 28),
+                    onPressed: () {
+                      Navigator.of(context).pop(false);
+                    },
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      this.upd,
+                      this.delete,
+                    ],
+                  ),
+                ),
+              ],
             ),
-            Container(
-              width: size.width,
-              height: size.height * 0.4,
-              child: Carousel(
-                autoplay: false,
-                dotSize: 8,
-                dotBgColor: Colors.transparent,
-                dotColor: Colors.white,
-                dotIncreasedColor: DefaultColors.primary,
-                images: _getListaImagens(),
-              ),
+          ),
+          Container(
+            width: size.width,
+            height: size.height * 0.30,
+            child: Carousel(
+              autoplay: false,
+              dotSize: 8,
+              dotBgColor: Colors.transparent,
+              dotColor: Colors.white,
+              dotIncreasedColor: DefaultColors.primary,
+              images: _getListaImagens(size),
             ),
-            Container(
-              // height: usuario != null
-              //     ? size.height * 0.8 - (size.height * 0.4 + 50)
-              //     : size.height * 0.4,
+          ),
+          SizedBox(height: size.height * 0.03),
+          Container(
+            height: size.height * 0.555,
+            child: SingleChildScrollView(
               padding:
                   const EdgeInsets.symmetric(vertical: 4.0, horizontal: 10.0),
               child: Column(
@@ -188,17 +242,25 @@ class _BottomSheetPostAdocaoState extends State<BottomSheetPostAdocao> {
                   ),
                   Row(children: <Widget>[
                     Expanded(
-                      child: Text(post.descricao, style: styleInf),
+                      child: Text(
+                          post.descricao.isEmpty ? "..." : post.descricao,
+                          style: styleInf),
                     ),
                   ]),
-                  Divider(color: DefaultColors.primary, height: 3),
+                  Padding(
+                    padding: EdgeInsets.all(size.height * 0.02),
+                    child: Divider(color: DefaultColors.primary, height: 3),
+                  ),
                   _customContainer(
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
                         Expanded(
-                          child:
-                              Text(post.especie + "\n" + raca, style: styleInf),
+                          child: Text(
+                              post.dataNascimento != null
+                                  ? post.especie + "\n" + raca + "\n" + idade
+                                  : post.especie + "\n" + raca,
+                              style: styleInf),
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 12.0),
@@ -213,14 +275,7 @@ class _BottomSheetPostAdocaoState extends State<BottomSheetPostAdocao> {
                       ],
                     ),
                   ),
-                  post.dataNascimento != null
-                      ? Row(children: <Widget>[
-                          Expanded(
-                            child: Text(post.dataNascimento, style: styleInf),
-                          ),
-                        ])
-                      : Container(),
-                  Divider(color: DefaultColors.primary, height: 3),
+                  SizedBox(height: size.height * 0.01),
                   //* Info Contato Dono
                   _customContainer(
                     child: Column(
@@ -256,7 +311,8 @@ class _BottomSheetPostAdocaoState extends State<BottomSheetPostAdocao> {
                         Row(children: <Widget>[
                           Expanded(
                             child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 12.0),
                               child: Text(
                                 post.dataRegistro,
                                 textAlign: TextAlign.end,
@@ -268,26 +324,34 @@ class _BottomSheetPostAdocaoState extends State<BottomSheetPostAdocao> {
                       ],
                     ),
                   ),
+                  Container(
+                    padding: EdgeInsets.only(
+                        top: size.height * 0.04, bottom: size.height * 0.01),
+                    width: size.width,
+                    alignment: Alignment.center,
+                    child: btnEntrarEmContato,
+                  ),
                 ],
               ),
             ),
-            btnEntrarEmContato,
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
 
-  List<Widget> _getListaImagens() {
+  List<Widget> _getListaImagens(Size size) {
     List<String> listUrlImage = post.petImages.listImages;
     return listUrlImage.where((url) => url != "No Photo").map((url) {
       return Padding(
-        padding: const EdgeInsets.all(12.0),
+        padding: EdgeInsets.symmetric(
+            vertical: 4.0, horizontal: size.height * 0.075),
         child: Material(
           elevation: 4.0,
           borderRadius: BorderRadius.circular(10),
           child: Container(
-            height: 250,
+            height: size.height * 0.25,
+            width: size.height * 0.30,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
               image: DecorationImage(

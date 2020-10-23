@@ -53,8 +53,8 @@ abstract class _AdocaoControllerBase extends Disposable with Store {
       clipBehavior: Clip.antiAlias,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(30),
-          topRight: Radius.circular(30),
+          topLeft: Radius.circular(15),
+          topRight: Radius.circular(15),
         ),
       ),
       isScrollControlled: true,

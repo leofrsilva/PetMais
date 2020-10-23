@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:petmais/app/modules/home/pages/show_post_adocao/show_post_adocao_page.dart';
+import 'package:petmais/app/modules/home/widgets/BottomSheetPostAdocao.dart';
 import 'package:petmais/app/shared/models/post_adocao/post_adocao_model.dart';
 import 'package:petmais/app/shared/models/usuario/usuario_chat_model.dart';
 import 'package:petmais/app/shared/models/usuario/usuario_model.dart';
@@ -371,14 +372,21 @@ class _PerfilPageState
                                 size: size.height * 0.25,
                                 urlImage: pet.petImages.imgPrincipal,                                
                                 onTap: () async {
-                                  await Modular.to.showDialog(
+                                  await showModalBottomSheet(
+                                    elevation: 6.0,
+                                    clipBehavior: Clip.antiAlias,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(15),
+                                        topRight: Radius.circular(15),
+                                      ),
+                                    ),
+                                    isScrollControlled: true,
+                                    context: context,
                                     builder: (context) {
-                                      return Center(
-                                        child: ShowPostAdocaoPage(
-                                          postAdotation: pet,
-                                          usuarioModel:
-                                              controller.usuario ?? null,
-                                        ),
+                                      return BottomSheetPostAdocao(
+                                        postAdotation: pet,
+                                        usuarioModel: controller.usuario ?? null,
                                       );
                                     },
                                   ).then((value){
@@ -398,6 +406,33 @@ class _PerfilPageState
                                       });
                                     }
                                   });
+                                  // await Modular.to.showDialog(
+                                  //   builder: (context) {
+                                  //     return Center(
+                                  //       child: ShowPostAdocaoPage(
+                                  //         postAdotation: pet,
+                                  //         usuarioModel:
+                                  //             controller.usuario ?? null,
+                                  //       ),
+                                  //     );
+                                  //   },
+                                  // ).then((value){
+                                  //   if(value){
+                                  //     UsuarioChatModel usuarioChat = UsuarioChatModel(
+                                  //       identifier: user.usuarioInfoModel.id,
+                                  //       name: user.usuarioInfoModel.nome +
+                                  //           " " +
+                                  //           user.usuarioInfoModel.sobreNome,
+                                  //       image: user.usuarioInfoModel.urlFoto,
+                                  //     );
+                                  //     controller.changePageConversa();
+                                  //     Modular.to.pop();
+                                  //     Future.delayed(Duration(milliseconds: 200), () {
+                                  //       bool viewed = false;
+                                  //       Modular.to.pushNamed("/home/chat/$viewed", arguments: usuarioChat);
+                                  //     });
+                                  //   }
+                                  // });
                                 },
                               );
                             },
