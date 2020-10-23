@@ -53,7 +53,7 @@ abstract class _SplashControllerBase with Store {
     );
 
     Map<String, dynamic> result;
-    result = await usuarioRepository.loginUser(user["email"], senha);
+    result = await usuarioRepository.loginUser(user["email"], senha, user["type"]);
     if (result["Result"] == "Found User") {
       UsuarioModel user = UsuarioModel.fromMap(json.decode(result["User"]));
       auth.setUser(user);
