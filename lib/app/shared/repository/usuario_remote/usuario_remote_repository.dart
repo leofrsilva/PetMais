@@ -47,16 +47,10 @@ class UsuarioRemoteRepository {
     }
   }
 
-  Future<Map<String, dynamic>> loginUser(String email, String senha, String type) async {
+  Future<Map<String, dynamic>> loginUser(String email, String senha) async {
     final dio = Modular.get<Dio>();
 
-    String link = "";
-    if(type == "c"){
-      link = "/functions/login_user.php";
-    }
-    else if(type == "j"){
-      link = "/functions/login_user.php";
-    }
+    String link =  "/functions/login_user.php";
     Map<String, dynamic> map = {
       "email": email,
       "senha": senha,

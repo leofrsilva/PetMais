@@ -37,8 +37,7 @@ class UsuarioPersistenceLocalRepository {
     if (user != null) {
       map["email"] = user[0];
       map["senha"] = user[1];
-      map["encrypted"] = user[1];
-      map["type"] = user[2];
+      map["encrypted"] = user[1];      
       return map;
     } else {
       return null;
