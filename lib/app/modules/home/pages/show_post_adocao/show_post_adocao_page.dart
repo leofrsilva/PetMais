@@ -174,11 +174,6 @@ class _ShowPostAdocaoPageState extends State<ShowPostAdocaoPage> {
               width: size.width * 0.88,
               height: size.height * 0.4,
               color: DefaultColors.others.withOpacity(0.5),
-              // child: Image.network(
-              //   post.urlImage,
-              //   key: ValueKey(new Random().nextInt(100)),
-              //   fit: BoxFit.cover,
-              // ),
               child: Carousel(
                 autoplay: false,
                 dotSize: 8,

@@ -6,6 +6,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:petmais/app/modules/home/pages/show_post_adocao/show_post_adocao_page.dart';
 import 'package:petmais/app/modules/home/submodules/add_adocao/models/adocao/adocao_model.dart';
+import 'package:petmais/app/modules/home/widgets/BottomSheetPostAdocao.dart';
 import 'package:petmais/app/modules/home/widgets/ImageMeuPet.dart';
 import 'package:petmais/app/modules/home/widgets/ImagePet.dart';
 import 'package:petmais/app/shared/models/pet/pet_model.dart';
@@ -60,7 +61,7 @@ class _PerfilPageState extends ModularState<PerfilPage, PerfilController> {
             ),
           ),
           child: SingleChildScrollView(
-                      child: Column(
+            child: Column(
               // physics: NeverScrollableScrollPhysics(),
               children: <Widget>[
                 _headerPerfil(size),
@@ -73,7 +74,9 @@ class _PerfilPageState extends ModularState<PerfilPage, PerfilController> {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.only(
                           bottomLeft: Radius.circular(
-                              controller.animationDrawer.isShowDrawer ? 40 : 0)),
+                              controller.animationDrawer.isShowDrawer
+                                  ? 40
+                                  : 0)),
                     ),
                     child: ListView(
                       controller: this.scrollController,
@@ -492,54 +495,85 @@ class _PerfilPageState extends ModularState<PerfilPage, PerfilController> {
                             size: size.height * 0.2,
                             urlImage: petAdocao.petImages.imgPrincipal,
                             onTap: () async {
-                              await Modular.to.showDialog(
+                              await showModalBottomSheet(
+                                elevation: 6.0,
+                                clipBehavior: Clip.antiAlias,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(15),
+                                    topRight: Radius.circular(15),
+                                  ),
+                                ),
+                                isScrollControlled: true,
+                                context: context,
                                 builder: (context) {
-                                  return Center(
-                                    child: StatefulBuilder(
-                                        builder: (context, setState) {
-                                      return ShowPostAdocaoPage(
-                                        postAdotation: petAdocao,
-                                        usuarioModel:
-                                            controller.usuario ?? null,
-                                        isUpd: true,
-                                        isDelete: true,
-                                        onPressedUpd: () async {
-                                          await Modular.to
-                                              .pushNamed(
-                                            "/home/adocaoUpd",
-                                            arguments: petAdocao,
-                                          )
-                                              .then((dynamic adocaoModel) {
-                                            if (adocaoModel != null &&
-                                                (adocaoModel is AdocaoModel)) {                                               
-                                              setState(() {
-                                                petAdocao.email =
-                                                    adocaoModel.email;
-                                                petAdocao.numeroTelefone =
-                                                    adocaoModel.numeroTelefone;
-                                                petAdocao.descricao =
-                                                    adocaoModel.descricao;                                                
-                                              });
-                                            }
-                                          });
-                                        },
-                                        onPressedDel: () {
-                                          controller
-                                              .onPressedDel(
-                                                  size, petAdocao.idPet)
-                                              .then((bool result) {
-                                            if (result == true) {
-                                              Modular.to.pop();
-                                            }
-                                          });
-                                        },
-                                      );
-                                    }),
+                                  return BottomSheetPostAdocao(
+                                    postAdotation: petAdocao,
+                                    usuarioModel: controller.usuario ?? null,
+                                    isUpd: true,
+                                    isDelete: true,
+                                    onPressedDel: () {
+                                      controller
+                                          .onPressedDel(size, petAdocao.idPet)
+                                          .then((bool result) {
+                                        if (result == true) {
+                                          Navigator.of(context).pop();
+                                        }
+                                      });
+                                    },
                                   );
                                 },
                               ).then((_) {
                                 setState(() {});
                               });
+                              // await Modular.to.showDialog(
+                              //   builder: (context) {
+                              //     return Center(
+                              //       child: StatefulBuilder(
+                              //           builder: (context, setState) {
+                              //         return ShowPostAdocaoPage(
+                              //           postAdotation: petAdocao,
+                              //           usuarioModel:
+                              //               controller.usuario ?? null,
+                              //           isUpd: true,
+                              //           isDelete: true,
+                              //           onPressedUpd: () async {
+                              //             await Modular.to
+                              //                 .pushNamed(
+                              //               "/home/adocaoUpd",
+                              //               arguments: petAdocao,
+                              //             )
+                              //                 .then((dynamic adocaoModel) {
+                              //               if (adocaoModel != null &&
+                              //                   (adocaoModel is AdocaoModel)) {
+                              //                 setState(() {
+                              //                   petAdocao.email =
+                              //                       adocaoModel.email;
+                              //                   petAdocao.numeroTelefone =
+                              //                       adocaoModel.numeroTelefone;
+                              //                   petAdocao.descricao =
+                              //                       adocaoModel.descricao;
+                              //                 });
+                              //               }
+                              //             });
+                              //           },
+                              //           onPressedDel: () {
+                              //             controller
+                              //                 .onPressedDel(
+                              //                     size, petAdocao.idPet)
+                              //                 .then((bool result) {
+                              //               if (result == true) {
+                              //                 Modular.to.pop();
+                              //               }
+                              //             });
+                              //           },
+                              //         );
+                              //       }),
+                              //     );
+                              //   },
+                              // ).then((_) {
+                              //   setState(() {});
+                              // });
                             },
                           ),
                         );

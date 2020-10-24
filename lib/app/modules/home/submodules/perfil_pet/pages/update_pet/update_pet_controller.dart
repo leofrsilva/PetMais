@@ -134,9 +134,21 @@ abstract class _UpdatePetControllerBase with Store {
   }
 
   bool isValidData(String textData) {
+    DateTime dataNow = DateTime.now();
     DateTime dataTime = convertStringForDate(textData);
     String data = _formatarData(dataTime.toString());
+
     if (data == textData) {
+      if (dataTime.year > dataNow.year) {
+        return false;
+      } else if (dataTime.year == dataNow.year &&
+          dataTime.month > dataNow.month) {
+        return false;
+      } else if (dataTime.year == dataNow.year &&
+          dataTime.month == dataNow.month &&
+          dataTime.day > dataNow.day) {
+        return false;
+      }
       return true;
     } else {
       return false;

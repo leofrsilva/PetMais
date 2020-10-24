@@ -5,6 +5,7 @@ import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:petmais/app/modules/home/pages/show_post_adocao/show_post_adocao_page.dart';
 import 'package:petmais/app/modules/home/submodules/adocao/widgets/PostAdotation.dart';
+import 'package:petmais/app/modules/home/widgets/BottomSheetPostAdocao.dart';
 import 'package:petmais/app/shared/models/post_adocao/post_adocao_model.dart';
 import 'package:petmais/app/shared/models/usuario/usuario_chat_model.dart';
 import 'package:petmais/app/shared/repository/usuario_remote/usuario_remote_repository.dart';
@@ -164,72 +165,25 @@ class _AbaAdocaoPageState
                                                     PostAdotation(
                                                       postAdotationModel: post,
                                                       onTap: () async {
-                                                        if (post.petImages
-                                                                .imgPrincipal !=
-                                                            null) {
-                                                          // _showAdocao(size, post, imageAdocao[index]);
-                                                          await Modular.to
-                                                              .showDialog(
-                                                            builder: (context) {
-                                                              return Center(
-                                                                child:
-                                                                    ShowPostAdocaoPage(
-                                                                  postAdotation:
-                                                                      post,
-                                                                  usuarioModel: controller
-                                                                              .adocao
-                                                                              .auth
-                                                                              .usuario
-                                                                              .usuarioInfoModel
-                                                                              .id !=
-                                                                          null
-                                                                      ? controller
-                                                                          .adocao
-                                                                          .auth
-                                                                          .usuario
-                                                                      : null,
-                                                                ),
-                                                              );
-                                                            },
-                                                          ).then((value) {
-                                                            if (value is bool &&
-                                                                value == true) {
-                                                              UsuarioChatModel
-                                                                  usuarioChat =
-                                                                  UsuarioChatModel(
-                                                                identifier:
-                                                                    post.idDono,
-                                                                name: post
-                                                                    .nomeDono,
-                                                                image: post.imgDono !=
-                                                                        "No Photo"
-                                                                    ? UsuarioRemoteRepository
-                                                                            .URL +
-                                                                        "/files/" +
-                                                                        post.imgDono
-                                                                    : "No Photo",
-                                                              );
-                                                              controller.adocao
-                                                                  .tabController
-                                                                  .animateTo(1);
-                                                              Future.delayed(
-                                                                  Duration(
-                                                                    milliseconds:
-                                                                        200,
-                                                                  ), () {
-                                                                bool viewed =
-                                                                    false;
-                                                                Modular.to.pushNamed(
-                                                                    "/home/chat/$viewed",
-                                                                    arguments:
-                                                                        usuarioChat);
-                                                              });
-                                                            }
-                                                          });
-                                                        }
+                                                        controller.adocao
+                                                            .showPostAdocao(
+                                                          post,
+                                                          controller
+                                                                      .adocao
+                                                                      .auth
+                                                                      .usuario
+                                                                      .usuarioInfoModel
+                                                                      .id !=
+                                                                  null
+                                                              ? controller
+                                                                  .adocao
+                                                                  .auth
+                                                                  .usuario
+                                                              : null,
+                                                        );
+                                                       
                                                       },
                                                     ),
-                                                    Divider(),
                                                   ],
                                                 );
                                               }).toList(),

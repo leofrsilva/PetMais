@@ -30,7 +30,8 @@ class _AdocaoPageState extends ModularState<AdocaoPage, AdocaoController>
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;  
+    Size size = MediaQuery.of(context).size;
+    controller.setContext(context);  
     return Scaffold(
       resizeToAvoidBottomPadding: true,
       backgroundColor: DefaultColors.secondary,
