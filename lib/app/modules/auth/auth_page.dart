@@ -108,7 +108,7 @@ class _AuthPageState extends ModularState<AuthPage, AuthController> {
                       SizedBox(height: size.height * 0.025),
                       CustomButton(
                         onPressed: () {
-                          Modular.to.pushReplacementNamed("/auth/login");
+                          Modular.to.pushReplacementNamed("/auth/logincomum");
                         },
                         text: "LOGIN",
                         paddingRaised: 15.0,

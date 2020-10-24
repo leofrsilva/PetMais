@@ -12,14 +12,15 @@ import 'package:petmais/app/shared/utils/font_style.dart';
 import '../../widgets/CustomFlatButtonAuth.dart';
 import '../../../../shared/widgets/CustomTextField.dart';
 import '../../../../shared/widgets/CustomButton.dart';
-import 'login_controller.dart';
+import 'login_comum_controller.dart';
 
-class LoginPage extends StatefulWidget {
+class LoginComumPage extends StatefulWidget {
   @override
-  _LoginPageState createState() => _LoginPageState();
+  _LoginComumPageState createState() => _LoginComumPageState();
 }
 
-class _LoginPageState extends ModularState<LoginPage, LoginController> {
+class _LoginComumPageState
+    extends ModularState<LoginComumPage, LoginComumController> {
   Widget get _backGround {
     return Stack(
       children: <Widget>[
@@ -214,7 +215,8 @@ class _LoginPageState extends ModularState<LoginPage, LoginController> {
                               SizedBox(height: size.height * 0.025),
                               GestureDetector(
                                 onTap: () {
-                                  Modular.to.pushReplacementNamed("/auth/cadastro");
+                                  Modular.to
+                                      .pushReplacementNamed("/auth/cadastro");
                                 },
                                 child: RichText(
                                   text: TextSpan(
@@ -240,6 +242,23 @@ class _LoginPageState extends ModularState<LoginPage, LoginController> {
                                   ),
                                 ),
                               ),
+                              //* Login the Person Juridico
+                              SizedBox(height: size.height * 0.02),
+                              GestureDetector(
+                                onTap: () {
+                                  Modular.to.pushReplacementNamed(
+                                      "/auth/loginjuridico");
+                                },
+                                child: Text(
+                                  "Acessar conta Jurísica",
+                                  style: TextStyle(
+                                      color: DefaultColors.background,
+                                      fontSize: 16.0,
+                                      fontFamily: "RussoOne"),
+                                ),
+                              ),
+
+                              //----------------------------------------------------------------------------------------------------
                               SizedBox(height: size.height * 0.04),
                               IconButton(
                                 icon: Icon(
@@ -247,7 +266,8 @@ class _LoginPageState extends ModularState<LoginPage, LoginController> {
                                   color: Colors.black26,
                                 ),
                                 onPressed: () {
-                                  Modular.to.pushNamedAndRemoveUntil("/auth", (_) => false);
+                                  Modular.to.pushNamedAndRemoveUntil(
+                                      "/auth", (_) => false);
                                 },
                               ),
                             ],

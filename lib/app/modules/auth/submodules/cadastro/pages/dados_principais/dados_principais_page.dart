@@ -193,7 +193,7 @@ class _DadosPrincipaisPageState
                           SizedBox(height: size.height * 0.02),
                           GestureDetector(
                             onTap: () {
-                              Modular.to.pushReplacementNamed("/auth/login");
+                              Modular.to.pushReplacementNamed("/auth/logincomum");
                             },
                             child: RichText(
                               text: TextSpan(

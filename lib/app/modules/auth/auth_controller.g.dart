@@ -22,9 +22,9 @@ mixin _$AuthController on _AuthControllerBase, Store {
   final _$entrarAsyncAction = AsyncAction('_AuthControllerBase.entrar');
 
   @override
-  Future<String> entrar({String email, String senha}) {
+  Future<String> entrar({String email, String senha, String type}) {
     return _$entrarAsyncAction
-        .run(() => super.entrar(email: email, senha: senha));
+        .run(() => super.entrar(email: email, senha: senha, type: type));
   }
 
   final _$cadastrarAsyncAction = AsyncAction('_AuthControllerBase.cadastrar');

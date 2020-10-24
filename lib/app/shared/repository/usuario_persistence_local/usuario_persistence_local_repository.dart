@@ -14,11 +14,13 @@ class UsuarioPersistenceLocalRepository {
       String email = map["email"];
       String senha = map["senha"];
       String encrypted = map["encrypted"];
+      String typeUser = map["type"];
 
       List<String> user = [
         email,
         senha,
         encrypted,
+        typeUser,
       ];
       bool value = await preferences.setStringList(KEYLOGADO, user);
       if (value == true) {

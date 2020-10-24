@@ -9,11 +9,11 @@ import 'package:petmais/app/shared/utils/font_style.dart';
 import 'package:petmais/app/shared/widgets/CustomTextField.dart';
 
 import '../../auth_controller.dart';
-part 'login_controller.g.dart';
+part 'login_juridico_controller.g.dart';
 
-class LoginController = _LoginControllerBase with _$LoginController;
+class LoginJuridicoController = _LoginJuridicoControllerBase with _$LoginJuridicoController;
 
-abstract class _LoginControllerBase extends Disposable with Store {
+abstract class _LoginJuridicoControllerBase extends Disposable with Store {
   BuildContext context;
   setContext(BuildContext contx) => this.context = contx;
 
@@ -22,7 +22,7 @@ abstract class _LoginControllerBase extends Disposable with Store {
   TextEditingController senhaController;
   FocusNode focusEmail;
   FocusNode focusSenha;
-  _LoginControllerBase(this.authController) {
+  _LoginJuridicoControllerBase(this.authController) {
     this.emailController = TextEditingController();
     this.senhaController = TextEditingController();
     this.focusEmail = FocusNode();
@@ -67,7 +67,7 @@ abstract class _LoginControllerBase extends Disposable with Store {
   setLoading(bool value) => this.isLoading = value;
 
   //? ---------------------------------------------------------
-  //? Entrar
+  //? Escqueci a Senha
   Future esqueciMinhaSenha() async {
     var formCheckEmail = GlobalKey<FormState>();
     await showDialog<bool>(
@@ -227,10 +227,12 @@ abstract class _LoginControllerBase extends Disposable with Store {
       this.setError(false);
       this.setLoading(true);
 
+      // String typeUser = this.onUsuarioJuridico ? "j" : "c";
       await authController
           .entrar(
         email: this.emailController.text.trim().toLowerCase(),
         senha: this.senhaController.text.trim(),
+        //! type: typeUser,
       )
           .then((String result) {
         this.setLoading(false);

@@ -5,9 +5,12 @@ class DefaultColors {
 
   static List<Color> gradient = [
     Color(0xff66FFB3).withOpacity(0.5),
-    Color(0xFF66FFB3),
-    
-    
+    Color(0xFF66FFB3),   
+  ];
+
+  static List<Color> gradientAux = [
+    Color(0xffffff75).withOpacity(0.5),
+    Color(0xffffff75),   
   ]; 
 
   static final Color primary = Color(0xff66FFB3);

@@ -34,14 +34,14 @@ abstract class _AuthControllerBase with Store {
   }
 
   @action
-  Future<String> entrar({String email, String senha}) async {
+  Future<String> entrar({String email, String senha, String type}) async {
     final usuarioRepository = UsuarioRemoteRepository();
     Map<String, dynamic> result;
-    result = await usuarioRepository.loginUser(email, senha);
+    result = await usuarioRepository.loginUser(email, senha, type);
     if (result["Result"] == "Found User") {
       UsuarioModel user = UsuarioModel.fromMap(json.decode(result["User"]));
       auth.setUser(user);
-      _saveLocalUser(user.email, senha, result["key"]);
+      _saveLocalUser(user.email, senha, result["key"], type);
     }
     return result["Result"];
   }
@@ -54,24 +54,32 @@ abstract class _AuthControllerBase with Store {
       await usuarioRepository
           .uploadImagePerfil(image, isLoading)
           .then((Map<String, dynamic> result) {
-        if (result["Result"] == "Falha no Envio" || result["Result"] == "Not Send") {
+        if (result["Result"] == "Falha no Envio" ||
+            result["Result"] == "Not Send") {
           return result["Result"];
         } else {
           isLoading = false;
-        }     
+        }
       });
     }
     Map<String, dynamic> result;
-    result = await usuarioRepository.registerUser(usuarioModel, loading: isLoading);
+    result =
+        await usuarioRepository.registerUser(usuarioModel, loading: isLoading);
     if (result["Result"] == "Registered") {
       UsuarioModel user = UsuarioModel.fromMap(json.decode(result["User"]));
       auth.setUser(user);
-      _saveLocalUser(user.email, usuarioModel.senha, result["key"]);
+      String type;
+      if (usuarioModel.typeUser == TypeUser.fisica) {
+        type = "c";
+      } else {
+        type = "j";
+      }
+      _saveLocalUser(user.email, usuarioModel.senha, result["key"], type);
     }
     return result["Result"];
   }
 
-  _saveLocalUser(String email, String senha, String key) async {
+  _saveLocalUser(String email, String senha, String key, String type) async {
     this.auth.cryptoAes.setkey(key);
     senha = this.auth.cryptoAes.encryptPass(senha);
     await UsuarioPersistenceLocalRepository.setUserLogado(
@@ -79,6 +87,7 @@ abstract class _AuthControllerBase with Store {
         "email": email,
         "senha": senha,
         "encrypted": this.auth.cryptoAes.getEncrypted,
+        "type": type,
       },
     ).then((bool result) {
       if (result == true)
@@ -87,4 +96,7 @@ abstract class _AuthControllerBase with Store {
         print("Don't keep connected");
     });
   }
+
+  //? Esqueci minha Senha
+  
 }

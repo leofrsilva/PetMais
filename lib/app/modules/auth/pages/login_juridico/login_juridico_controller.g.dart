@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'login_controller.dart';
+part of 'login_juridico_controller.dart';
 
 // **************************************************************************
 // StoreGenerator
@@ -8,9 +8,9 @@ part of 'login_controller.dart';
 
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
-mixin _$LoginController on _LoginControllerBase, Store {
+mixin _$LoginJuridicoController on _LoginJuridicoControllerBase, Store {
   final _$isVisibleBackgroundAtom =
-      Atom(name: '_LoginControllerBase.isVisibleBackground');
+      Atom(name: '_LoginJuridicoControllerBase.isVisibleBackground');
 
   @override
   bool get isVisibleBackground {
@@ -25,7 +25,8 @@ mixin _$LoginController on _LoginControllerBase, Store {
     });
   }
 
-  final _$obscureTextAtom = Atom(name: '_LoginControllerBase.obscureText');
+  final _$obscureTextAtom =
+      Atom(name: '_LoginJuridicoControllerBase.obscureText');
 
   @override
   bool get obscureText {
@@ -40,7 +41,7 @@ mixin _$LoginController on _LoginControllerBase, Store {
     });
   }
 
-  final _$isErrorAtom = Atom(name: '_LoginControllerBase.isError');
+  final _$isErrorAtom = Atom(name: '_LoginJuridicoControllerBase.isError');
 
   @override
   bool get isError {
@@ -55,7 +56,7 @@ mixin _$LoginController on _LoginControllerBase, Store {
     });
   }
 
-  final _$isLoadingAtom = Atom(name: '_LoginControllerBase.isLoading');
+  final _$isLoadingAtom = Atom(name: '_LoginJuridicoControllerBase.isLoading');
 
   @override
   bool get isLoading {
@@ -70,57 +71,58 @@ mixin _$LoginController on _LoginControllerBase, Store {
     });
   }
 
-  final _$logarAsyncAction = AsyncAction('_LoginControllerBase.logar');
+  final _$logarAsyncAction = AsyncAction('_LoginJuridicoControllerBase.logar');
 
   @override
   Future<dynamic> logar() {
     return _$logarAsyncAction.run(() => super.logar());
   }
 
-  final _$_LoginControllerBaseActionController =
-      ActionController(name: '_LoginControllerBase');
+  final _$_LoginJuridicoControllerBaseActionController =
+      ActionController(name: '_LoginJuridicoControllerBase');
 
   @override
   dynamic setIsVisibleBackground(bool value) {
-    final _$actionInfo = _$_LoginControllerBaseActionController.startAction(
-        name: '_LoginControllerBase.setIsVisibleBackground');
+    final _$actionInfo =
+        _$_LoginJuridicoControllerBaseActionController.startAction(
+            name: '_LoginJuridicoControllerBase.setIsVisibleBackground');
     try {
       return super.setIsVisibleBackground(value);
     } finally {
-      _$_LoginControllerBaseActionController.endAction(_$actionInfo);
+      _$_LoginJuridicoControllerBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
   dynamic setObscureText(bool value) {
-    final _$actionInfo = _$_LoginControllerBaseActionController.startAction(
-        name: '_LoginControllerBase.setObscureText');
+    final _$actionInfo = _$_LoginJuridicoControllerBaseActionController
+        .startAction(name: '_LoginJuridicoControllerBase.setObscureText');
     try {
       return super.setObscureText(value);
     } finally {
-      _$_LoginControllerBaseActionController.endAction(_$actionInfo);
+      _$_LoginJuridicoControllerBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
   dynamic setError(bool value) {
-    final _$actionInfo = _$_LoginControllerBaseActionController.startAction(
-        name: '_LoginControllerBase.setError');
+    final _$actionInfo = _$_LoginJuridicoControllerBaseActionController
+        .startAction(name: '_LoginJuridicoControllerBase.setError');
     try {
       return super.setError(value);
     } finally {
-      _$_LoginControllerBaseActionController.endAction(_$actionInfo);
+      _$_LoginJuridicoControllerBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
   dynamic setLoading(bool value) {
-    final _$actionInfo = _$_LoginControllerBaseActionController.startAction(
-        name: '_LoginControllerBase.setLoading');
+    final _$actionInfo = _$_LoginJuridicoControllerBaseActionController
+        .startAction(name: '_LoginJuridicoControllerBase.setLoading');
     try {
       return super.setLoading(value);
     } finally {
-      _$_LoginControllerBaseActionController.endAction(_$actionInfo);
+      _$_LoginJuridicoControllerBaseActionController.endAction(_$actionInfo);
     }
   }
 
