@@ -3,17 +3,6 @@
 part of 'add_adocao_controller.dart';
 
 // **************************************************************************
-// InjectionGenerator
-// **************************************************************************
-
-final $AddAdocaoController = BindInject(
-  (i) => AddAdocaoController(i<HomeController>(), i<PetRemoteRepository>(),
-      i<AdocaoRemoteRepository>()),
-  singleton: true,
-  lazy: true,
-);
-
-// **************************************************************************
 // StoreGenerator
 // **************************************************************************
 

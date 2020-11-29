@@ -8,6 +8,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:petmais/app/modules/home/submodules/add_adocao/models/adocao/adocao_model.dart';
 import 'package:petmais/app/modules/home/widgets/carousel/carousel_pro.dart';
 import 'package:petmais/app/shared/models/post_adocao/post_adocao_model.dart';
+import 'package:petmais/app/shared/models/usuario/usuario_info_juridico_model.dart';
 import 'package:petmais/app/shared/utils/colors.dart';
 import 'package:petmais/app/shared/models/pet/pet_model.dart';
 import 'package:petmais/app/shared/utils/font_style.dart';
@@ -152,7 +153,7 @@ class _PerfilPetPageState
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Container(height: 70, child: Divider()),
+                Container(height: size.height * 0.055, child: Divider()),
                 _listInfos(),
                 SizedBox(height: 20),
                 controller.pet.estado == 0
@@ -208,8 +209,7 @@ class _PerfilPetPageState
                         ),
                         child: Theme(
                           data: ThemeData(
-                            
-        accentColor: DefaultColors.secondary,
+                            accentColor: DefaultColors.secondary,
                             unselectedWidgetColor:
                                 DefaultColors.secondarySmooth,
                             canvasColor: Colors.white,
@@ -329,7 +329,11 @@ class _PerfilPetPageState
                     child: Row(children: [
                       Expanded(
                         child: Text(
-                          postAdocao.numeroTelefone,
+                          controller.usuario.usuarioInfo
+                                  is UsuarioInfoJuridicoModel
+                              ? controller
+                                  .formatterPhone(postAdocao.numeroTelefone)
+                              : postAdocao.numeroTelefone,
                           style: TextStyle(
                             color: DefaultColors.secondarySmooth,
                             fontFamily: "Changa",

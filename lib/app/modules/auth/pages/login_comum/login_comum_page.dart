@@ -8,6 +8,7 @@ import 'package:petmais/app/shared/models/usuario/usuario_model.dart';
 import 'package:petmais/app/shared/utils/NoGlowBehavior.dart';
 import 'package:petmais/app/shared/utils/colors.dart';
 import 'package:petmais/app/shared/utils/font_style.dart';
+import 'package:petmais/app/shared/widgets/CustomButtonOutline.dart';
 
 import '../../widgets/CustomFlatButtonAuth.dart';
 import '../../../../shared/widgets/CustomTextField.dart';
@@ -117,7 +118,7 @@ class _LoginComumPageState
                         // SizedBox(height: size.height * 0.04),
                         //--------------------------------
                         Container(
-                          height: size.height * 0.45,
+                          height: size.height * 0.43,
                           alignment: Alignment.topCenter,
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.start,
@@ -199,7 +200,7 @@ class _LoginComumPageState
                         //----------------------------------------
                         //SizedBox(height: size.height * 0.025),
                         Container(
-                          height: size.height * 0.30,
+                          height: size.height * 0.33,
                           child: Column(
                             children: <Widget>[
                               Observer(builder: (_) {
@@ -212,6 +213,19 @@ class _LoginComumPageState
                                   isLoading: controller.isLoading,
                                 );
                               }),
+                              SizedBox(height: size.height * 0.02),
+                              CustomButtonOutline(
+                                text: "Acessar Organização",
+                                onPressed: () {
+                                  Modular.to.pushReplacementNamed(
+                                      "/auth/loginjuridico");
+                                },
+                                fontsize: 14.0,
+                                elevation: 0.0,
+                                width: size.width * 0.65,
+                                // height: ,
+                                decoration: kDecorationContainerBorder,
+                              ),
                               SizedBox(height: size.height * 0.025),
                               GestureDetector(
                                 onTap: () {
@@ -243,23 +257,9 @@ class _LoginComumPageState
                                 ),
                               ),
                               //* Login the Person Juridico
-                              SizedBox(height: size.height * 0.02),
-                              GestureDetector(
-                                onTap: () {
-                                  Modular.to.pushReplacementNamed(
-                                      "/auth/loginjuridico");
-                                },
-                                child: Text(
-                                  "Acessar conta Jurísica",
-                                  style: TextStyle(
-                                      color: DefaultColors.background,
-                                      fontSize: 16.0,
-                                      fontFamily: "RussoOne"),
-                                ),
-                              ),
 
                               //----------------------------------------------------------------------------------------------------
-                              SizedBox(height: size.height * 0.04),
+                              SizedBox(height: size.height * 0.025),
                               IconButton(
                                 icon: Icon(
                                   Icons.arrow_back_ios,

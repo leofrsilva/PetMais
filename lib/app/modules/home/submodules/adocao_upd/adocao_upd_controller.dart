@@ -9,12 +9,15 @@ import 'package:mobx/mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:petmais/app/modules/home/submodules/add_adocao/models/adocao/adocao_model.dart';
 import 'package:petmais/app/shared/models/post_adocao/post_adocao_model.dart';
+import 'package:petmais/app/shared/models/usuario/usuario_info_model.dart';
+import 'package:petmais/app/shared/models/usuario/usuario_model.dart';
 import 'package:petmais/app/shared/repository/adocao_remote/adocao_remote_repository.dart';
 import 'package:petmais/app/shared/utils/colors.dart';
 
+import '../../home_controller.dart';
+
 part 'adocao_upd_controller.g.dart';
 
-@Injectable()
 class AdocaoUpdController = _AdocaoUpdControllerBase with _$AdocaoUpdController;
 
 abstract class _AdocaoUpdControllerBase extends Disposable with Store {
@@ -22,8 +25,9 @@ abstract class _AdocaoUpdControllerBase extends Disposable with Store {
   setContext(BuildContext contx) => this.context = contx;
 
   final _picker = ImagePicker();
+  HomeController _homeController;
   AdocaoRemoteRepository _adocaoRemoteRepository;
-  _AdocaoUpdControllerBase(this._adocaoRemoteRepository);
+  _AdocaoUpdControllerBase(this._homeController, this._adocaoRemoteRepository);
 
   void init(PostAdocaoModel postModel) {
     setPet(postModel);
@@ -31,7 +35,9 @@ abstract class _AdocaoUpdControllerBase extends Disposable with Store {
       text: this.pet.email,
     );
     phoneController = MaskedTextController(
-      mask: "(00) 90000-0000",
+      mask: this.usuario.usuarioInfo is UsuarioInfoModel
+          ? "(00) 90000-0000"
+          : "(00) 000000000",
       text: this.pet.numeroTelefone,
     );
     descricaoController = TextEditingController(
@@ -47,6 +53,8 @@ abstract class _AdocaoUpdControllerBase extends Disposable with Store {
       borderRadius: BorderRadius.circular(20),
     ));
   }
+
+  UsuarioModel get usuario => this._homeController.auth.usuario;
 
   final formKey = GlobalKey<FormState>();
 

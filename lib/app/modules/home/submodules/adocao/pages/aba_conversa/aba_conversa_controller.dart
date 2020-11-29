@@ -34,7 +34,7 @@ abstract class _AbaConversaControllerBase extends Disposable with Store {
   void addListenerConversations() {
     //Stream<QuerySnapshot>
     final stream = this._chatRepository.listConversation(
-          this.auth.usuario.usuarioInfoModel.id.toString(),
+          this.auth.usuario.usuarioInfo.id.toString(),
         );
 
     stream.listen((dados) {

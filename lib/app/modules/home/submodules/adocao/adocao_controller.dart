@@ -15,7 +15,6 @@ import 'package:petmais/app/shared/repository/adocao_remote/adocao_remote_reposi
 
 part 'adocao_controller.g.dart';
 
-@Injectable()
 class AdocaoController = _AdocaoControllerBase with _$AdocaoController;
 
 abstract class _AdocaoControllerBase extends Disposable with Store {
@@ -41,9 +40,10 @@ abstract class _AdocaoControllerBase extends Disposable with Store {
     this.auth.setUser(UsuarioModel());
   }
 
-  Future<List<PostAdocaoModel>> listAllAdocoes(String esp, String rac) async {
+  Future<List<PostAdocaoModel>> listAllAdocoes(String esp, String rac, bool isONG) async {
     final adocaoRepository = AdocaoRemoteRepository();
-    return await adocaoRepository.listAdocoes(0, especie: esp, raca: rac);
+    return await adocaoRepository.listAllAdocoes(0, especie: esp, raca: rac, ong: isONG);
+
   }
 
   Future showPostAdocao(

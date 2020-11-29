@@ -1,3 +1,4 @@
+import 'package:petmais/app/modules/home/home_controller.dart';
 import 'package:petmais/app/shared/repository/adocao_remote/adocao_remote_repository.dart';
 
 import 'adocao_upd_controller.dart';
@@ -8,7 +9,7 @@ import 'adocao_upd_page.dart';
 class AdocaoUpdModule extends ChildModule {
   @override
   List<Bind> get binds => [
-        Bind((i) => AdocaoUpdController(i.get<AdocaoRemoteRepository>())),
+        Bind((i) => AdocaoUpdController(i.get<HomeController>(), i.get<AdocaoRemoteRepository>())),
         Bind((i) => AdocaoRemoteRepository()),
       ];
 

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:petmais/app/shared/models/usuario/usuario_info_juridico_model.dart';
+import 'package:petmais/app/shared/models/usuario/usuario_info_model.dart';
 import 'package:petmais/app/shared/models/usuario/usuario_model.dart';
 import 'package:petmais/app/shared/repository/usuario_remote/usuario_remote_repository.dart';
 import 'package:petmais/app/shared/utils/colors.dart';
@@ -6,10 +8,11 @@ import 'package:petmais/app/shared/utils/font_style.dart';
 
 class CustomSearchDelegate extends SearchDelegate<UsuarioModel> {
   final UsuarioModel usuario;
-  CustomSearchDelegate(this.usuario) : super(
-       keyboardType: TextInputType.text,
-       textInputAction: TextInputAction.search,
-     );
+  CustomSearchDelegate(this.usuario)
+      : super(
+          keyboardType: TextInputType.text,
+          textInputAction: TextInputAction.search,
+        );
 
   @override
   List<Widget> buildActions(BuildContext context) {
@@ -74,16 +77,25 @@ class CustomSearchDelegate extends SearchDelegate<UsuarioModel> {
                 itemBuilder: (context, index) {
                   List<UsuarioModel> users = snapshot.data;
                   UsuarioModel user = users[index];
-                  String nomeSobreNome = user.usuarioInfoModel.nome.toLowerCase() +
+                  String nomeSobreNome = (user.usuarioInfo as UsuarioInfoModel)
+                          .nome
+                          .toLowerCase() +
                       " " +
-                      user.usuarioInfoModel.sobreNome.toLowerCase();
+                      (user.usuarioInfo as UsuarioInfoModel)
+                          .sobreNome
+                          .toLowerCase();
                   if (nomeSobreNome ==
-                      (user.usuarioInfoModel.nome + " " + user.usuarioInfoModel.sobreNome).toLowerCase()) {
+                      ((user.usuarioInfo as UsuarioInfoModel).nome +
+                              " " +
+                              (user.usuarioInfo as UsuarioInfoModel).sobreNome)
+                          .toLowerCase()) {
                     return Container();
                   }
                   return ListTile(
                     title: Text(
-                      user.usuarioInfoModel.nome + " " + user.usuarioInfoModel.sobreNome,
+                      (user.usuarioInfo as UsuarioInfoModel).nome +
+                          " " +
+                          (user.usuarioInfo as UsuarioInfoModel).sobreNome,
                       style: kLabelTitleStyle,
                     ),
                     onTap: () {
@@ -101,7 +113,6 @@ class CustomSearchDelegate extends SearchDelegate<UsuarioModel> {
   }
 
   Future<List<UsuarioModel>> _suggestionsUser(String q) async {
-    
     if (q.isNotEmpty) {
       final usuarioRepository = UsuarioRemoteRepository();
       return await usuarioRepository.suggestionsUser(q);
@@ -146,13 +157,47 @@ class CustomSearchDelegate extends SearchDelegate<UsuarioModel> {
                 itemBuilder: (context, index) {
                   List<UsuarioModel> users = snapshot.data;
                   UsuarioModel user = users[index];
-                  String nomeSobreNome = user.usuarioInfoModel.nome.toLowerCase() +
-                      " " +
-                      user.usuarioInfoModel.sobreNome.toLowerCase();
-                  if (nomeSobreNome ==
-                      (usuario.usuarioInfoModel.nome + " " + usuario.usuarioInfoModel.sobreNome).toLowerCase()) {
-                    return Container();
+                  String nomeSobreNome = "";
+                  if (user.usuarioInfo is UsuarioInfoModel) {
+                    nomeSobreNome = (user.usuarioInfo as UsuarioInfoModel)
+                            .nome
+                            .toLowerCase() +
+                        " " +
+                        (user.usuarioInfo as UsuarioInfoModel)
+                            .sobreNome
+                            .toLowerCase();
+                  } else {
+                    nomeSobreNome =
+                        (user.usuarioInfo as UsuarioInfoJuridicoModel)
+                            .nomeOrg
+                            .toLowerCase();
                   }
+
+                  if (usuario.usuarioInfo is UsuarioInfoModel) {
+                    if (nomeSobreNome ==
+                        ((usuario.usuarioInfo as UsuarioInfoModel).nome +
+                                " " +
+                                (usuario.usuarioInfo as UsuarioInfoModel)
+                                    .sobreNome)
+                            .toLowerCase()) {
+                      return Container();
+                    }
+                  } else {
+                    if (nomeSobreNome ==
+                        ((usuario.usuarioInfo as UsuarioInfoJuridicoModel)
+                            .nomeOrg
+                            .toLowerCase())) {                      
+                      return Container();
+                    }                    
+                  }
+                  if (user.usuarioInfo is UsuarioInfoJuridicoModel) {
+                        if ((user.usuarioInfo as UsuarioInfoJuridicoModel)
+                                .typeJuridico ==
+                            TypeJuridico.petshop) {
+                          return Container();
+                        }
+                      }
+
                   List<String> comp = nomeSobreNome.split(query.toLowerCase());
                   return ListTile(
                     title: Text.rich(
@@ -166,22 +211,28 @@ class CustomSearchDelegate extends SearchDelegate<UsuarioModel> {
                           style: kLabelTitleStyle,
                         ),
                         TextSpan(
-                            text: comp[1],
-                            style: kLabelTitleSmoothStyle,
-                            ),
+                          text: comp[1],
+                          style: kLabelTitleSmoothStyle,
+                        ),
                       ]),
                     ),
-                    subtitle: Text(user.email, style: TextStyle(
-                      color: DefaultColors.secondarySmooth.withOpacity(0.2),
-                      fontFamily: "OpenSans",
-                    )),
+                    subtitle: Text(
+                        user.usuarioInfo is UsuarioInfoModel
+                            ? user.email
+                            : "ONG - " + user.email,
+                        style: TextStyle(
+                          color: DefaultColors.secondarySmooth.withOpacity(0.2),
+                          fontFamily: "OpenSans",
+                        )),
                     trailing: IconButton(
                       icon: Icon(
                         Icons.call_made,
                         textDirection: TextDirection.rtl,
                       ),
                       onPressed: () {
-                        query = user.usuarioInfoModel.nome + " " + user.usuarioInfoModel.sobreNome;
+                        query = (user.usuarioInfo as UsuarioInfoModel).nome +
+                            " " +
+                            (user.usuarioInfo as UsuarioInfoModel).sobreNome;
                       },
                     ),
                     onTap: () {

@@ -3,16 +3,6 @@
 part of 'perfil_pet_controller.dart';
 
 // **************************************************************************
-// InjectionGenerator
-// **************************************************************************
-
-final $PerfilPetController = BindInject(
-  (i) => PerfilPetController(i<HomeController>(), i<PetRemoteRepository>()),
-  singleton: true,
-  lazy: true,
-);
-
-// **************************************************************************
 // StoreGenerator
 // **************************************************************************
 

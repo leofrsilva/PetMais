@@ -123,6 +123,7 @@ class _AdocaoPageState extends ModularState<AdocaoPage, AdocaoController>
                 indicatorWeight: 4,
                 labelStyle: kLabelTabStyle,
                 labelColor: DefaultColors.background,
+
                 onTap: (index) {
                   // setState(() {
                   //   tab = index;

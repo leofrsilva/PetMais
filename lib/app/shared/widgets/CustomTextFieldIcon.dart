@@ -5,6 +5,7 @@ import 'package:petmais/app/shared/utils/font_style.dart';
 // import 'package:modulo_login/app/modules/auth/utils/StylesTexts.dart';
 
 class CustomTextFieldIcon extends StatelessWidget {
+  final bool enabled;
   final double height;
   final TextEditingController controller;
   final FocusNode focusNode;
@@ -28,6 +29,7 @@ class CustomTextFieldIcon extends StatelessWidget {
   final Function() onPressedIcon;
 
   const CustomTextFieldIcon({
+    this.enabled,
     this.controller,
     this.focusNode,
     this.icon,
@@ -68,6 +70,7 @@ class CustomTextFieldIcon extends StatelessWidget {
               Expanded(
                 flex: 5,
                 child: TextFormField(
+                  enabled: this.enabled,
                   obscureText: this.isPass,
                   onChanged: this.onChanged,
                   focusNode: this.focusNode,
@@ -76,11 +79,13 @@ class CustomTextFieldIcon extends StatelessWidget {
                   inputFormatters: this.inputFormatters,
                   textInputAction: this.textInputAction,
                   onFieldSubmitted: this.onFieldSubmitted,
-                  cursorColor:  Colors.grey,
+                  cursorColor: Colors.grey,
                   onSaved: this.onSaved,
                   validator: this.validator,
                   style: TextStyle(
-                    color: DefaultColors.secondarySmooth ?? this.color,
+                    color: this.enabled == false
+                        ? Colors.grey
+                        : DefaultColors.secondarySmooth,
                     fontFamily: "Changa",
                   ),
                   decoration: InputDecoration(
@@ -122,7 +127,7 @@ class CustomTextFieldIcon extends StatelessWidget {
                 flex: 1,
                 child: IconButton(
                   icon: this.widgetIcon,
-                  color: this.color,
+                  color: Colors.black26,
                   onPressed: this.onPressedIcon,
                 ),
               ),

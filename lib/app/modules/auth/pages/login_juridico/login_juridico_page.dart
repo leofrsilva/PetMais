@@ -3,7 +3,6 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:petmais/app/shared/models/usuario/usuario_model.dart';
 import 'package:petmais/app/shared/utils/NoGlowBehavior.dart';
 import 'package:petmais/app/shared/utils/colors.dart';
@@ -19,7 +18,8 @@ class LoginJuridicoPage extends StatefulWidget {
   _LoginJuridicoPageState createState() => _LoginJuridicoPageState();
 }
 
-class _LoginJuridicoPageState extends ModularState<LoginJuridicoPage, LoginJuridicoController> {
+class _LoginJuridicoPageState
+    extends ModularState<LoginJuridicoPage, LoginJuridicoController> {
   Widget get _backGround {
     return Stack(
       children: <Widget>[
@@ -49,8 +49,8 @@ class _LoginJuridicoPageState extends ModularState<LoginJuridicoPage, LoginJurid
             gradient: LinearGradient(
               begin: AlignmentDirectional.topCenter,
               end: AlignmentDirectional.bottomEnd,
-              colors: DefaultColors.gradientAux,
-              stops: [0.2, 1.0],
+              colors: DefaultColors.gradient,
+              stops: [0.2, 0.9],
             ),
           ),
         ),
@@ -90,27 +90,11 @@ class _LoginJuridicoPageState extends ModularState<LoginJuridicoPage, LoginJurid
                       children: <Widget>[
                         Container(
                           height: size.height * 0.25,
-                          alignment: Alignment.center,
+                          alignment: Alignment.bottomCenter,
                           // margin: const EdgeInsets.only(bottom: 2),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Text(
-                                "LOGIN",
-                                style: TextStyle(
-                                  color: DefaultColors.secondarySmooth,
-                                  fontFamily: "OpenSans",
-                                  fontSize: 30.0,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              SizedBox(width: 10),
-                              FaIcon(
-                                FontAwesomeIcons.signInAlt,
-                                size: 40,
-                                color: DefaultColors.secondarySmooth,
-                              ),
-                            ],
+                          child: Image.asset(
+                            "assets/images/org.png",
+                            height: size.height * 0.15,
                           ),
                         ),
                         // SizedBox(height: size.height * 0.04),
@@ -130,6 +114,8 @@ class _LoginJuridicoPageState extends ModularState<LoginJuridicoPage, LoginJurid
                               Observer(builder: (_) {
                                 bool isError = controller.isError;
                                 return CustomTextField(
+                                  colorBorder: DefaultColors.tertiary,
+                                  //
                                   height: isError ? 70.0 : 40.0,
                                   controller: controller.emailController,
                                   focusNode: controller.focusEmail,
@@ -162,6 +148,8 @@ class _LoginJuridicoPageState extends ModularState<LoginJuridicoPage, LoginJurid
                               Observer(builder: (_) {
                                 bool isError = controller.isError;
                                 return CustomTextField(
+                                  colorBorder: DefaultColors.tertiary,
+                                  //
                                   height: isError ? 70.0 : 40.0,
                                   controller: controller.senhaController,
                                   focusNode: controller.focusSenha,
@@ -202,19 +190,21 @@ class _LoginJuridicoPageState extends ModularState<LoginJuridicoPage, LoginJurid
                           child: Column(
                             children: <Widget>[
                               Observer(builder: (_) {
-                                return CustomButton(
+                                return CustomButton(                                  
                                   text: "ENTRAR",
                                   onPressed: controller.logar,
                                   elevation: 0.0,
                                   width: size.width * 0.65,
                                   decoration: kDecorationContainer,
+                                  corText: DefaultColors.primary,
                                   isLoading: controller.isLoading,
                                 );
                               }),
                               SizedBox(height: size.height * 0.025),
                               GestureDetector(
                                 onTap: () {
-                                  Modular.to.pushReplacementNamed("/auth/cadastro");
+                                  Modular.to
+                                      .pushReplacementNamed("/auth/cadastro");
                                 },
                                 child: RichText(
                                   text: TextSpan(
@@ -244,10 +234,11 @@ class _LoginJuridicoPageState extends ModularState<LoginJuridicoPage, LoginJurid
                               IconButton(
                                 icon: Icon(
                                   Icons.arrow_back_ios,
-                                  color: Colors.black26,
+                                  color: DefaultColors.tertiary,
                                 ),
                                 onPressed: () {
-                                  Modular.to.pushNamedAndRemoveUntil("/auth", (_) => false);
+                                  Modular.to.pushNamedAndRemoveUntil(
+                                      "/auth", (_) => false);
                                 },
                               ),
                             ],

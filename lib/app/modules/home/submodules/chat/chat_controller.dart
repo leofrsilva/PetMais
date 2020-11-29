@@ -22,7 +22,6 @@ import 'package:petmais/app/shared/utils/colors.dart';
 
 part 'chat_controller.g.dart';
 
-@Injectable()
 class ChatController = _ChatControllerBase with _$ChatController;
 
 abstract class _ChatControllerBase extends Disposable with Store {
@@ -114,8 +113,8 @@ abstract class _ChatControllerBase extends Disposable with Store {
 
   //?----------------------------------------------
   //? Enviar Mensagem
-  Future sendMessageText() async {
-    String textMessage = this.messageController.text.trim();
+  Future sendMessageText({String msg}) async {
+    String textMessage = msg ?? this.messageController.text.trim();
     if (textMessage.isNotEmpty) {
       this.messageController.clear();
       MessageModel message = MessageModel(

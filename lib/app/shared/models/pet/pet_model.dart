@@ -87,7 +87,7 @@ class PetModel {
     Map<String, int> result = {
       "nome": 15,
       "especie": 15,
-      "raca": 10,
+      "raca": 30,
       "data": 10,
     };
     return result;

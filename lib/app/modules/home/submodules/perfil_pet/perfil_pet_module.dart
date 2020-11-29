@@ -26,7 +26,9 @@ class PerfilPetModule extends ChildModule {
   List<ModularRouter> get routers => [
         ModularRouter(
           Modular.initialRoute,
-          child: (_, args) => PerfilPetPage(petModel: args.data),
+          child: (_, args) => PerfilPetPage(
+            petModel: args.data,
+          ),
         ),
         ModularRouter(
           "/updatePet",

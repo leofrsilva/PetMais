@@ -1,7 +1,9 @@
 import 'dart:convert';
 
 import 'package:petmais/app/shared/models/pet/pet_images_model.dart';
+import 'package:petmais/app/shared/models/usuario/usuario_model.dart';
 
+const String COLUMN_TYPEUSER = "typeUser";
 const String COLUMN_IDDONO = "idDono";
 const String COLUMN_IDPET = "idPet";
 const String COLUMN_NOMEDONO = "nomeDono";
@@ -33,8 +35,10 @@ class PostAdocaoModel {
   String _numeroTelefone;
   String _dataRegistro;
   PetImagesModel _petImages;
+  TypeUser _typeUser;
 
   PostAdocaoModel({
+    TypeUser type,
     int idDono,
     int idPet,
     String nomeDono,
@@ -64,23 +68,30 @@ class PostAdocaoModel {
     this._dataRegistro = dataRegistro;
     this._descricao = descricao;
     this._petImages = petImages;
+    this._typeUser = type;
   }
 
   PostAdocaoModel.fromMap(Map map) {
+    this._typeUser = map[COLUMN_TYPEUSER].toString() == 'c'
+        ? TypeUser.fisica
+        : TypeUser.juridica;
     this._idDono = map[COLUMN_IDDONO];
     this._idPet = map[COLUMN_IDPET];
     this._nomeDono = map[COLUMN_NOMEDONO];
     this._imgDono = map[COLUMN_IMGDONO];
     this._nome = map[COLUMN_NOME];
-    this._especie = map[COLUMN_ESPECIE];//utf8.decode(map[COLUMN_ESPECIE].toString().codeUnits);
-    this._raca = map[COLUMN_RACA];//utf8.decode(map[COLUMN_RACA].toString().codeUnits);
+    this._especie = map[
+        COLUMN_ESPECIE]; //utf8.decode(map[COLUMN_ESPECIE].toString().codeUnits);
+    this._raca =
+        map[COLUMN_RACA]; //utf8.decode(map[COLUMN_RACA].toString().codeUnits);
     this._sexo = map[COLUMN_SEXO];
     this._dataNascimento = map[COLUMN_DATANASCIMENTO];
     this._email = map[COLUMN_EMAIL];
     this._numeroTelefone = map[COLUMN_NUMEROTELEFONE];
     this._dataRegistro = map[COLUMN_DATAREGISTRO];
-    this._descricao = map[COLUMN_DESCRICAO];//utf8.decode(map[COLUMN_DESCRICAO].toString().codeUnits);
-    this._petImages =  PetImagesModel.fromMap(map["petImages"]);
+    this._descricao = map[
+        COLUMN_DESCRICAO]; //utf8.decode(map[COLUMN_DESCRICAO].toString().codeUnits);
+    this._petImages = PetImagesModel.fromMap(map["petImages"]);
   }
 
   static Map<String, int> toNumCaracteres() {
@@ -99,6 +110,9 @@ class PostAdocaoModel {
     };
     return result;
   }
+
+  TypeUser get typeUser => this._typeUser;
+  set typeUser(TypeUser value) => this._typeUser = value;
 
   int get idDono => this._idDono;
   int get idPet => this._idPet;

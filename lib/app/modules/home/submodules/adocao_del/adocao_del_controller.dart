@@ -7,7 +7,6 @@ import 'package:petmais/app/shared/utils/colors.dart';
 
 part 'adocao_del_controller.g.dart';
 
-@Injectable()
 class AdocaoDelController = _AdocaoDelControllerBase with _$AdocaoDelController;
 
 abstract class _AdocaoDelControllerBase with Store {

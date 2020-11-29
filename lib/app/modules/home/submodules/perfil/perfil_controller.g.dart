@@ -3,17 +3,6 @@
 part of 'perfil_controller.dart';
 
 // **************************************************************************
-// InjectionGenerator
-// **************************************************************************
-
-final $PerfilController = BindInject(
-  (i) => PerfilController(i<HomeController>(), i<DrawerMenuController>(),
-      i<AdocaoRemoteRepository>(), i<PetRemoteRepository>()),
-  singleton: true,
-  lazy: true,
-);
-
-// **************************************************************************
 // StoreGenerator
 // **************************************************************************
 

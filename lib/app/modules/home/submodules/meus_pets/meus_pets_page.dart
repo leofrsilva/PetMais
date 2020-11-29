@@ -3,6 +3,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:petmais/app/modules/home/widgets/ImageMeuPet.dart';
 import 'package:petmais/app/shared/models/pet/pet_model.dart';
+import 'package:petmais/app/shared/models/usuario/usuario_info_juridico_model.dart';
 import 'package:petmais/app/shared/utils/colors.dart';
 import 'package:petmais/app/shared/utils/font_style.dart';
 import 'meus_pets_controller.dart';
@@ -83,7 +84,7 @@ class _MeusPetsPageState
                     controller.animationDrawer.isShowDrawer ? 40 : 0),
               ),
             ),
-            child: _listPets(),
+            child: _listPets(size),
           );
         }),
       ),
@@ -101,7 +102,7 @@ class _MeusPetsPageState
     );
   }
 
-  Widget _listPets() {
+  Widget _listPets(Size size) {
     return FutureBuilder<List<PetModel>>(
       future: controller.recuperarPets(),
       builder: (context, snapshot) {
@@ -110,6 +111,11 @@ class _MeusPetsPageState
           if (snapshot.data != null) {
             List<PetModel> listPets = snapshot.data;
             if (listPets.length > 0) {
+              if (controller.usuario.usuarioInfo is UsuarioInfoJuridicoModel) {
+                // List Pets the Ong
+                return _listPetsForOng(listPets, size);
+              }
+              // List User Comum
               defaultWidget = Container(
                 padding: EdgeInsets.only(left: 4, right: 4),
                 decoration: BoxDecoration(
@@ -189,6 +195,261 @@ class _MeusPetsPageState
         }
         return defaultWidget;
       },
+    );
+  }
+
+  Widget _listPetsForOng(List<PetModel> listPets, Size size) {
+    Map<String, List<PetModel>> order = controller.ordernarPetsFor(listPets);
+
+    Widget orderPets;
+    if (controller.selectedTypeGroup == controller.listTypeGroup[0]) {
+      List<PetModel> petDogs = order["dog"];
+      List<PetModel> petCats = order["cat"];
+      double sizeImgPetsDog =
+          (petDogs.length / 3).ceilToDouble() * size.width * 0.33;
+      double sizeImgPetsCat =
+          (petCats.length / 3).ceilToDouble() * size.width * 0.33;
+      orderPets = Column(
+        children: [
+          if (petDogs.length > 0)
+            Container(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(
+                      left: size.width * 0.05,
+                      top: size.height * 0.035,
+                    ),
+                    child: Text(
+                      "Cachorro",
+                      textAlign: TextAlign.start,
+                      style: TextStyle(
+                        fontFamily: "Changa",
+                        color: DefaultColors.secondarySmooth,
+                        // color: Colors.black26,
+                        fontSize: size.height * 0.035,
+                      ),
+                    ),
+                  ),
+                  Container(
+                    color: Colors.greenAccent,
+                    height: sizeImgPetsDog,
+                    padding: EdgeInsets.only(right: (size.width * 0.0075) / 4),
+                    alignment: Alignment.topLeft,
+                    child: Wrap(
+                      children: petDogs.map((pet) {
+                        return Padding(
+                          padding: EdgeInsets.only(
+                            left: (size.width * 0.01) / 4,
+                            bottom: (size.width * 0.01) / 4,
+                          ),
+                          child: ImageMeuPet(
+                            size: size.width * 0.3225,
+                            petModel: pet,
+                            onTap: () async {
+                              await Modular.to
+                                  .pushNamed("/home/perfilPet", arguments: pet)
+                                  .then((_) {
+                                setState(() {});
+                              });
+                            },
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          if (petCats.length > 0)
+            Container(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(
+                      left: size.width * 0.05,
+                      top: size.height * 0.035,
+                    ),
+                    child: Text(
+                      "Gato",
+                      textAlign: TextAlign.start,
+                      style: TextStyle(
+                        fontFamily: "Changa",
+                        color: DefaultColors.secondarySmooth,
+                        // color: Colors.black26,
+                        fontSize: size.height * 0.035,
+                      ),
+                    ),
+                  ),
+                  Container(
+                    color: Colors.greenAccent,
+                    height: sizeImgPetsCat,
+                    padding: EdgeInsets.only(right: (size.width * 0.0075) / 4),
+                    alignment: Alignment.topLeft,
+                    child: Wrap(
+                      alignment: WrapAlignment.start,
+                      children: petCats.map((pet) {
+                        return Padding(
+                          padding: EdgeInsets.only(
+                            left: (size.width * 0.01) / 4,
+                            bottom: (size.width * 0.01) / 4,
+                          ),
+                          child: ImageMeuPet(
+                            size: size.width * 0.3225,
+                            petModel: pet,
+                            onTap: () async {
+                              await Modular.to
+                                  .pushNamed("/home/perfilPet", arguments: pet)
+                                  .then((_) {
+                                setState(() {});
+                              });
+                            },
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+        ],
+      );
+    } else if (controller.selectedTypeGroup == controller.listTypeGroup[1]) {
+      List<PetModel> petM = order["macho"];
+      List<PetModel> petF = order["femea"];
+      double sizeImgPetsM =
+          (petM.length / 3).ceilToDouble() * size.width * 0.33;
+      double sizeImgPetsF =
+          (petF.length / 3).ceilToDouble() * size.width * 0.33;
+      orderPets = Column(
+        children: [
+          if (petM.length > 0)
+            Container(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(
+                      left: size.width * 0.05,
+                      top: size.height * 0.035,
+                    ),
+                    child: Text(
+                      "Macho",
+                      textAlign: TextAlign.start,
+                      style: TextStyle(
+                        fontFamily: "Changa",
+                        color: DefaultColors.secondarySmooth,
+                        // color: Colors.black26,
+                        fontSize: size.height * 0.035,
+                      ),
+                    ),
+                  ),
+                  Container(
+                    color: Colors.greenAccent,
+                    height: sizeImgPetsM,
+                    padding: EdgeInsets.only(right: (size.width * 0.0075) / 4),
+                    alignment: Alignment.topLeft,
+                    child: Wrap(
+                      alignment: WrapAlignment.start,
+                      children: petM.map((pet) {
+                        return Padding(
+                          padding: EdgeInsets.only(
+                            left: (size.width * 0.01) / 4,
+                            bottom: (size.width * 0.01) / 4,
+                          ),
+                          child: ImageMeuPet(
+                            size: size.width * 0.3225,
+                            petModel: pet,
+                            onTap: () async {
+                              await Modular.to
+                                  .pushNamed("/home/perfilPet", arguments: pet)
+                                  .then((_) {
+                                setState(() {});
+                              });
+                            },
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          if (petF.length > 0)
+            Container(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(
+                      left: size.width * 0.05,
+                      top: size.height * 0.035,
+                    ),
+                    child: Text(
+                      "Fêmea",
+                      textAlign: TextAlign.start,
+                      style: TextStyle(
+                        fontFamily: "Changa",
+                        color: DefaultColors.secondarySmooth,
+                        // color: Colors.black26,
+                        fontSize: size.height * 0.035,
+                      ),
+                    ),
+                  ),
+                  Container(
+                    color: Colors.greenAccent,
+                    height: sizeImgPetsF,
+                    padding: EdgeInsets.only(right: (size.width * 0.0075) / 4),
+                    alignment: Alignment.topLeft,
+                    child: Wrap(
+                      alignment: WrapAlignment.start,
+                      children: petF.map((pet) {
+                        return Padding(
+                          padding: EdgeInsets.only(
+                            left: (size.width * 0.01) / 4,
+                            bottom: (size.width * 0.01) / 4,
+                          ),
+                          child: ImageMeuPet(
+                            size: size.width * 0.3225,
+                            petModel: pet,
+                            onTap: () async {
+                              await Modular.to
+                                  .pushNamed("/home/perfilPet", arguments: pet)
+                                  .then((_) {
+                                setState(() {});
+                              });
+                            },
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+        ],
+      );
+    }
+
+    return Container(
+      padding: EdgeInsets.only(left: 4, right: 4),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(40),
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(
+            controller.animationDrawer.isShowDrawer ? 40 : 0,
+          ),
+        ),
+        child: ListView(
+          children: [
+            orderPets,
+          ],
+        ),
+      ),
     );
   }
 }

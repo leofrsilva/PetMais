@@ -14,6 +14,8 @@ import 'chat_controller.dart';
 class ChatPage extends StatefulWidget {
   final UsuarioChatModel usuarioContact;
   final bool viewed;
+  // final String nomePet;
+  // final String urlFotoPet;
   ChatPage({this.usuarioContact, this.viewed});
 
   @override
@@ -56,38 +58,42 @@ class _ChatPageState extends ModularState<ChatPage, ChatController> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Text(
-                    controller.usuarioContact.name,
-                    style: TextStyle(
-                      color: DefaultColors.secondary,
-                      fontSize: 20,
-                      fontFamily: "Roboto",
+                  Container(
+                    width: size.width * 0.6,
+                    child: Text(
+                      controller.usuarioContact.name,
+                      maxLines: 1,
+                      style: TextStyle(
+                        color: DefaultColors.secondary,
+                        fontSize: 20,
+                        fontFamily: "Roboto",
+                      ),
                     ),
                   ),
-                  StreamBuilder<DocumentSnapshot>(
-                    stream: controller.isOnline.stream,
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.active) {
-                        if (snapshot.hasError) {
-                          return Container();
-                        } else if (snapshot != null && snapshot.data != null) {
-                          DocumentSnapshot user = snapshot.data;
-                          bool status = user["status"];
-                          if (status == true) {
-                            return Text(
-                              "Online",
-                              textAlign: TextAlign.start,
-                              style: TextStyle(
-                                  fontSize: 12, color: Colors.black26),
-                            );
-                          } else {
-                            return Container();
-                          }
-                        }
-                      }
-                      return Container();
-                    },
-                  ),
+                  // StreamBuilder<DocumentSnapshot>(
+                  //   stream: controller.isOnline.stream,
+                  //   builder: (context, snapshot) {
+                  //     if (snapshot.connectionState == ConnectionState.active) {
+                  //       if (snapshot.hasError) {
+                  //         return Container();
+                  //       } else if (snapshot != null && snapshot.data != null) {
+                  //         DocumentSnapshot user = snapshot.data;
+                  //         bool status = user["status"];
+                  //         if (status == true) {
+                  //           return Text(
+                  //             "Online",
+                  //             textAlign: TextAlign.start,
+                  //             style: TextStyle(
+                  //                 fontSize: 12, color: Colors.black26),
+                  //           );
+                  //         } else {
+                  //           return Container();
+                  //         }
+                  //       }
+                  //     }
+                  //     return Container();
+                  //   },
+                  // ),
                 ],
               ),
             ),
@@ -149,7 +155,8 @@ class _ChatPageState extends ModularState<ChatPage, ChatController> {
                       AlignmentDirectional alignment =
                           AlignmentDirectional.centerEnd;
                       Color cor = DefaultColors.secondary;
-                      if (controller.usuario.id != int.tryParse(message.idUsuario)) {
+                      if (controller.usuario.id !=
+                          int.tryParse(message.idUsuario)) {
                         cor = Colors.orangeAccent;
                         alignment = AlignmentDirectional.centerStart;
                         controller.isNewMessage(isOnlineInChat: true);

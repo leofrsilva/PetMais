@@ -136,12 +136,28 @@ class _PetShopPageState extends ModularState<PetShopPage, PetShopController>
       body: TabBarView(
         controller: controller.tabController,
         children: <Widget>[
-          Container(
-            color: Colors.white,
-          ),
-          Container(
-            color: Colors.white,
-          ),
+          Observer(builder: (_) {
+            return ClipRRect(
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(
+                    controller.animationDrawer.isShowDrawer ? 40 : 0),
+              ),
+              child: Container(
+                color: Colors.white,
+              ),
+            );
+          }),
+          Observer(builder: (_) {
+            return ClipRRect(
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(
+                    controller.animationDrawer.isShowDrawer ? 40 : 0),
+              ),
+              child: Container(
+                color: Colors.white,
+              ),
+            );
+          }),
         ],
       ),
     );

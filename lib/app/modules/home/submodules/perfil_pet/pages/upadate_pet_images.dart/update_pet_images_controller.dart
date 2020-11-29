@@ -247,7 +247,7 @@ abstract class _UpdatePetImagesControllerBase extends Disposable with Store {
         caminho = this.petImagesModel.imgSecundario.split("/").last;
       } else {
         String id =
-            this._perfilPetController.usuario.usuarioInfoModel.id.toString();
+            this._perfilPetController.usuario.usuarioInfo.id.toString();
         String rand = DateTime.now().millisecondsSinceEpoch.toString();
         caminho = "image_$id" + "_$rand.jpg";
       }
@@ -256,7 +256,7 @@ abstract class _UpdatePetImagesControllerBase extends Disposable with Store {
         caminho = this.petImagesModel.imgTerciaria.split("/").last;
       } else {
         String id =
-            this._perfilPetController.usuario.usuarioInfoModel.id.toString();
+            this._perfilPetController.usuario.usuarioInfo.id.toString();
         String rand = DateTime.now().millisecondsSinceEpoch.toString();
         caminho = "image_$id" + "_$rand.jpg";
       }

@@ -11,7 +11,6 @@ import 'package:petmais/app/shared/stores/auth/auth_store.dart';
 
 part 'splash_controller.g.dart';
 
-@Injectable()
 class SplashController = _SplashControllerBase with _$SplashController;
 
 abstract class _SplashControllerBase with Store {
@@ -49,7 +48,7 @@ abstract class _SplashControllerBase with Store {
 
     String senha = _decryptSenha(
       await usuarioRepository.getKey(),
-      user["encrypted"],
+      user["senha"],
     );
 
     Map<String, dynamic> result;

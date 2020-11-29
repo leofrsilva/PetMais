@@ -9,7 +9,6 @@ import 'package:petmais/app/modules/home/controllers/animation_drawer_controller
 
 part 'search_user_controller.g.dart';
 
-@Injectable()
 class SearchUserController = _SearchUserControllerBase
     with _$SearchUserController;
 

@@ -9,7 +9,6 @@ import 'package:petmais/app/shared/utils/NoGlowBehavior.dart';
 import 'package:petmais/app/shared/utils/font_style.dart';
 import 'package:petmais/app/shared/widgets/CustomTextField.dart';
 import 'package:petmais/app/shared/widgets/CustomTextFieldIcon.dart';
-import 'package:petmais/app/shared/widgets/CustomCheckBox.dart';
 import 'package:petmais/app/shared/widgets/CustomRadioButton.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -181,6 +180,7 @@ class _UpdatePetPageState
                         padding: const EdgeInsets.only(bottom: 10, right: 14),
                         child: Observer(builder: (_) {
                           return CustomRadioButton(
+                            size: size,
                             label: "Sexo",
                             primaryTitle: "Macho",
                             secondyTitle: "Fêmea",

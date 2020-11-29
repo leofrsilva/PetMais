@@ -4,6 +4,8 @@ import 'package:mobx/mobx.dart';
 import 'package:petmais/app/modules/home/controllers/animation_drawer_controller.dart';
 import 'package:petmais/app/modules/home/repository/hasura_chat/firestore_chat_repository.dart';
 import 'package:petmais/app/shared/models/usuario/usuario_chat_model.dart';
+import 'package:petmais/app/shared/models/usuario/usuario_info_juridico_model.dart';
+import 'package:petmais/app/shared/models/usuario/usuario_info_model.dart';
 import 'package:petmais/app/shared/repository/usuario_persistence_local/usuario_persistence_local_repository.dart';
 import 'package:petmais/app/shared/stores/auth/auth_store.dart';
 
@@ -29,7 +31,17 @@ abstract class _HomeControllerBase extends Disposable with Store {
   PageController pageController;
   _HomeControllerBase(this._authStore, this._animationDrawerController,
       this._firestoreChatRepository) {
-    pageController = PageController(initialPage: 1, keepPage: false);
+    int initPage = 1;
+    if ((this.auth.usuario.usuarioInfo is UsuarioInfoJuridicoModel)) {
+      if ((this.auth.usuario.usuarioInfo as UsuarioInfoJuridicoModel)
+              .typeJuridico ==
+          TypeJuridico.petshop) {
+        modulesScreen = screensPetshop;
+        initPage = 0;
+      }
+    }
+
+    pageController = PageController(initialPage: initPage, keepPage: false);
   }
 
   double get maxExtentPages => this.pageController.position.maxScrollExtent;
@@ -59,7 +71,13 @@ abstract class _HomeControllerBase extends Disposable with Store {
     RouterOutlet(module: AdocaoModule()),
     RouterOutlet(module: PerfilModule()),
     RouterOutlet(module: MeusPetsModule()),
-    RouterOutlet(module: SearchUserModule()),
+    RouterOutlet(module: SearchUserModule())
+  ];
+
+  List<Widget> screensPetshop = <Widget>[
+    RouterOutlet(module: PetShopModule()),
+    RouterOutlet(module: PerfilModule()),
+    RouterOutlet(module: SearchUserModule())
   ];
 
   //? Online
@@ -85,10 +103,10 @@ abstract class _HomeControllerBase extends Disposable with Store {
   //? Sign In
   Future signIn() async {
     if (this._authStore.isLogged) {
-        final usuarioChat = await this._firestoreChatRepository.updateInfoUser(
-              this._authStore.usuario,
-            );
-        this._authStore.setUserChat(usuarioChat);
+      final usuarioChat = await this._firestoreChatRepository.updateInfoUser(
+            this._authStore.usuario,
+          );
+      this._authStore.setUserChat(usuarioChat);
     }
   }
 

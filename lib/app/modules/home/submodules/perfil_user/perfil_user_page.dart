@@ -5,6 +5,8 @@ import 'package:petmais/app/modules/home/pages/show_post_adocao/show_post_adocao
 import 'package:petmais/app/modules/home/widgets/BottomSheetPostAdocao.dart';
 import 'package:petmais/app/shared/models/post_adocao/post_adocao_model.dart';
 import 'package:petmais/app/shared/models/usuario/usuario_chat_model.dart';
+import 'package:petmais/app/shared/models/usuario/usuario_info_juridico_model.dart';
+import 'package:petmais/app/shared/models/usuario/usuario_info_model.dart';
 import 'package:petmais/app/shared/models/usuario/usuario_model.dart';
 import 'package:petmais/app/shared/utils/colors.dart';
 import 'package:petmais/app/shared/utils/font_style.dart';
@@ -49,67 +51,79 @@ class _PerfilPageState
                   bottomLeft: Radius.circular(
                       controller.animationDrawer.isShowDrawer ? 40 : 0)),
               child: Container(
-                height: size.height * 0.535,
+                height: size.height * 0.575,
+                
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.only(
                       bottomLeft: Radius.circular(
                           controller.animationDrawer.isShowDrawer ? 40 : 0)),
                 ),
-                child: ListView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: <Widget>[
                     Container(
-                      color: Colors.white,
-                      padding: EdgeInsets.symmetric(
-                        vertical: size.height * (0.037),
-                        horizontal: 24,
-                      ),
-                      child: CustomButton(
-                        text: "INICIAR CONVERSA",
-                        corText: Colors.white,
-                        elevation: 0.0,
-                        width: size.width * 0.6,
-                        decoration: kDecorationContainerGradient,
-                        onPressed: () {
-                          UsuarioChatModel usuarioChat = UsuarioChatModel(
-                            identifier: user.usuarioInfoModel.id,
-                            name: user.usuarioInfoModel.nome +
-                                " " +
-                                user.usuarioInfoModel.sobreNome,
-                            image: user.usuarioInfoModel.urlFoto,
-                          );
-                          controller.changePageConversa();
-                          Modular.to.pop();
-                          Future.delayed(Duration(milliseconds: 200), () {
-                            bool viewed = false;
-                            Modular.to.pushNamed("/home/chat/$viewed", arguments: usuarioChat);
-                          });
-
-                          // Future.delayed(Duration(milliseconds: 200), (){
-                          //   Modular.to.pushNamed("routeName");
-                          // });
-                          //if (_image != null) {
-                          //       UserChat userDestinatario = UserChat();
-                          //       userDestinatario.idUser = _user.id;
-                          //       userDestinatario.nome = _user.nome;
-                          //       userDestinatario.urlImagem = _image;
-                          //       Navigator.pushNamed(
-                          //         context,
-                          //         "/mensagens",
-                          //         arguments: [
-                          //           widget.usuarioLogado,
-                          //           userDestinatario,
-                          //           false
-                          //         ],
-                          //       ).whenComplete((){
-                          //         Navigator.pop(context);
-                          //       });
-                          //     }
-                        },
+                      height: size.height * 0.25,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Expanded(
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 3.0),
+                                  child: Text(
+                                    (user.usuarioInfo as UsuarioInfoJuridicoModel)
+                                        .descricao,
+                                    textAlign: TextAlign.center,
+                                    maxLines: 2,
+                                    style: TextStyle(
+                                      color: DefaultColors.secondarySmooth,
+                                      fontFamily: "Changa",
+                                      height: size.height * 0.00185,
+                                      fontSize: size.height * 0.0275,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          CustomButton(
+                            text: "INICIAR CONVERSA",
+                            corText: Colors.white,
+                            elevation: 0.0,
+                            width: size.width * 0.7,
+                            decoration: kDecorationContainerGradient,
+                            onPressed: () {
+                              UsuarioChatModel usuarioChat = UsuarioChatModel(
+                                identifier: user.usuarioInfo.id,
+                                name: user.usuarioInfo is UsuarioInfoModel
+                                    ? (user.usuarioInfo as UsuarioInfoModel)
+                                            .nome +
+                                        " " +
+                                        (user.usuarioInfo as UsuarioInfoModel)
+                                            .sobreNome
+                                    : (user.usuarioInfo
+                                            as UsuarioInfoJuridicoModel)
+                                        .nomeOrg,
+                                image: user.usuarioInfo.urlFoto,
+                              );
+                              controller.changePageConversa();
+                              Modular.to.pop();
+                              Future.delayed(Duration(milliseconds: 200), () {
+                                bool viewed = false;
+                                Modular.to.pushNamed("/home/chat/$viewed",
+                                    arguments: usuarioChat);
+                              });
+                            },
+                          ),
+                        ],
                       ),
                     ),
                     //?-------------------------------------------
                     user != null
-                        ? _listPets(user.usuarioInfoModel.id, size)
+                        ? _listPets(user.usuarioInfo.id, size)
                         : Container(),
                   ],
                 ),
@@ -125,9 +139,8 @@ class _PerfilPageState
     return Observer(
       builder: (BuildContext context) {
         return Container(
-          height: size.height * 0.465,
+          height: size.height * 0.44,
           decoration: BoxDecoration(
-            color: Colors.white,
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(
                   controller.animationDrawer.isShowDrawer ? 40 : 0),
@@ -137,7 +150,7 @@ class _PerfilPageState
           child: Stack(
             children: <Widget>[
               Container(
-                height: (size.height * 0.465) * 2 / 3,
+                height: (size.height * 0.42) * 2 / 3,
                 width: size.width,
                 decoration: BoxDecoration(
                   color: DefaultColors.primary,
@@ -152,7 +165,7 @@ class _PerfilPageState
                       alignment: Alignment.centerLeft,
                       child: Column(
                         children: <Widget>[
-                          SizedBox(height: 25),
+                          SizedBox(height: size.height * 0.035),
                           Padding(
                             padding: const EdgeInsets.only(left: 8.0),
                             child: IconButton(
@@ -169,6 +182,23 @@ class _PerfilPageState
                         ],
                       ),
                     ),
+                    if (user.usuarioInfo is UsuarioInfoJuridicoModel)
+                      Align(
+                        alignment: Alignment.topRight,
+                        child: Column(
+                          children: [
+                            SizedBox(height: size.height * 0.055),
+                            Padding(
+                              padding: const EdgeInsets.only(right: 7.0),
+                              child: Image.asset(
+                                "assets/images/ong.png",
+                                width: 70,
+                                height: 70,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     Align(
                       alignment: Alignment.bottomRight,
                       child: Container(
@@ -177,16 +207,33 @@ class _PerfilPageState
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: <Widget>[
                             Divider(color: Colors.white, thickness: 6),
-                            Padding(
+                            Container(
+                              width: size.width * 0.5,
                               padding: const EdgeInsets.only(
                                   right: 16.0, bottom: 8.0),
-                              child: Text(
-                                user.usuarioInfoModel.nome,
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontFamily: "Changa",
-                                  fontSize: 26,
-                                ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      user.usuarioInfo is UsuarioInfoModel
+                                          ? (user.usuarioInfo
+                                                  as UsuarioInfoModel)
+                                              .nome
+                                          : (user.usuarioInfo
+                                                  as UsuarioInfoJuridicoModel)
+                                              .nomeOrg,
+                                      maxLines: 2,
+                                      textAlign: TextAlign.end,
+                                      style: TextStyle(
+                                        height: size.height * 0.0022,
+                                        color: Colors.white,
+                                        fontFamily: "Changa",
+                                        fontSize: size.height * 0.03,
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           ],
@@ -207,7 +254,11 @@ class _PerfilPageState
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       _info(
-                        user.usuarioInfoModel.numeroTelefone,
+                        user.usuarioInfo is UsuarioInfoModel
+                            ? (user.usuarioInfo as UsuarioInfoModel)
+                                .numeroTelefone
+                            : (user.usuarioInfo as UsuarioInfoJuridicoModel)
+                                .telefone1,
                         Icon(
                           Icons.phone,
                           color: Colors.black26,
@@ -262,8 +313,8 @@ class _PerfilPageState
     final moldePhoto = Padding(
       padding: EdgeInsets.only(bottom: 40),
       child: Container(
-        width: 175,
-        height: 175,
+        width: 155,
+        height: 155,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.only(
             topRight: Radius.circular(100),
@@ -282,7 +333,7 @@ class _PerfilPageState
           ),
           color: DefaultColors.others,
         ),
-        child: user.usuarioInfoModel.urlFoto == "No Photo"
+        child: user.usuarioInfo.urlFoto == "No Photo"
             ? Icon(
                 Icons.person,
                 size: 60,
@@ -294,7 +345,7 @@ class _PerfilPageState
                   bottomRight: Radius.circular(100),
                 ),
                 child: Image.network(
-                  user.usuarioInfoModel.urlFoto,
+                  user.usuarioInfo.urlFoto,
                   fit: BoxFit.cover,
                 ),
               ),
@@ -308,10 +359,10 @@ class _PerfilPageState
       child: Column(
         children: <Widget>[
           Container(
-            height: size.height * 0.04,
+            height: size.height * 0.0395,
             margin: EdgeInsets.only(
-              top: size.height * 0.0075,
-              bottom: size.height * 0.0075,
+              top: size.height * 0.0055,
+              bottom: size.height * 0.0085,
             ),
             decoration: BoxDecoration(
               border: Border(
@@ -338,10 +389,13 @@ class _PerfilPageState
             ),
           ),
           Container(
-            height: size.height * 0.3,
+            height: size.height * 0.255,
             alignment: Alignment.center,
             child: FutureBuilder<List<PostAdocaoModel>>(
-              future: controller.recuperarPets(this.user.usuarioInfoModel.id),
+              future: controller.recuperarPets(
+                this.user.usuarioInfo.id,
+                this.user.usuarioInfo,
+              ),
               builder: (context, snapshot) {
                 Widget defaultWidget;
                 if (snapshot.connectionState == ConnectionState.done) {
@@ -361,16 +415,16 @@ class _PerfilPageState
                                 SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount: 2,
                               childAspectRatio: 1.1,
-                              crossAxisSpacing: 6,
-                              mainAxisSpacing: 6,
+                              crossAxisSpacing: 10,
+                              mainAxisSpacing: 12,
                             ),
                             padding: const EdgeInsets.only(
-                                left: 4, right: 4, top: 8.0),
+                                left: 4, right: 4, top: 6.0),
                             itemBuilder: (_, int index) {
                               PostAdocaoModel pet = listPets[index];
                               return ImagePet(
-                                size: size.height * 0.25,
-                                urlImage: pet.petImages.imgPrincipal,                                
+                                size: size.height * 0.175,
+                                urlImage: pet.petImages.imgPrincipal,
                                 onTap: () async {
                                   await showModalBottomSheet(
                                     elevation: 6.0,
@@ -386,53 +440,40 @@ class _PerfilPageState
                                     builder: (context) {
                                       return BottomSheetPostAdocao(
                                         postAdotation: pet,
-                                        usuarioModel: controller.usuario ?? null,
+                                        usuarioModel:
+                                            controller.usuario ?? null,
                                       );
                                     },
-                                  ).then((value){
-                                    if(value){
-                                      UsuarioChatModel usuarioChat = UsuarioChatModel(
-                                        identifier: user.usuarioInfoModel.id,
-                                        name: user.usuarioInfoModel.nome +
-                                            " " +
-                                            user.usuarioInfoModel.sobreNome,
-                                        image: user.usuarioInfoModel.urlFoto,
+                                  ).then((value) {
+                                    if (value) {
+                                      UsuarioChatModel usuarioChat =
+                                          UsuarioChatModel(
+                                        identifier: user.usuarioInfo.id,
+                                        name: user.usuarioInfo
+                                                is UsuarioInfoModel
+                                            ? (user.usuarioInfo
+                                                        as UsuarioInfoModel)
+                                                    .nome +
+                                                " " +
+                                                (user.usuarioInfo
+                                                        as UsuarioInfoModel)
+                                                    .sobreNome
+                                            : (user.usuarioInfo
+                                                    as UsuarioInfoJuridicoModel)
+                                                .nomeOrg,
+                                        image: user.usuarioInfo.urlFoto,
                                       );
                                       controller.changePageConversa();
                                       Modular.to.pop();
-                                      Future.delayed(Duration(milliseconds: 200), () {
+                                      Future.delayed(
+                                          Duration(milliseconds: 200), () {
                                         bool viewed = false;
-                                        Modular.to.pushNamed("/home/chat/$viewed", arguments: usuarioChat);
+                                        Modular.to.pushNamed(
+                                            "/home/chat/$viewed",
+                                            arguments: usuarioChat);
                                       });
                                     }
                                   });
-                                  // await Modular.to.showDialog(
-                                  //   builder: (context) {
-                                  //     return Center(
-                                  //       child: ShowPostAdocaoPage(
-                                  //         postAdotation: pet,
-                                  //         usuarioModel:
-                                  //             controller.usuario ?? null,
-                                  //       ),
-                                  //     );
-                                  //   },
-                                  // ).then((value){
-                                  //   if(value){
-                                  //     UsuarioChatModel usuarioChat = UsuarioChatModel(
-                                  //       identifier: user.usuarioInfoModel.id,
-                                  //       name: user.usuarioInfoModel.nome +
-                                  //           " " +
-                                  //           user.usuarioInfoModel.sobreNome,
-                                  //       image: user.usuarioInfoModel.urlFoto,
-                                  //     );
-                                  //     controller.changePageConversa();
-                                  //     Modular.to.pop();
-                                  //     Future.delayed(Duration(milliseconds: 200), () {
-                                  //       bool viewed = false;
-                                  //       Modular.to.pushNamed("/home/chat/$viewed", arguments: usuarioChat);
-                                  //     });
-                                  //   }
-                                  // });
                                 },
                               );
                             },

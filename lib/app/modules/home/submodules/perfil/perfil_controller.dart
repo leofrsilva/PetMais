@@ -11,8 +11,12 @@ import 'package:path_provider/path_provider.dart';
 import 'package:petmais/app/modules/home/controllers/animation_drawer_controller.dart';
 import 'package:petmais/app/modules/home/submodules/adocao_del/adocao_del_module.dart';
 import 'package:petmais/app/modules/home/submodules/drawer/drawer_menu_controller.dart';
+import 'package:petmais/app/modules/home/widgets/BottomSheetPostAdocao.dart';
 import 'package:petmais/app/shared/models/pet/pet_model.dart';
 import 'package:petmais/app/shared/models/post_adocao/post_adocao_model.dart';
+import 'package:petmais/app/shared/models/usuario/usuario_chat_model.dart';
+import 'package:petmais/app/shared/models/usuario/usuario_info_juridico_model.dart';
+import 'package:petmais/app/shared/models/usuario/usuario_info_model.dart';
 import 'package:petmais/app/shared/models/usuario/usuario_model.dart';
 import 'package:petmais/app/shared/repository/adocao_remote/adocao_remote_repository.dart';
 import 'package:petmais/app/shared/repository/pet_remote/pet_remote_repository.dart';
@@ -22,7 +26,6 @@ import '../../home_controller.dart';
 
 part 'perfil_controller.g.dart';
 
-@Injectable()
 class PerfilController = _PerfilControllerBase with _$PerfilController;
 
 abstract class _PerfilControllerBase with Store {
@@ -55,7 +58,12 @@ abstract class _PerfilControllerBase with Store {
   }
 
   void showUpdUser() async {
-    var result = await Navigator.of(context).pushNamed("/updateUser");
+    var result;
+    if (this.usuario.usuarioInfo is UsuarioInfoModel) {
+      result = await Navigator.of(context).pushNamed("/updateUser");
+    } else {
+      result = await Navigator.of(context).pushNamed("/updateUserJuridico");
+    }
     if (result != null) {
       FlushbarHelper.createSuccess(
         duration: Duration(milliseconds: 1750),
@@ -63,6 +71,7 @@ abstract class _PerfilControllerBase with Store {
       )..show(this.context);
       this._homeController.auth.usuario = result;
       await this._homeController.signIn();
+      this.atualizarInfoUser();
     }
   }
 
@@ -121,9 +130,14 @@ abstract class _PerfilControllerBase with Store {
     }
     emailUser = emailUser + ".jpg";
 
-    if (this.usuario.usuarioInfoModel.urlFoto != "No Photo") {
-      this.imgDepreciada =
-          this.usuario.usuarioInfoModel.urlFoto.split("image_")[1];
+    if (this.usuario.usuarioInfo.urlFoto != "No Photo") {
+      this.imgDepreciada = (this.usuario.usuarioInfo is UsuarioInfoModel)
+          ? (this.usuario.usuarioInfo as UsuarioInfoModel)
+              .urlFoto
+              .split("image_")[1]
+          : (this.usuario.usuarioInfo as UsuarioInfoJuridicoModel)
+              .urlFoto
+              .split("image_")[1];
       //*Verificando diferença entre nome dos arquivos
       if (emailUser != this.imgDepreciada) {
         this.isDeleteImgDepreciada = true;
@@ -163,7 +177,7 @@ abstract class _PerfilControllerBase with Store {
           if (isDeleteImgDepreciada) {
             String urlFoto = "images/perfil/" + tmpImage.path.split("/").last;
             await usuarioRepository
-                .updateUrlFotoUser(this.usuario.usuarioInfoModel.id, urlFoto)
+                .updateUrlFotoUser(this.usuario.usuarioInfo.id, urlFoto)
                 .then((String result) {
               //* Stop Loading
               Modular.to.pop();
@@ -203,7 +217,7 @@ abstract class _PerfilControllerBase with Store {
 
   void updateInAppImage(String urlFoto) {
     UsuarioModel usuarioModel = this.usuario;
-    usuarioModel.usuarioInfoModel.urlFoto =
+    (usuarioModel.usuarioInfo as UsuarioInfoModel).urlFoto =
         UsuarioRemoteRepository.URL + "/files/" + urlFoto;
     this._homeController.signIn();
   }
@@ -211,6 +225,11 @@ abstract class _PerfilControllerBase with Store {
   //* Atualizando Imagem do Drawer
   void atualizarImage() {
     this._drawerMenuController.execClearCache();
+  }
+
+  //* Atualizando Imagem do Drawer
+  void atualizarInfoUser() {
+    this._drawerMenuController.resetInfoUser();
   }
 
   //? Loading
@@ -269,9 +288,34 @@ abstract class _PerfilControllerBase with Store {
     });
   }
 
+  Future showPostAdocao(PostAdocaoModel postAdocaoModel, UsuarioModel userModel,
+      {Function onPressedDelete}) async {
+    await showModalBottomSheet(
+      elevation: 6.0,
+      clipBehavior: Clip.antiAlias,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(15),
+          topRight: Radius.circular(15),
+        ),
+      ),
+      isScrollControlled: true,
+      context: context,
+      builder: (context) {
+        return BottomSheetPostAdocao(
+          postAdotation: postAdocaoModel,
+          usuarioModel: userModel,
+          isUpd: true,
+          isDelete: true,
+          onPressedDel: onPressedDelete,
+        );
+      },
+    );
+  }
+
   Future<List<PetModel>> recuperarPets() async {
     return await this._petRemoteRepository.listPet(
-          idDono: this.usuario.usuarioInfoModel.id,
+          idDono: this.usuario.usuarioInfo.id,
           paraAdocao: false,
           agruparEsp: "",
           agruparSex: "",
@@ -279,9 +323,15 @@ abstract class _PerfilControllerBase with Store {
   }
 
   Future<List<PostAdocaoModel>> recuperarPetsAdocao() async {
-    int identifir = this.usuario.usuarioInfoModel.id;
-    return await this
-        ._adocaoRemoteRepository
-        .listAdocoes(identifir, especie: "", raca: "");
+    int identifir = this.usuario.usuarioInfo.id;
+    if (this.usuario.usuarioInfo is UsuarioInfoModel) {
+      return await this
+          ._adocaoRemoteRepository
+          .listAdocoes(identifir, especie: "", raca: "");
+    } else {
+      return await this
+          ._adocaoRemoteRepository
+          .listOngAdocoes(identifir, especie: "", raca: "");
+    }
   }
 }

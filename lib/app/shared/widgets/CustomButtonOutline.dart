@@ -4,6 +4,7 @@ import 'package:petmais/app/shared/utils/colors.dart';
 class CustomButtonOutline extends StatelessWidget {
   final Function onPressed;
   final String text;
+  final double fontsize;
   final Color corText;
   final double elevation;
   final double width;
@@ -14,6 +15,7 @@ class CustomButtonOutline extends StatelessWidget {
   const CustomButtonOutline({
     @required this.onPressed,
     @required this.text,
+    this.fontsize = 18.0,
     this.corText,
     this.elevation = 5.0,
     this.width = double.infinity,
@@ -46,7 +48,7 @@ class CustomButtonOutline extends StatelessWidget {
               style: TextStyle(
                 color: this.corText ?? DefaultColors.secondary,
                 letterSpacing: 1.5,
-                fontSize: 18.0,
+                fontSize: this.fontsize,
                 fontWeight: FontWeight.bold,
                 fontFamily: "RussoOne",
               ),

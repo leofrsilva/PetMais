@@ -5,6 +5,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:petmais/app/modules/home/submodules/adocao/models/conversation/conversation_model.dart';
 import 'package:petmais/app/modules/home/submodules/chat/models/message/message_model.dart';
 import 'package:petmais/app/shared/models/usuario/usuario_chat_model.dart';
+import 'package:petmais/app/shared/models/usuario/usuario_info_juridico_model.dart';
+import 'package:petmais/app/shared/models/usuario/usuario_info_model.dart';
 import 'package:petmais/app/shared/models/usuario/usuario_model.dart';
 
 const HASURA_URL =
@@ -36,9 +38,15 @@ class FirestoreChatRepository {
 
   Future<UsuarioChatModel> updateInfoUser(UsuarioModel usuario) async {
     UsuarioChatModel usuarioChat = UsuarioChatModel(
-      identifier: usuario.usuarioInfoModel.id,
-      name: usuario.usuarioInfoModel.nome + " " + usuario.usuarioInfoModel.sobreNome,
-      image: usuario.usuarioInfoModel.urlFoto,
+      identifier: usuario.usuarioInfo.id,
+      name: usuario.usuarioInfo is UsuarioInfoModel
+          ? (usuario.usuarioInfo as UsuarioInfoModel).nome +
+              " " +
+              (usuario.usuarioInfo as UsuarioInfoModel).sobreNome
+          : (usuario.usuarioInfo as UsuarioInfoJuridicoModel).nomeOrg,
+      image: usuario.usuarioInfo is UsuarioInfoModel
+          ? (usuario.usuarioInfo as UsuarioInfoModel).urlFoto
+          : (usuario.usuarioInfo as UsuarioInfoJuridicoModel).urlFoto,
       status: true,
     );
     if (this._connection == null) {
@@ -84,11 +92,11 @@ class FirestoreChatRepository {
   //* Set Viewed
   Future setViewed(bool view, String idUser, String idUserConcat) async {
     await store
-            .collection("conversas")
-            .doc(idUser)
-            .collection("ultima_conversa")
-            .doc(idUserConcat)
-            .set({"viewed": true}, SetOptions(merge: true));
+        .collection("conversas")
+        .doc(idUser)
+        .collection("ultima_conversa")
+        .doc(idUserConcat)
+        .set({"viewed": true}, SetOptions(merge: true));
   }
 
   //* ----------------------------------------------------------------------
@@ -96,7 +104,7 @@ class FirestoreChatRepository {
   Future addConversation(
     ConversationModel conversation,
   ) async {
-     /*
+    /*
         + conversas
           + Leonardo
             + ultima_conversa
@@ -106,15 +114,17 @@ class FirestoreChatRepository {
                 idDes
                 ...
     */
-    await store.collection("conversas")
-      .doc(conversation.idRemetente)
-      .collection("ultima_conversa")
-      .doc(conversation.idDestinatario)
-      .set(conversation.toJson());
+    await store
+        .collection("conversas")
+        .doc(conversation.idRemetente)
+        .collection("ultima_conversa")
+        .doc(conversation.idDestinatario)
+        .set(conversation.toJson());
   }
 
   // Send Message
-  Future<String> sendMessage(String idRemetente, String idDestinatario, MessageModel msg) async {
+  Future<String> sendMessage(
+      String idRemetente, String idDestinatario, MessageModel msg) async {
     await store
         .collection("mensagens")
         .doc(idRemetente)

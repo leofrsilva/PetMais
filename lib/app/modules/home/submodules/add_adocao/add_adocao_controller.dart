@@ -8,6 +8,8 @@ import 'package:mobx/mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:petmais/app/modules/home/home_controller.dart';
 import 'package:petmais/app/shared/models/pet/pet_model.dart';
+import 'package:petmais/app/shared/models/usuario/usuario_info_juridico_model.dart';
+import 'package:petmais/app/shared/models/usuario/usuario_info_model.dart';
 import 'package:petmais/app/shared/models/usuario/usuario_model.dart';
 import 'package:petmais/app/shared/repository/adocao_remote/adocao_remote_repository.dart';
 import 'package:petmais/app/shared/repository/pet_remote/pet_remote_repository.dart';
@@ -17,7 +19,6 @@ import 'models/adocao/adocao_model.dart';
 
 part 'add_adocao_controller.g.dart';
 
-@Injectable()
 class AddAdocaoController = _AddAdocaoControllerBase with _$AddAdocaoController;
 
 abstract class _AddAdocaoControllerBase extends Disposable with Store {
@@ -34,8 +35,14 @@ abstract class _AddAdocaoControllerBase extends Disposable with Store {
       text: this.usuario.email,
     );
     phoneController = MaskedTextController(
-      mask: "(00) 90000-0000",
-      text: this.usuario.usuarioInfoModel.numeroTelefone,
+      text: this.usuario.usuarioInfo is UsuarioInfoModel
+          ? (this.usuario.usuarioInfo as UsuarioInfoModel).numeroTelefone
+          : (this.usuario.usuarioInfo as UsuarioInfoJuridicoModel)
+              .telefone1
+              .replaceFirst("-", ""),
+      mask: this.usuario.usuarioInfo is UsuarioInfoModel
+          ? "(00) 90000-0000"
+          : "(00) 000000000",
     );
     descricaoController = TextEditingController();
     focusTelefone = FocusNode();
@@ -136,7 +143,7 @@ abstract class _AddAdocaoControllerBase extends Disposable with Store {
 
   Future<List<PetModel>> recuperarPets() async {
     return await this._petRemoteRepository.listPetsAdocao(
-          this.usuario.usuarioInfoModel.id,
+          this.usuario.usuarioInfo.id,
           paraDoacao: 0,
         );
   }

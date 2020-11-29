@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:io';
 
 import 'package:flushbar/flushbar_helper.dart';
@@ -11,15 +10,13 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import 'package:mobx/mobx.dart';
 import 'package:path_provider/path_provider.dart';
-
 import 'package:petmais/app/shared/models/usuario/usuario_info_model.dart';
 import 'package:petmais/app/shared/utils/colors.dart';
-import '../../cadastro_controller.dart';
 
+import '../../cadastro_controller.dart';
 part 'pessoa_fisica_controller.g.dart';
 
-class PessoaFisicaController = _PessoaFisicaControllerBase
-    with _$PessoaFisicaController;
+class PessoaFisicaController = _PessoaFisicaControllerBase with _$PessoaFisicaController;
 
 abstract class _PessoaFisicaControllerBase extends Disposable with Store {
   BuildContext context;
@@ -221,8 +218,8 @@ abstract class _PessoaFisicaControllerBase extends Disposable with Store {
         foto: urlFoto,
       );
       //* Start Loading
-      this.showLoadin();
-      this.cadastroController.setUsuarioInfoModel = usuarioInfo;
+      this.showLoading();
+      this.cadastroController.setUsuarioInfo = usuarioInfo;
       await this
           .cadastroController
           .cadastrar(this.compressedImage, true)
@@ -259,7 +256,7 @@ abstract class _PessoaFisicaControllerBase extends Disposable with Store {
     this.cadastroController.changePage(0);
   }
 
-  showLoadin() {
+  showLoading() {
     Modular.to.showDialog(builder: (_) {
       return AlertDialog(
         shape: RoundedRectangleBorder(

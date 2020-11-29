@@ -44,6 +44,17 @@ abstract class _DrawerMenuControllerBase with Store {
     functionClearCache.call();
   }
 
+  //? ----------------------------------------------------------
+  //? Reset Info User
+  Function functionResetInfo;
+  setFunctionResetInfo(Function function){
+    this.functionResetInfo = function;
+  }
+
+  void resetInfoUser(){
+    functionResetInfo.call();
+  }
+
   Future exitApp() async {
     this._homeController.exit().then((value) {
       this._homeController.changePage(1);

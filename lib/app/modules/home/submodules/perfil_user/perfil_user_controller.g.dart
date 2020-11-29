@@ -3,17 +3,6 @@
 part of 'perfil_user_controller.dart';
 
 // **************************************************************************
-// InjectionGenerator
-// **************************************************************************
-
-final $PerfilUserController = BindInject(
-  (i) => PerfilUserController(
-      i<HomeController>(), i<AdocaoRemoteRepository>(), i<AdocaoController>()),
-  singleton: true,
-  lazy: true,
-);
-
-// **************************************************************************
 // StoreGenerator
 // **************************************************************************
 

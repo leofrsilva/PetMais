@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:petmais/app/shared/models/post_adocao/post_adocao_model.dart';
+import 'package:petmais/app/shared/models/usuario/usuario_model.dart';
 import 'package:petmais/app/shared/utils/colors.dart';
-import 'package:petmais/app/shared/utils/font_style.dart';
 
+// ignore: must_be_immutable
 class PostAdotation extends StatelessWidget {
   final Function onTap;
   final PostAdocaoModel postAdotationModel;
+  final int idDono;
+
+  Widget img;
 
   PostAdotation({
     this.onTap,
     this.postAdotationModel,
+    this.idDono,
   });
 
   @override
@@ -36,7 +41,8 @@ class PostAdotation extends StatelessWidget {
           borderRadius: BorderRadius.circular(20),
           child: Row(
             children: <Widget>[
-              _imagePost(postAdotationModel.petImages.imgPrincipal),
+              _imagePost(postAdotationModel.petImages.imgPrincipal,
+                  postAdotationModel.typeUser),
               SizedBox(width: 20),
               Container(
                 padding: const EdgeInsets.only(right: 8),
@@ -50,7 +56,13 @@ class PostAdotation extends StatelessWidget {
                         Expanded(
                           child: Text(
                             postAdotationModel.nome,
-                            style: kLabelTitleStyle,
+                            style: TextStyle(
+                              color: DefaultColors.secondary,
+                              fontFamily:
+                                  'OpenSans', //GoogleFonts.montserrat().fontFamily,
+                              fontWeight: FontWeight.w500,
+                              fontSize: size.height * 0.03,
+                            ),
                           ),
                         ),
                       ],
@@ -61,13 +73,14 @@ class PostAdotation extends StatelessWidget {
                           child: Text(
                             postAdotationModel.raca != "null"
                                 ? postAdotationModel.especie +
-                                    " - " + 
+                                    " - " +
                                     postAdotationModel.raca +
-                                    "\n" +
+                                    " | " +
                                     sexo
                                 : postAdotationModel.especie + " | " + sexo,
                             style: TextStyle(
-                              fontSize: 12,
+                              fontSize: size.height * 0.02,
+                              height: size.height * 0.002,
                               color: DefaultColors.secondarySmooth,
                               fontFamily: "Changa",
                             ),
@@ -84,7 +97,7 @@ class PostAdotation extends StatelessWidget {
                             postAdotationModel.descricao,
                             maxLines: 3,
                             style: TextStyle(
-                              fontSize: 13,
+                              fontSize: size.height * 0.019,
                               color: Colors.black26,
                               fontFamily: "OpenSans",
                             ),
@@ -114,7 +127,42 @@ class PostAdotation extends StatelessWidget {
     );
   }
 
-  Widget _imagePost(String url) {
+  Widget _imagePost(String url, TypeUser typerUser) {
+    img = Stack(
+      children: [
+        ClipRRect(
+          borderRadius: BorderRadius.circular(20),
+          child: Image.network(
+            url,
+            fit: BoxFit.cover,
+            width: 150,
+            height: 150,
+          ),
+        ),
+        if (typerUser == TypeUser.juridica)
+          ClipRRect(
+            borderRadius: BorderRadius.circular(20),
+            child: Container(
+              width: 150,
+              height: 150,
+              color: Colors.black.withOpacity(0.4),
+              alignment: Alignment.bottomLeft,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Opacity(
+                  opacity: 1,
+                  child: Image.asset(
+                    "assets/images/background_ong.png",
+                    fit: BoxFit.contain,
+                    width: 35,
+                    height: 35,
+                  ),
+                ),
+              ),
+            ),
+          ),
+      ],
+    );
     return Container(
       width: 150,
       height: 150,
@@ -122,13 +170,7 @@ class PostAdotation extends StatelessWidget {
         color: DefaultColors.others.withOpacity(0.5),
         borderRadius: BorderRadius.circular(20),
       ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(20),
-        child: Image.network(
-          url,
-          fit: BoxFit.cover,
-        ),
-      ),
+      child: img,
     );
   }
 }

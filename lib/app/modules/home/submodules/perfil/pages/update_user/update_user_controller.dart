@@ -7,6 +7,7 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import 'package:mobx/mobx.dart';
 import 'package:petmais/app/modules/home/submodules/perfil/perfil_controller.dart';
+import 'package:petmais/app/shared/models/usuario/usuario_info_model.dart';
 import 'package:petmais/app/shared/models/usuario/usuario_model.dart';
 import 'package:petmais/app/shared/utils/colors.dart';
 part 'update_user_controller.g.dart';
@@ -21,20 +22,20 @@ abstract class _UpdateUserControllerBase with Store {
   PerfilController _perfilController;
   _UpdateUserControllerBase(this._perfilController) {
     this.nomeController = TextEditingController(
-      text: this.usuario.usuarioInfoModel.nome,
+      text: (this.usuario.usuarioInfo as UsuarioInfoModel).nome,
     );
     this.sobrenomeController = TextEditingController(
-      text: this.usuario.usuarioInfoModel.sobreNome,
+      text: (this.usuario.usuarioInfo as UsuarioInfoModel).sobreNome,
     );
     this.emailController = TextEditingController(
       text: this.usuario.email,
     );
     this.dataController = MaskedTextController(
-      text: this.usuario.usuarioInfoModel.dataNascimento,
+      text: (this.usuario.usuarioInfo as UsuarioInfoModel).dataNascimento,
       mask: "00/00/0000",
     );
     phoneController = MaskedTextController(
-      text: this.usuario.usuarioInfoModel.numeroTelefone,
+      text: (this.usuario.usuarioInfo as UsuarioInfoModel).numeroTelefone,
       mask: "(00) 90000-0000",
     );
     focusSobrenome = FocusNode();
@@ -183,24 +184,24 @@ abstract class _UpdateUserControllerBase with Store {
         //* Start Loading
         if (record) this.showLoading();
         setError(false);
-        if ((usuario.usuarioInfoModel.nome.toLowerCase() !=
+        if (((this.usuario.usuarioInfo as UsuarioInfoModel).nome.toLowerCase() !=
                 nomeController.text.trim().toLowerCase()) ||
-            (usuario.usuarioInfoModel.sobreNome.toLowerCase() !=
+            ((this.usuario.usuarioInfo as UsuarioInfoModel).sobreNome.toLowerCase() !=
                 sobrenomeController.text.trim().toLowerCase()) ||
-            (usuario.usuarioInfoModel.dataNascimento.toLowerCase() !=
+            ((this.usuario.usuarioInfo as UsuarioInfoModel).dataNascimento.toLowerCase() !=
                 dataController.text.trim().toLowerCase()) ||
-            (usuario.usuarioInfoModel.numeroTelefone.toLowerCase() !=
+            ((this.usuario.usuarioInfo as UsuarioInfoModel).numeroTelefone.toLowerCase() !=
                 phoneController.text.trim().toLowerCase()) ||
             (usuario.email.toLowerCase() !=
                 emailController.text.trim().toLowerCase())) {
           UsuarioModel usuarioModel = this.usuario;
           usuarioModel.email = emailController.text.trim();
-          usuarioModel.usuarioInfoModel.nome = nomeController.text.trim();
-          usuarioModel.usuarioInfoModel.sobreNome =
+          (this.usuario.usuarioInfo as UsuarioInfoModel).nome = nomeController.text.trim();
+          (this.usuario.usuarioInfo as UsuarioInfoModel).sobreNome =
               sobrenomeController.text.trim();
-          usuarioModel.usuarioInfoModel.dataNascimento =
+          (this.usuario.usuarioInfo as UsuarioInfoModel).dataNascimento =
               dataController.text.trim();
-          usuarioModel.usuarioInfoModel.numeroTelefone =
+          (this.usuario.usuarioInfo as UsuarioInfoModel).numeroTelefone =
               phoneController.text.trim();
           await this
               ._perfilController

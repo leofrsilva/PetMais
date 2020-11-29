@@ -7,6 +7,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:petmais/app/modules/home/submodules/meus_pets/pages/add_pet/add_pet_controller.dart';
 import 'package:petmais/app/shared/models/pet/pet_model.dart';
+import 'package:petmais/app/shared/models/usuario/usuario_info_model.dart';
 import 'package:petmais/app/shared/models/usuario/usuario_model.dart';
 import 'package:petmais/app/shared/utils/colors.dart';
 import 'package:petmais/app/shared/utils/font_style.dart';
@@ -66,6 +67,163 @@ class _AddPetPageState extends ModularState<AddPetPage, AddPetController> {
   }
 
   Widget _screenData(Size size) {
+    Widget data;
+    if (controller.usuario.usuarioInfo is UsuarioInfoModel) {
+      data = Padding(
+        padding: const EdgeInsets.only(bottom: 20),
+        child: CustomTextFieldIcon(
+          height: 40.0,
+          controller: controller.dataController,
+          focusNode: controller.focusData,
+          textInputType: TextInputType.number,
+          textInputAction: TextInputAction.next,
+          onFieldSubmitted: (String value) {
+            controller.focusEspecie.requestFocus();
+          },
+          label: "Data de Nascimento",
+          hint: "00/00/0000",
+          contentPadding: const EdgeInsets.symmetric(horizontal: 15.0),
+          widgetIcon: Icon(
+            FontAwesomeIcons.calendar,
+            color: Colors.black26,
+          ),
+          onPressedIcon: () {
+            controller.selectData(context);
+          },
+          validator: (String value) {
+            if (value.length > 0) {
+              if (value.length < 9) {
+                return "  [Data Incompleta]";
+              }
+              if (controller.isValidData(value) == false) {
+                return "  [Data Inválida]";
+              }
+            }
+            return null;
+          },
+        ),
+      );
+    } else {
+      data = Container(
+        padding: const EdgeInsets.only(bottom: 20),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            CustomTextFieldIcon(
+              height: 40.0,
+              controller: controller.dataController,
+              focusNode: controller.focusData,
+              textInputType: TextInputType.number,
+              textInputAction: TextInputAction.next,
+              onFieldSubmitted: (String value) {
+                controller.focusEspecie.requestFocus();
+              },
+              label: "Data",
+              hint: "00/00/0000",
+              contentPadding: const EdgeInsets.symmetric(horizontal: 15.0),
+              widgetIcon: Icon(
+                FontAwesomeIcons.calendar,
+                color: Colors.black26,
+              ),
+              onPressedIcon: () {
+                controller.selectData(context);
+              },
+              validator: (String value) {
+                if (value.length > 0) {
+                  if (value.length < 9) {
+                    return "  [Data Incompleta]";
+                  }
+                  if (controller.isValidData(value) == false) {
+                    return "  [Data Inválida]";
+                  }
+                }
+                return null;
+              },
+            ),
+            Container(
+              height: size.height * 0.1,
+              alignment: AlignmentDirectional.centerStart,
+              child: Observer(builder: (_) {
+                return Row(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Row(
+                      children: [
+                        Radio(
+                          activeColor: DefaultColors.background,
+                          groupValue: controller.typeData,
+                          value: controller.listDataTypes[0],
+                          onChanged: controller.setTypeData,
+                        ),
+                        GestureDetector(
+                          child: Text("Nascimento", style: kLabelStyle),
+                          onTap: (){
+                            if(controller.typeData == controller.listDataTypes[1]){
+                              controller.setTypeData(controller.listDataTypes[0]);
+                            }
+                          },
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Radio(
+                          activeColor: DefaultColors.background,
+                          groupValue: controller.typeData,
+                          value: controller.listDataTypes[1],
+                          onChanged: controller.setTypeData,
+                        ),
+                         GestureDetector(
+                          child: Text("Registro", style: kLabelStyle),
+                          onTap: (){
+                            if(controller.typeData == controller.listDataTypes[0]){
+                              controller.setTypeData(controller.listDataTypes[1]);
+                            }
+                          },
+                        ),
+                      ],
+                    ),
+                    // Theme(
+                    //   data: ThemeData(unselectedWidgetColor: Colors.black26),
+                    //   child: RadioListTile<String>(
+                    //     dense: true,
+                    //     activeColor: DefaultColors.secondarySmooth,
+                    //     title: Text("Data de Nascimento", style: kLabelStyle),
+                    //     selected:
+                    //         controller.typeData == controller.listDataTypes[0]
+                    //             ? true
+                    //             : false,
+                    //     value: controller.listDataTypes[0],
+                    //     groupValue: controller.typeData,
+                    //     onChanged: controller.setTypeData,
+                    //   ),
+                    // ),
+                    // Theme(
+                    //   data: ThemeData(unselectedWidgetColor: Colors.black26),
+                    //   child: RadioListTile<String>(
+                    //     dense: true,
+                    //     activeColor: DefaultColors.secondarySmooth,
+                    //     title: Text("Data de Registro", style: kLabelStyle),
+                    //     selected:
+                    //         controller.typeData == controller.listDataTypes[1]
+                    //             ? true
+                    //             : false,
+                    //     value: controller.listDataTypes[1],
+                    //     groupValue: controller.typeData,
+                    //     onChanged: controller.setTypeData,
+                    //   ),
+                    // ),
+                  ],
+                );
+              }),
+            ),
+          ],
+        ),
+      );
+    }
     return Container(
       height: size.height * 0.8,
       child: SingleChildScrollView(
@@ -107,40 +265,8 @@ class _AddPetPageState extends ModularState<AddPetPage, AddPetController> {
                 );
               }),
             ),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 20),
-              child: CustomTextFieldIcon(
-                height: 40.0,
-                controller: controller.dataController,
-                focusNode: controller.focusData,
-                textInputType: TextInputType.number,
-                textInputAction: TextInputAction.next,
-                onFieldSubmitted: (String value) {
-                  controller.focusEspecie.requestFocus();
-                },
-                label: "Data de Nascimento",
-                hint: "00/00/0000",
-                contentPadding: const EdgeInsets.symmetric(horizontal: 15.0),
-                widgetIcon: Icon(
-                  FontAwesomeIcons.calendar,
-                  color: Colors.black26,
-                ),
-                onPressedIcon: () {
-                  controller.selectData(context);
-                },
-                validator: (String value) {
-                  if (value.length > 0) {
-                    if (value.length < 9) {
-                      return "  [Data Incompleta]";
-                    }
-                    if (controller.isValidData(value) == false) {
-                      return "  [Data Inválida]";
-                    }
-                  }
-                  return null;
-                },
-              ),
-            ),
+            //* Escolha qual tipo de data
+            data,
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
@@ -150,6 +276,7 @@ class _AddPetPageState extends ModularState<AddPetPage, AddPetController> {
                     padding: const EdgeInsets.only(bottom: 10),
                     child: Observer(builder: (_) {
                       return CustomRadioButton(
+                        size: size,
                         label: "Sexo",
                         primaryTitle: "Macho",
                         secondyTitle: "Fêmea",
@@ -258,10 +385,10 @@ class _AddPetPageState extends ModularState<AddPetPage, AddPetController> {
                     color: DefaultColors.secondary),
                 onPressed: () {
                   controller.pageController.animateToPage(
-                      0,
-                      duration: Duration(milliseconds: 150),
-                      curve: Curves.easeIn,
-                    );
+                    0,
+                    duration: Duration(milliseconds: 150),
+                    curve: Curves.easeIn,
+                  );
                 },
               ),
             ),
@@ -319,8 +446,15 @@ class _AddPetPageState extends ModularState<AddPetPage, AddPetController> {
                               if (value.isEmpty) {
                                 return "[O campo é obrigatório]";
                               }
-                              if (value.length < 15) {
-                                return "[Número de telefone Incompleto]";
+                              if (controller.usuario.usuarioInfo
+                                  is UsuarioInfoModel) {
+                                if (value.length < 15) {
+                                  return "[Número de telefone Incompleto]";
+                                }
+                              } else {
+                                if (value.length < 13) {
+                                  return "[Telefone Incompleto]";
+                                }
                               }
                               return null;
                             },
@@ -329,15 +463,27 @@ class _AddPetPageState extends ModularState<AddPetPage, AddPetController> {
                         Padding(
                           padding: const EdgeInsets.only(bottom: 10),
                           child: CustomTextField(
-                            height: size.height * 0.28,
+                            height: size.height * 0.25,
                             controller: controller.descricaoController,
                             focusNode: controller.focusDescricao,
                             label: "Decrição",
                             hint: "  ...",
                             numLines: 5,
+                            heightText: size.height,
                             maxCaracteres: 215,
                             onFieldSubmitted: (String value) {
                               FocusScope.of(context).unfocus();
+                            },
+                             validator: (String value) {
+                              if (value.isEmpty) {
+                                return "[O campo é obrigatório]";
+                              }
+
+                              if (value.length < 3) {
+                                return "[Descrição deve conter mais de 3 caracteres]";
+                              }
+
+                              return null;
                             },
                           ),
                         ),
@@ -355,7 +501,7 @@ class _AddPetPageState extends ModularState<AddPetPage, AddPetController> {
                   value: controller.forAdocao,
                   onChanged: controller.setForAdocao,
                   activeColor: DefaultColors.primary,
-                  onTap: () {                    
+                  onTap: () {
                     controller.setForAdocao(!controller.forAdocao);
                   },
                 );
@@ -390,9 +536,9 @@ class _AddPetPageState extends ModularState<AddPetPage, AddPetController> {
       builder: (FormFieldState<List<File>> state) {
         return Observer(builder: (_) {
           return Container(
-            height: size.height * 0.21,
+            height: size.height * 0.175,
             width: size.width * 0.98,
-            margin: const EdgeInsets.only(bottom: 15),
+            margin: EdgeInsets.only(bottom: size.height * 0.02),
             child: Column(
               children: <Widget>[
                 Expanded(
@@ -506,7 +652,7 @@ class _AddPetPageState extends ModularState<AddPetPage, AddPetController> {
               ],
             ),
           );
-        });        
+        });
       },
     );
   }

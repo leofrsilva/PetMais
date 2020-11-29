@@ -6,6 +6,8 @@ import 'package:petmais/app/modules/home/submodules/add_adocao/models/adocao/ado
 import 'package:petmais/app/shared/models/pet/pet_images_model.dart';
 import 'package:petmais/app/shared/models/pet/pet_model.dart';
 import 'package:petmais/app/modules/home/submodules/meus_pets/meus_pets_controller.dart';
+import 'package:petmais/app/shared/models/usuario/usuario_info_juridico_model.dart';
+import 'package:petmais/app/shared/models/usuario/usuario_info_model.dart';
 import 'package:petmais/app/shared/models/usuario/usuario_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -42,10 +44,17 @@ abstract class _AddPetControllerBase extends Disposable with Store {
       text: this.usuario.email,
     );
     this.phoneController = MaskedTextController(
-      text: this.usuario.usuarioInfoModel.numeroTelefone,
-      mask: "(00) 90000-0000",
+      text: this.usuario.usuarioInfo is UsuarioInfoModel
+          ? (this.usuario.usuarioInfo as UsuarioInfoModel).numeroTelefone
+          : (this.usuario.usuarioInfo as UsuarioInfoJuridicoModel)
+              .telefone1
+              .replaceFirst("-", ""),
+      mask: this.usuario.usuarioInfo is UsuarioInfoModel
+          ? "(00) 90000-0000"
+          : "(00) 000000000",
     );
     this.pageController = PageController(initialPage: 0);
+    this.typeData = listDataTypes[0];
 
     this.focusNome = FocusNode();
     this.focusData = FocusNode();
@@ -82,28 +91,43 @@ abstract class _AddPetControllerBase extends Disposable with Store {
 
   @observable
   bool isError = false;
-
   @action
   setError(bool value) => this.isError = value;
 
   @observable
   bool forAdocao = false;
-
   @action
   setForAdocao(bool value) {
     if (this.forAdocao == false) {
       this.emailController.text = this.usuario.email;
-      this.phoneController.text = this.usuario.usuarioInfoModel.numeroTelefone;
+      this.phoneController.text = this.usuario.usuarioInfo is UsuarioInfoModel
+          ? (this.usuario.usuarioInfo as UsuarioInfoModel).numeroTelefone
+          : (this.usuario.usuarioInfo as UsuarioInfoJuridicoModel).telefone1;
       this.setError(false);
     }
     this.forAdocao = value;
   }
 
+  List<String> listDataTypes = ["n", "r"];
+  @observable
+  String typeData;
+  @action
+  setTypeData(String value) => this.typeData = value;
+
   @observable
   String valueSexo = "M";
-
   @action
   setSexo(String value) => this.valueSexo = value;
+
+  //* Formatar Telefone
+  String formatterPhone(String phon) {
+    if (phon.length == 14) {
+      return phon.replaceRange(9, 10, phon.substring(9, 10) + "-");
+    } else if (phon.length == 13) {
+      return phon.replaceRange(8, 9, phon.substring(8, 9) + "-");
+    }
+    return null;
+  }
 
   //? -----------------------------------------------------------------------
   //? Lista de Imagem
@@ -126,6 +150,7 @@ abstract class _AddPetControllerBase extends Disposable with Store {
   //? -----------------------------------------------------------------------
   //? Imagem
   Future selectImage() async {
+    FocusScope.of(this.context).unfocus();
     String op = await showDialog(
       context: context,
       builder: (context) {
@@ -208,7 +233,7 @@ abstract class _AddPetControllerBase extends Disposable with Store {
     Directory tempDir = await getTemporaryDirectory();
     String path = tempDir.path;
     //? String title = _titleController.text;
-    String id = this.usuario.usuarioInfoModel.id.toString();
+    String id = this.usuario.usuarioInfo.id.toString();
     String rand = DateTime.now().millisecondsSinceEpoch.toString();
 
     File compressImg = new File("$path/image_$id" + "_$rand.jpg")
@@ -308,6 +333,8 @@ abstract class _AddPetControllerBase extends Disposable with Store {
     await Modular.to.showDialog(
       builder: (context) {
         return StatefulBuilder(builder: (context, setState) {
+          //* SIZE
+          Size size = MediaQuery.of(context).size;
           return AlertDialog(
             shape: ContinuousRectangleBorder(
               borderRadius: BorderRadius.circular(20),
@@ -321,6 +348,7 @@ abstract class _AddPetControllerBase extends Disposable with Store {
                 Padding(
                   padding: const EdgeInsets.only(top: 12.0),
                   child: CustomRadioButton<String>(
+                    size: size,
                     primaryTitle: "Cachorro",
                     secondyTitle: "Gato",
                     primaryValue: "Cachorro",
@@ -381,7 +409,7 @@ abstract class _AddPetControllerBase extends Disposable with Store {
       );
       // Model Pet
       PetModel pet = PetModel(
-        idDono: this.usuario.usuarioInfoModel.id,
+        idDono: this.usuario.usuarioInfo.id,
         nome: this.nomeController.text.trim(),
         dataNascimento: this.dataController.text.trim(),
         especie: this.especieController.text.trim(),
@@ -435,14 +463,15 @@ abstract class _AddPetControllerBase extends Disposable with Store {
           title: "Cadastro",
           message: "Falha no cadastro das Imagens do Pet!",
         )..show(this.context);
-      }
-      //* Sucesso no Cadastro
-      else if (result == "Registered") {
+      } else if (result == "Registered") {
+        //* Sucesso no Cadastro
         if (this.forAdocao == true) {
           AdocaoModel adocaoModel = AdocaoModel(
             idPet: idPet,
             email: this.emailController.text.trim(),
-            numeroTelefone: this.phoneController.text.trim(),
+            numeroTelefone: this.usuario.usuarioInfo is UsuarioInfoJuridicoModel
+                ? this.formatterPhone(this.phoneController.text.trim())
+                : this.phoneController.text.trim(),
             dataRegistro: _formatarData(DateTime.now()),
             descricao: this.descricaoController.text.trim(),
           );

@@ -8,7 +8,6 @@ import '../../home_controller.dart';
 
 part 'pet_shop_controller.g.dart';
 
-@Injectable()
 class PetShopController = _PetShopControllerBase with _$PetShopController;
 
 abstract class _PetShopControllerBase with Store {

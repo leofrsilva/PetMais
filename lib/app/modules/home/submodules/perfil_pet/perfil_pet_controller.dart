@@ -1,6 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
@@ -10,8 +8,9 @@ import 'package:petmais/app/modules/home/submodules/adocao_del/adocao_del_module
 import 'package:petmais/app/shared/models/pet/pet_images_model.dart';
 import 'package:petmais/app/shared/models/pet/pet_model.dart';
 import 'package:petmais/app/shared/models/post_adocao/post_adocao_model.dart';
+import 'package:petmais/app/shared/models/usuario/usuario_info_juridico_model.dart';
+import 'package:petmais/app/shared/models/usuario/usuario_info_model.dart';
 import 'package:petmais/app/shared/models/usuario/usuario_model.dart';
-import 'package:petmais/app/shared/repository/adocao_remote/adocao_remote_repository.dart';
 import 'package:petmais/app/shared/repository/pet_remote/pet_remote_repository.dart';
 import 'package:petmais/app/shared/utils/colors.dart';
 import 'package:petmais/app/shared/utils/font_style.dart';
@@ -20,7 +19,6 @@ import '../../home_controller.dart';
 
 part 'perfil_pet_controller.g.dart';
 
-@Injectable()
 class PerfilPetController = _PerfilPetControllerBase with _$PerfilPetController;
 
 abstract class _PerfilPetControllerBase extends Disposable with Store {
@@ -54,6 +52,17 @@ abstract class _PerfilPetControllerBase extends Disposable with Store {
   setPetImages(PetImagesModel value) => this.pet.petImages = value;
 
   List<String> listOp = ["Atualizar Foto", "Excluir Pet"];
+
+  //* ---------------------------------------------------------------------
+  //* Formatar Telefone
+  String formatterPhone(String phon){
+    if(phon.length == 13){
+      return phon.replaceRange(8, 9, phon.substring(8, 9) + "-"); 
+    }
+    else if (phon.length == 14) {
+      return phon.replaceRange(9, 10, phon.substring(9, 10) + "-");
+    }
+  }
 
   //? ---------------------------------------------------------------------
   //? Update Imagem
@@ -224,11 +233,15 @@ abstract class _PerfilPetControllerBase extends Disposable with Store {
     if (map["Result"] == "Found adocao") {
       Map<String, dynamic> adocao = json.decode(map["PetInfo"]);
       PostAdocaoModel postAdocao = PostAdocaoModel(
-        idDono: this.usuario.usuarioInfoModel.id,
+        idDono: this.usuario.usuarioInfo.id,
         idPet: this.pet.id,
-        nomeDono: this.usuario.usuarioInfoModel.nome,
+        nomeDono: this.usuario.usuarioInfo is UsuarioInfoModel
+            ? (this.usuario.usuarioInfo as UsuarioInfoModel).nome
+            : (this.usuario.usuarioInfo as UsuarioInfoJuridicoModel).nomeOrg,
         nome: this.pet.nome,
-        imgDono: this.usuario.usuarioInfoModel.urlFoto,
+        imgDono: this.usuario.usuarioInfo is UsuarioInfoModel
+            ? (this.usuario.usuarioInfo as UsuarioInfoModel).urlFoto
+            : (this.usuario.usuarioInfo as UsuarioInfoJuridicoModel).urlFoto,
         especie: this.pet.especie,
         raca: this.pet.raca,
         sexo: this.pet.sexo,

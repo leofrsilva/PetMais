@@ -3,6 +3,8 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:petmais/app/shared/models/usuario/usuario_info_juridico_model.dart';
+import 'package:petmais/app/shared/models/usuario/usuario_info_model.dart';
 import 'package:petmais/app/shared/models/usuario/usuario_model.dart';
 import 'package:petmais/app/shared/utils/colors.dart';
 import 'package:petmais/app/shared/utils/font_style.dart';
@@ -21,15 +23,20 @@ class _DrawerMenuPageState
     extends ModularState<DrawerMenuPage, DrawerMenuController> {
   //use 'controller' variable to access controller
 
-  void updateImage(){
-    setState(() {                        
+  void updateImage() {
+    setState(() {
       imageCache.clearLiveImages();
     });
+  }
+
+  void updateInfo() {
+    setState(() { });
   }
 
   @override
   Widget build(BuildContext context) {
     controller.setFunctionClearCache(updateImage);
+    controller.setFunctionResetInfo(updateInfo);
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       body: Container(
@@ -45,9 +52,22 @@ class _DrawerMenuPageState
                       padding: const EdgeInsets.only(top: 20),
                       child: _avatar(
                         size,
-                        nome: controller.usuario.usuarioInfoModel.nome,
+                        nome: controller.usuario.usuarioInfo is UsuarioInfoModel
+                            ? (controller.usuario.usuarioInfo
+                                    as UsuarioInfoModel)
+                                .nome
+                            : (controller.usuario.usuarioInfo
+                                    as UsuarioInfoJuridicoModel)
+                                .nomeOrg,
                         email: controller.usuario.email,
-                        urlFoto: controller.usuario.usuarioInfoModel.urlFoto,
+                        urlFoto:
+                            controller.usuario.usuarioInfo is UsuarioInfoModel
+                                ? (controller.usuario.usuarioInfo
+                                        as UsuarioInfoModel)
+                                    .urlFoto
+                                : (controller.usuario.usuarioInfo
+                                        as UsuarioInfoJuridicoModel)
+                                    .urlFoto,
                       ),
                     ),
                     Container(
@@ -70,7 +90,7 @@ class _DrawerMenuPageState
         children: <Widget>[
           Container(
             height: 85,
-              width: 85,
+            width: 85,
             decoration: BoxDecoration(
               color: Colors.grey.withOpacity(0.5),
               borderRadius: BorderRadius.circular(40),
@@ -113,7 +133,15 @@ class _DrawerMenuPageState
                       Expanded(
                         child: Text(
                           nome,
-                          style: kLabelTitleAuxStyle,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: nome.length <= 13 ? 24 : 18,
+                            fontFamily:
+                                'OpenSans', //GoogleFonts.montserrat().fontFamily,
+                            fontWeight: FontWeight.w500,
+                            letterSpacing: 0,
+                            wordSpacing: 0,
+                          ),
                         ),
                       ),
                     ],
@@ -141,20 +169,30 @@ class _DrawerMenuPageState
   }
 
   Widget _listMenu(UsuarioModel user) {
+    bool removeAdocao = false;
+    if (controller.usuario.usuarioInfo is UsuarioInfoJuridicoModel) {
+      if ((controller.usuario.usuarioInfo as UsuarioInfoJuridicoModel)
+              .typeJuridico ==
+          TypeJuridico.petshop) {
+        removeAdocao = true;
+      }
+    }
     return Observer(builder: (_) {
       return SingleChildScrollView(
         child: Column(
           children: <Widget>[
-            _tilesImage(
-              title: "ADOÇÂO",
-              url: "assets/images/btnAdocao.png",
-              selected: controller.opSelected == 1 ? true : false,
-              onTap: () {
-                controller.setOpSelected(1);
-                controller.animationDrawer.closeDrawer();
-              },
-            ),
             SizedBox(height: 5),
+            if (!removeAdocao)
+              _tilesImage(
+                title: "ADOÇÂO",
+                url: "assets/images/btnAdocao.png",
+                selected: controller.opSelected == 1 ? true : false,
+                onTap: () {
+                  controller.setOpSelected(1);
+                  controller.animationDrawer.closeDrawer();
+                },
+              ),
+            if (!removeAdocao) SizedBox(height: 5),
             _tilesImage(
               title: "PET SHOP",
               url: "assets/images/btnPetShop.png",
@@ -169,25 +207,34 @@ class _DrawerMenuPageState
               icon: Icons.account_circle,
               selected: controller.opSelected == 2 ? true : false,
               onTap: () {
-                controller.setOpSelected(2);
+                if (removeAdocao) {
+                  controller.setOpSelected(1);
+                } else {
+                  controller.setOpSelected(2);
+                }
                 controller.animationDrawer.closeDrawer();
               },
             ),
-            _tiles(
-              title: "MEUS PETS",
-              icon: Icons.pets,
-              selected: controller.opSelected == 3 ? true : false,
-              onTap: () {
-                controller.setOpSelected(3);
-                controller.animationDrawer.closeDrawer();
-              },
-            ),
+            if (!removeAdocao)
+              _tiles(
+                title: "MEUS PETS",
+                icon: Icons.pets,
+                selected: controller.opSelected == 3 ? true : false,
+                onTap: () {
+                  controller.setOpSelected(3);
+                  controller.animationDrawer.closeDrawer();
+                },
+              ),
             _tiles(
               title: "USUÁRIOS",
               icon: Icons.search,
               selected: controller.opSelected == 4 ? true : false,
               onTap: () async {
-                controller.setOpSelected(4);
+                if (removeAdocao) {
+                  controller.setOpSelected(2);
+                } else {
+                  controller.setOpSelected(4);
+                }
                 controller.animationDrawer.closeDrawer();
               },
             ),
@@ -229,7 +276,8 @@ class _DrawerMenuPageState
     );
   }
 
-  Widget _tilesImage({String title, String url, bool selected, Function onTap}) {
+  Widget _tilesImage(
+      {String title, String url, bool selected, Function onTap}) {
     return ListTile(
       enabled: true,
       leading: Image.asset(url),

@@ -47,6 +47,21 @@ mixin _$AddPetController on _AddPetControllerBase, Store {
     });
   }
 
+  final _$typeDataAtom = Atom(name: '_AddPetControllerBase.typeData');
+
+  @override
+  String get typeData {
+    _$typeDataAtom.reportRead();
+    return super.typeData;
+  }
+
+  @override
+  set typeData(String value) {
+    _$typeDataAtom.reportWrite(value, super.typeData, () {
+      super.typeData = value;
+    });
+  }
+
   final _$valueSexoAtom = Atom(name: '_AddPetControllerBase.valueSexo');
 
   @override
@@ -103,6 +118,17 @@ mixin _$AddPetController on _AddPetControllerBase, Store {
   }
 
   @override
+  dynamic setTypeData(String value) {
+    final _$actionInfo = _$_AddPetControllerBaseActionController.startAction(
+        name: '_AddPetControllerBase.setTypeData');
+    try {
+      return super.setTypeData(value);
+    } finally {
+      _$_AddPetControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   dynamic setSexo(String value) {
     final _$actionInfo = _$_AddPetControllerBaseActionController.startAction(
         name: '_AddPetControllerBase.setSexo');
@@ -140,6 +166,7 @@ mixin _$AddPetController on _AddPetControllerBase, Store {
     return '''
 isError: ${isError},
 forAdocao: ${forAdocao},
+typeData: ${typeData},
 valueSexo: ${valueSexo},
 listImages: ${listImages},
 totalImg: ${totalImg}

@@ -1,6 +1,6 @@
 import 'package:petmais/app/shared/repository/usuario_remote/usuario_remote_repository.dart';
 
-const String COLUMN_ID = "id";
+const String COLUMN_IDF = "id";
 const String COLUMN_NOME = "nome";
 const String COLUMN_SOBRENOME = "sobreNome";
 const String COLUMN_DATANASCIMENTO = "dataNascimento";
@@ -32,7 +32,7 @@ class UsuarioInfoModel {
   }
 
   UsuarioInfoModel.fromMap(Map map) {
-    this.id = map[COLUMN_ID];
+    this.id = map[COLUMN_IDF];
     this.nome = map[COLUMN_NOME];
     this.sobreNome = map[COLUMN_SOBRENOME];
     this.dataNascimento = map[COLUMN_DATANASCIMENTO];
@@ -52,6 +52,7 @@ class UsuarioInfoModel {
     };
     return result;
   }
+
 
   int get id => this._id;
   set id(int value) => this._id = value;

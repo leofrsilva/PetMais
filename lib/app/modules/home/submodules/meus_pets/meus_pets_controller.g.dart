@@ -3,17 +3,6 @@
 part of 'meus_pets_controller.dart';
 
 // **************************************************************************
-// InjectionGenerator
-// **************************************************************************
-
-final $MeusPetsController = BindInject(
-  (i) => MeusPetsController(i<HomeController>(), i<PetRemoteRepository>(),
-      i<AdocaoRemoteRepository>()),
-  singleton: true,
-  lazy: true,
-);
-
-// **************************************************************************
 // StoreGenerator
 // **************************************************************************
 
@@ -52,6 +41,22 @@ mixin _$MeusPetsController on _MeusPetsControllerBase, Store {
     });
   }
 
+  final _$selectedTypeGroupAtom =
+      Atom(name: '_MeusPetsControllerBase.selectedTypeGroup');
+
+  @override
+  String get selectedTypeGroup {
+    _$selectedTypeGroupAtom.reportRead();
+    return super.selectedTypeGroup;
+  }
+
+  @override
+  set selectedTypeGroup(String value) {
+    _$selectedTypeGroupAtom.reportWrite(value, super.selectedTypeGroup, () {
+      super.selectedTypeGroup = value;
+    });
+  }
+
   final _$_MeusPetsControllerBaseActionController =
       ActionController(name: '_MeusPetsControllerBase');
 
@@ -78,10 +83,22 @@ mixin _$MeusPetsController on _MeusPetsControllerBase, Store {
   }
 
   @override
+  dynamic setSelectedTypeGroup(String value) {
+    final _$actionInfo = _$_MeusPetsControllerBaseActionController.startAction(
+        name: '_MeusPetsControllerBase.setSelectedTypeGroup');
+    try {
+      return super.setSelectedTypeGroup(value);
+    } finally {
+      _$_MeusPetsControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 selectedSexGroup: ${selectedSexGroup},
-selectedEspGroup: ${selectedEspGroup}
+selectedEspGroup: ${selectedEspGroup},
+selectedTypeGroup: ${selectedTypeGroup}
     ''';
   }
 }

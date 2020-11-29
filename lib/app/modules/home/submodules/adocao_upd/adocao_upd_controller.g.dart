@@ -3,16 +3,6 @@
 part of 'adocao_upd_controller.dart';
 
 // **************************************************************************
-// InjectionGenerator
-// **************************************************************************
-
-final $AdocaoUpdController = BindInject(
-  (i) => AdocaoUpdController(i<AdocaoRemoteRepository>()),
-  singleton: true,
-  lazy: true,
-);
-
-// **************************************************************************
 // StoreGenerator
 // **************************************************************************
 

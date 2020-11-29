@@ -232,7 +232,7 @@ abstract class _LoginComumControllerBase extends Disposable with Store {
           .entrar(
         email: this.emailController.text.trim().toLowerCase(),
         senha: this.senhaController.text.trim(),
-        //! type: typeUser,
+        type: TypeUser.fisica,
       )
           .then((String result) {
         this.setLoading(false);

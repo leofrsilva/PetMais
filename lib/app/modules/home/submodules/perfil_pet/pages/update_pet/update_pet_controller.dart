@@ -162,6 +162,8 @@ abstract class _UpdatePetControllerBase with Store {
     await Modular.to.showDialog(
       builder: (context) {
         return StatefulBuilder(builder: (context, setState) {
+          //* SIZE
+          Size size = MediaQuery.of(context).size;
           return AlertDialog(
             shape: ContinuousRectangleBorder(
               borderRadius: BorderRadius.circular(20),
@@ -175,6 +177,7 @@ abstract class _UpdatePetControllerBase with Store {
                 Padding(
                   padding: const EdgeInsets.only(top: 12.0),
                   child: CustomRadioButton<String>(
+                    size: size,
                     primaryTitle: "Cachorro",
                     secondyTitle: "Gato",
                     primaryValue: "Cachorro",

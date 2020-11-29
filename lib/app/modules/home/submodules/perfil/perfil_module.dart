@@ -1,5 +1,7 @@
 import 'package:petmais/app/modules/home/home_controller.dart';
 import 'package:petmais/app/modules/home/submodules/drawer/drawer_menu_controller.dart';
+import 'package:petmais/app/modules/home/submodules/perfil/pages/update_user_juridico/update_user_juridico_controller.dart';
+import 'package:petmais/app/modules/home/submodules/perfil/pages/update_user_juridico/update_user_juridico_page.dart';
 import 'package:petmais/app/shared/repository/adocao_remote/adocao_remote_repository.dart';
 import 'package:petmais/app/shared/repository/pet_remote/pet_remote_repository.dart';
 
@@ -20,6 +22,7 @@ class PerfilModule extends ChildModule {
               i.get<PetRemoteRepository>(),
             )),
         Bind((i) => UpdateUserController(i.get<PerfilController>())),
+        Bind((i) => UpdateUserJuridicoController(i.get<PerfilController>())),
         Bind((i) => AdocaoRemoteRepository()),
         Bind((i) => PetRemoteRepository()),
       ];
@@ -28,6 +31,7 @@ class PerfilModule extends ChildModule {
   List<ModularRouter> get routers => [
         ModularRouter(Modular.initialRoute, child: (_, args) => PerfilPage()),
         ModularRouter("/updateUser", child: (_, args) => UpdateUserPage(), transition: TransitionType.downToUp),
+        ModularRouter("/updateUserJuridico", child: (_, args) => UpadateUserJuridicoPage(), transition: TransitionType.downToUp),
       ];
 
   static Inject get to => Inject<PerfilModule>.of();

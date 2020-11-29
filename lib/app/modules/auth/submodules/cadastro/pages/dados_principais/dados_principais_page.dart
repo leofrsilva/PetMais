@@ -45,7 +45,7 @@ class _DadosPrincipaisPageState
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   mainAxisSize: MainAxisSize.max,
                   children: <Widget>[
-                    SizedBox(height: size.height * 0.05),
+                    SizedBox(height: size.height * 0.04),
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       mainAxisSize: MainAxisSize.min,
@@ -159,6 +159,7 @@ class _DadosPrincipaisPageState
                         SizedBox(height: size.height * 0.03),
                         Observer(builder: (_) {
                           return CustomRadioButton<TypeUser>(
+                            size: size,
                             label: "Categoria do Usuário",
                             primaryTitle: "Comum",
                             secondyTitle: "Jurídica",
@@ -167,6 +168,7 @@ class _DadosPrincipaisPageState
                             groupValue: controller.typeUser,
                             primaryOnChanged: controller.setTypeUser,
                             secondyOnChanged: controller.setTypeUser,
+                            
                           );
                         }),
                       ],
@@ -174,7 +176,7 @@ class _DadosPrincipaisPageState
                     Observer(builder: (_) {
                       bool isError = controller.isError;
                       return SizedBox(
-                          height: size.height * (isError ? 0.05 : 0.04));
+                          height: size.height * (isError ? 0.05 : 0.03));
                     }),
                     Container(
                       height: size.height * 0.15,

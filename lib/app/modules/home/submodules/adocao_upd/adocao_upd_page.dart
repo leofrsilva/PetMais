@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:petmais/app/shared/models/post_adocao/post_adocao_model.dart';
+import 'package:petmais/app/shared/models/usuario/usuario_info_model.dart';
 import 'package:petmais/app/shared/models/usuario/usuario_model.dart';
 import 'package:petmais/app/shared/utils/colors.dart';
 import 'package:petmais/app/shared/utils/font_style.dart';
@@ -178,7 +179,7 @@ class _AdocaoUpdPageState
                                   ),
                                 ],
                               ),
-                              SizedBox(width: 7.5),
+                              SizedBox(width: size.width * 0.005),
                               Container(
                                 child: Form(
                                   key: controller.formKey,
@@ -275,12 +276,19 @@ class _AdocaoUpdPageState
                                             },
                                             label: "Telefone",
                                             hint: "(00) 90000-0000",
-                                            validator: (String value) {
+                                             validator: (String value) {
                                               if (value.isEmpty) {
                                                 return "[O campo é obrigatório]";
                                               }
-                                              if (value.length < 15) {
-                                                return "[Número de telefone Incompleto]";
+                                              if (controller.usuario.usuarioInfo
+                                                  is UsuarioInfoModel) {
+                                                if (value.length < 15) {
+                                                  return "[Número de telefone Incompleto]";
+                                                }
+                                              } else {
+                                                if (value.length < 13) {
+                                                  return "[Telefone Incompleto]";
+                                                }
                                               }
                                               return null;
                                             },
@@ -307,6 +315,17 @@ class _AdocaoUpdPageState
                             textCapitalization: TextCapitalization.sentences,
                             onFieldSubmitted: (String value) {
                               FocusScope.of(context).unfocus();
+                            },
+                            validator: (String value) {
+                              if (value.isEmpty) {
+                                return "[O campo é obrigatório]";
+                              }
+
+                              if (value.length < 3) {
+                                return "[Descrição deve conter mais de 3 caracteres]";
+                              }
+
+                              return null;
                             },
                           ),
                         ),

@@ -18,10 +18,13 @@ class UpdateUserPage extends StatefulWidget {
 
 class _UpdateUserPageState
     extends ModularState<UpdateUserPage, UpdateUserController> {
+  Widget formUser;
+
   @override
   Widget build(BuildContext context) {
     controller.setContext(context);
     Size size = MediaQuery.of(context).size;
+
     return Center(
       child: Material(
         borderRadius: BorderRadius.circular(10),
@@ -223,7 +226,7 @@ class _UpdateUserPageState
                             },
                           );
                         }),
-                      ),                     
+                      ),
                       Padding(
                         padding: const EdgeInsets.only(top: 8.0),
                         child: Row(
@@ -241,7 +244,7 @@ class _UpdateUserPageState
                                 "Atualizar",
                                 style: kFlatButtonStyle,
                               ),
-                              onPressed: controller.atualizar,                             
+                              onPressed: controller.atualizar,
                             ),
                           ],
                         ),

@@ -10,7 +10,6 @@ import 'package:petmais/app/shared/stores/auth/auth_store.dart';
 
 part 'auth_controller.g.dart';
 
-@Injectable()
 class AuthController = _AuthControllerBase with _$AuthController;
 
 abstract class _AuthControllerBase with Store {
@@ -34,14 +33,15 @@ abstract class _AuthControllerBase with Store {
   }
 
   @action
-  Future<String> entrar({String email, String senha, String type}) async {
+  Future<String> entrar({String email, String senha, TypeUser type}) async {
+    String ty = type ==  TypeUser.fisica ? "c" : "j";
     final usuarioRepository = UsuarioRemoteRepository();
     Map<String, dynamic> result;
-    result = await usuarioRepository.loginUser(email, senha, type);
+    result = await usuarioRepository.loginUser(email, senha, ty);
     if (result["Result"] == "Found User") {
       UsuarioModel user = UsuarioModel.fromMap(json.decode(result["User"]));
       auth.setUser(user);
-      _saveLocalUser(user.email, senha, result["key"], type);
+      _saveLocalUser(user.email, senha, result["key"], ty);
     }
     return result["Result"];
   }
@@ -76,6 +76,9 @@ abstract class _AuthControllerBase with Store {
       }
       _saveLocalUser(user.email, usuarioModel.senha, result["key"], type);
     }
+    else{
+      this.auth.usuario.reset();
+    }
     return result["Result"];
   }
 
@@ -86,7 +89,8 @@ abstract class _AuthControllerBase with Store {
       {
         "email": email,
         "senha": senha,
-        "encrypted": this.auth.cryptoAes.getEncrypted,
+        "encrypted": key,
+        // "encrypted": this.auth.cryptoAes.getEncrypted,
         "type": type,
       },
     ).then((bool result) {

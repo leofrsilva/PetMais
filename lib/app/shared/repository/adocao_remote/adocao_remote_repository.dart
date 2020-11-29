@@ -16,8 +16,7 @@ class AdocaoRemoteRepository {
   }
   AdocaoRemoteRepository._internal();
 
-  Future<Map<String, dynamic>> registerAdocao(
-    AdocaoModel adocao) async {
+  Future<Map<String, dynamic>> registerAdocao(AdocaoModel adocao) async {
     final dio = Modular.get<Dio>();
     String link = "/functions/registrations/registroAdocao.php";
     FormData formData = FormData.fromMap(adocao.toMap());
@@ -32,6 +31,7 @@ class AdocaoRemoteRepository {
       } else {
         return {"Result": "Falha na Conexão"};
       }
+      
     } catch (e) {
       print(e);
       return {"Result": "Falha na Conexão"};
@@ -42,7 +42,7 @@ class AdocaoRemoteRepository {
     final dio = Modular.get<Dio>();
     String link = "/uploads/uploadImageAdocao.php";
 
-     Map<String, dynamic> map = {
+    Map<String, dynamic> map = {
       "image": await MultipartFile.fromFile(
         image.path,
         filename: image.path.split("/").last,
@@ -50,14 +50,13 @@ class AdocaoRemoteRepository {
       ),
     };
     FormData file = FormData.fromMap(map);
-    
+
     try {
-      Response response = await dio
-          .post(link, data: file); 
-      if (response.statusCode == 200) {     
+      Response response = await dio.post(link, data: file);
+      if (response.statusCode == 200) {
         Map<String, dynamic> result = json.decode(response.data.trim());
         return result;
-      } else {        
+      } else {
         return {"Result": "Falha no Envio"};
       }
     } catch (e) {
@@ -66,21 +65,21 @@ class AdocaoRemoteRepository {
     }
   }
 
-  Future<List<PostAdocaoModel>> listAdocoes(
-      int id, {String especie, String raca}) async {
+  Future<List<PostAdocaoModel>> listAdocoes(int id,
+      {String especie, String raca}) async {
     final dio = Modular.get<Dio>();
-    String link = "/functions/listAllAdocao.php";
+    String link = "/functions/listAdocao.php";
 
     Map<String, dynamic> map = {};
-    if(id != 0){
+    if (id != 0) {
       map["id"] = id;
     }
     if (raca != null && raca.isNotEmpty) {
       map["raca"] = raca;
     }
-    if (especie != null && especie.isNotEmpty){
+    if (especie != null && especie.isNotEmpty) {
       map["especie"] = especie;
-    } 
+    }
     FormData formData = FormData.fromMap(map);
 
     try {
@@ -103,6 +102,101 @@ class AdocaoRemoteRepository {
     }
   }
 
+  Future<List<PostAdocaoModel>> listOngAdocoes(int id,
+      {String especie, String raca}) async {
+    final dio = Modular.get<Dio>();
+    String link = "/functions/listOngAllAdocao.php";
+
+    Map<String, dynamic> map = {};
+    if (id != 0) {
+      map["id"] = id;
+    }
+    if (raca != null && raca.isNotEmpty) {
+      map["raca"] = raca;
+    }
+    if (especie != null && especie.isNotEmpty) {
+      map["especie"] = especie;
+    }
+    FormData formData = FormData.fromMap(map);
+
+    try {
+      Response response = await dio
+          .post(link, data: formData)
+          .timeout(Duration(milliseconds: 10000));
+      if (response.statusCode == 200) {
+        String record = response.data.trimLeft();
+        if (record == "Not Found Pets") {
+          return [];
+        } else {
+          return listResults(response.data);
+        }
+      } else {
+        return null;
+      }
+    } catch (e) {
+      print(e);
+      return null;
+    }
+  }
+
+  DateTime convertStringForDate(String textData) {
+    List<String> listNumData = textData.split("/");
+    String data = "";
+    for (var item in listNumData.reversed) {
+      data = data + item;
+    }
+    final result = DateTime.tryParse(data);
+    return result;
+  }
+  Future<List<PostAdocaoModel>> listAllAdocoes(int id,
+      {String especie, String raca, bool ong}) async {
+    final dio = Modular.get<Dio>();
+    String link = "/functions/listAllAdocao.php";
+
+    Map<String, dynamic> map = {};
+    if (id != 0) {
+      map["id"] = id;
+    }
+    if (raca != null && raca.isNotEmpty) {
+       if(raca == "SRD")
+        raca = "SRD (Sem Raça Definida)";
+      map["raca"] = raca;
+    }
+    if (especie != null && especie.isNotEmpty) {     
+      map["especie"] = especie;
+    }
+    if (ong != null && ong == true) {     
+      map["ong"] = ong;
+    }
+    FormData formData = FormData.fromMap(map);
+
+    try {
+      Response response = await dio
+          .post(link, data: formData)
+          .timeout(Duration(milliseconds: 10000));
+      if (response.statusCode == 200) {
+        String record = response.data.trim();
+        if (record == "Not Found Pets") {
+          return [];
+        } else {
+          List<PostAdocaoModel> adocoes = listResults(response.data);
+          adocoes.sort((a, b)
+              // => a.length.compareTo(b.length)
+              =>
+              convertStringForDate(a.dataRegistro)
+                  .compareTo(convertStringForDate(b.dataRegistro)));
+          return adocoes.reversed.toList();
+
+        }
+      } else {
+        return null;
+      }
+    } catch (e) {
+      print(e);
+      return null;
+    }
+  }
+
   List<PostAdocaoModel> listResults(String results) {
     List<PostAdocaoModel> list = [];
     List<String> adocaosJosn = results.split("|");
@@ -114,8 +208,7 @@ class AdocaoRemoteRepository {
     return list;
   }
 
-  Future<Map<String, dynamic>> atualizarAdocao(
-    AdocaoModel adocao) async {
+  Future<Map<String, dynamic>> atualizarAdocao(AdocaoModel adocao) async {
     final dio = Modular.get<Dio>();
     String link = "/functions/updates/updateAdocao.php";
     FormData formData = FormData.fromMap(adocao.toMap());

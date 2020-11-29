@@ -3,16 +3,6 @@
 part of 'auth_controller.dart';
 
 // **************************************************************************
-// InjectionGenerator
-// **************************************************************************
-
-final $AuthController = BindInject(
-  (i) => AuthController(i<AuthStore>()),
-  singleton: true,
-  lazy: true,
-);
-
-// **************************************************************************
 // StoreGenerator
 // **************************************************************************
 
@@ -22,7 +12,7 @@ mixin _$AuthController on _AuthControllerBase, Store {
   final _$entrarAsyncAction = AsyncAction('_AuthControllerBase.entrar');
 
   @override
-  Future<String> entrar({String email, String senha, String type}) {
+  Future<String> entrar({String email, String senha, TypeUser type}) {
     return _$entrarAsyncAction
         .run(() => super.entrar(email: email, senha: senha, type: type));
   }

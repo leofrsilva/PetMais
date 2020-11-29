@@ -4,12 +4,11 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
 import 'package:petmais/app/shared/models/usuario/usuario_model.dart';
 import 'package:petmais/app/shared/utils/colors.dart';
-import '../../cadastro_controller.dart';
 
+import '../../cadastro_controller.dart';
 part 'dados_principais_controller.g.dart';
 
-class DadosPrincipaisController = _DadosPrincipaisControllerBase
-    with _$DadosPrincipaisController;
+class DadosPrincipaisController = _DadosPrincipaisControllerBase with _$DadosPrincipaisController;
 
 abstract class _DadosPrincipaisControllerBase extends Disposable with Store {
   BuildContext context;
@@ -152,7 +151,7 @@ abstract class _DadosPrincipaisControllerBase extends Disposable with Store {
       if (formKey.currentState.validate()) {
         setError(false);
         UsuarioModel usuario = UsuarioModel(
-          email: this.emailController.text.trim(),
+          email: this.emailController.text.toLowerCase().trim(),
           senha: this.senhaController.text.trim(),
           type: this.typeUser,
         );

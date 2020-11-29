@@ -4,6 +4,8 @@ import 'package:http_parser/http_parser.dart';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:petmais/app/shared/models/usuario/usuario_info_juridico_model.dart';
+import 'package:petmais/app/shared/models/usuario/usuario_info_model.dart';
 import 'package:petmais/app/shared/models/usuario/usuario_model.dart';
 
 class UsuarioRemoteRepository {
@@ -55,7 +57,7 @@ class UsuarioRemoteRepository {
       link = "/functions/login_user.php";
     }
     else if(type == "j"){
-      link = "/functions/login_user.php";
+      link = "/functions/login_juser.php";
     }
     Map<String, dynamic> map = {
       "email": email,
@@ -90,11 +92,37 @@ class UsuarioRemoteRepository {
     // });
   }
 
+  //* Verificar
   Future<Map<String, dynamic>> checkEmail(String email, {bool loading}) async {
     final dio = Modular.get<Dio>();
 
     String link = "/functions/registrations/checkEmail.php";
     Map<String, dynamic> map = {"email": email};
+    FormData formData = FormData.fromMap(map);
+
+    try {
+      Response response = await dio
+          .post(link, data: formData)
+          .timeout(Duration(milliseconds: 10000));
+      if (loading) Modular.to.pop();
+      if (response.statusCode == 200) {
+        Map<String, dynamic> result = json.decode(response.data.trim());
+        return result;
+      } else {
+        return {"Result": "Falha na Conexão"};
+      }
+    } catch (e) {
+      print(e);
+      if (loading) Modular.to.pop();
+      return {"Result": "Falha na Conexão"};
+    }
+  }
+
+  Future<Map<String, dynamic>> checkCNPJ(String cnpj, {bool loading}) async {
+    final dio = Modular.get<Dio>();
+
+    String link = "/functions/registrations/checkCnpj.php";
+    Map<String, dynamic> map = {"cnpj": cnpj};
     FormData formData = FormData.fromMap(map);
 
     try {
@@ -142,8 +170,16 @@ class UsuarioRemoteRepository {
     bool loading,
   }) async {
     final dio = Modular.get<Dio>();
-    String link = "/functions/registrations/registro_user.php";
-    FormData formData = FormData.fromMap(user.toMap());
+    String link;
+    FormData formData;
+    if(user.usuarioInfo is UsuarioInfoModel){
+      link = "/functions/registrations/registro_user.php";
+      formData = FormData.fromMap(user.toMapFisico());
+    }
+    else if(user.usuarioInfo is UsuarioInfoJuridicoModel){
+      link = "/functions/registrations/registro_juser.php";
+      formData = FormData.fromMap(user.toMapJuridico());
+    }
 
     try {
       Response response = await dio
@@ -190,9 +226,17 @@ class UsuarioRemoteRepository {
 
   Future<Map<String, dynamic>> updateUser(UsuarioModel user) async {
     final dio = Modular.get<Dio>();
-    String link = "/functions/updates/updateUser.php";
-    FormData formData = FormData.fromMap(user.toMapUpdate());
-
+    String link;
+    FormData formData;
+    if(user.usuarioInfo is UsuarioInfoModel){
+      link = "/functions/updates/updateUser.php";
+      formData = FormData.fromMap(user.toMapUpdateFisico());
+    }
+    else if(user.usuarioInfo is UsuarioInfoJuridicoModel){
+      link = "/functions/updates/updateJuser.php";
+      formData = FormData.fromMap(user.toMapUpdateJuridico());
+    }
+    
     try {
       Response response = await dio
           .post(link, data: formData)

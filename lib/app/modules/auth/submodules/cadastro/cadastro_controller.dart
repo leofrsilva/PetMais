@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
 import 'package:petmais/app/modules/auth/auth_controller.dart';
+import 'package:petmais/app/shared/models/dados_endereco/dados_endereco_model.dart';
 import 'package:petmais/app/shared/models/usuario/usuario_info_model.dart';
 import 'package:petmais/app/shared/models/usuario/usuario_model.dart';
 import 'package:petmais/app/shared/repository/usuario_remote/usuario_remote_repository.dart';
@@ -18,16 +19,24 @@ abstract class _CadastroControllerBase extends Disposable with Store {
   UsuarioModel _usuarioModel = UsuarioModel();
 
   UsuarioModel get usuario => this._usuarioModel;
-  UsuarioInfoModel get usuarioInf => this._usuarioModel.usuarioInfoModel;
+  dynamic get usuarioInf => this._usuarioModel.usuarioInfo;
 
   set setUsuarioModel(UsuarioModel value) {
     this._usuarioModel = value;
   }
-
-  set setUsuarioInfoModel(UsuarioInfoModel value) {
-    this._usuarioModel.usuarioInfoModel = value;
+  set setUsuarioInfo(dynamic value) {
+    this._usuarioModel.usuarioInfo = value;
   }
 
+  DadosEnderecoModel dadosEndereco = DadosEnderecoModel();
+  void setDadosEndereco(DadosEnderecoModel dadosEnd){
+    this.dadosEndereco = dadosEnd;
+  }
+  void disposeDadosEndereco(){
+    this.dadosEndereco = DadosEnderecoModel();
+  }
+
+  //* Verificar Email
   Future<String> checkEmail(String email, {bool isLoading}) async {
     final usuarioRepository = UsuarioRemoteRepository();
     Map<String, dynamic> result;
@@ -35,6 +44,15 @@ abstract class _CadastroControllerBase extends Disposable with Store {
     return result["Result"];
   }
 
+  //* Verificar CNPJ
+  Future<String> checkCnpj(String cnpj, {bool isLoading}) async {
+    final usuarioRepository = UsuarioRemoteRepository();
+    Map<String, dynamic> result;
+    result = await usuarioRepository.checkCNPJ(cnpj, loading: isLoading);
+    return result["Result"];
+  }
+
+  //* Cadastrar
   Future<String> cadastrar(File fileImage, bool isLoading) async {
     return await this.authController.cadastrar(this.usuario, fileImage, isLoading);
   }

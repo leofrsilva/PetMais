@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:petmais/app/shared/models/pet/pet_model.dart';
+import 'package:petmais/app/shared/models/usuario/usuario_info_model.dart';
 import 'package:petmais/app/shared/models/usuario/usuario_model.dart';
 import 'package:petmais/app/shared/utils/colors.dart';
 import 'package:petmais/app/shared/utils/font_style.dart';
@@ -73,124 +74,126 @@ class _AddAdocaoPageState
               children: <Widget>[
                 _selectPet(size),
                 Container(
-                  child: Observer(builder: (_) {
-                    return Column(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        if (controller.pet != null)
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: <Widget>[
-                                  Padding(
-                                    padding: EdgeInsets.only(bottom: 15),
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: <Widget>[
-                                        Text(
-                                          "Data",
-                                          style: kLabelTitleStyle,
-                                        ),
-                                        Container(
-                                          width: size.width * 0.4,
-                                          child: Row(
-                                            children: <Widget>[
-                                              Expanded(
-                                                child: Text(
-                                                  controller.pet
-                                                              .dataNascimento ==
-                                                          null
-                                                      ? " - "
-                                                      : controller
-                                                          .pet.dataNascimento,
-                                                  style: kLabelSmoothStyle,
-                                                ),
-                                              ),
-                                            ],
+                  child: Form(
+                    key: controller.formKey,
+                    child: Observer(builder: (_) {
+                      return Column(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          if (controller.pet != null)
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: <Widget>[
+                                    Padding(
+                                      padding: EdgeInsets.only(bottom: 15),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: <Widget>[
+                                          Text(
+                                            "Data",
+                                            style: kLabelTitleStyle,
                                           ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.only(bottom: 20),
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: <Widget>[
-                                        Text(
-                                          "Especie",
-                                          style: kLabelTitleStyle,
-                                        ),
-                                        Container(
-                                          width: size.width * 0.4,
-                                          child: Row(
-                                            children: <Widget>[
-                                              Expanded(
-                                                child: Text(
-                                                  controller.pet.especie,
-                                                  style: kLabelSmoothStyle,
+                                          Container(
+                                            width: size.width * 0.4,
+                                            child: Row(
+                                              children: <Widget>[
+                                                Expanded(
+                                                  child: Text(
+                                                    controller.pet
+                                                                .dataNascimento ==
+                                                            null
+                                                        ? " - "
+                                                        : controller
+                                                            .pet.dataNascimento,
+                                                    style: kLabelSmoothStyle,
+                                                  ),
                                                 ),
-                                              ),
-                                            ],
+                                              ],
+                                            ),
                                           ),
-                                        ),
-                                      ],
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.only(bottom: 20),
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: <Widget>[
-                                        Text(
-                                          "Raça",
-                                          style: kLabelTitleStyle,
-                                        ),
-                                        Container(
-                                          width: size.width * 0.38,
-                                          child: Row(
-                                            children: <Widget>[
-                                              Expanded(
-                                                child: Text(
-                                                  controller.pet.raca == null
-                                                      ? " - "
-                                                      : controller.pet.raca,
-                                                  style: controller.pet.raca ==
-                                                          "SRD (Sem Raça Definida)"
-                                                      ? TextStyle(
-                                                          color: DefaultColors
-                                                              .secondarySmooth,
-                                                          fontFamily: 'Changa',
-                                                          fontSize: 13,
-                                                        )
-                                                      : kLabelSmoothStyle,
+                                    Padding(
+                                      padding: EdgeInsets.only(bottom: 20),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: <Widget>[
+                                          Text(
+                                            "Especie",
+                                            style: kLabelTitleStyle,
+                                          ),
+                                          Container(
+                                            width: size.width * 0.4,
+                                            child: Row(
+                                              children: <Widget>[
+                                                Expanded(
+                                                  child: Text(
+                                                    controller.pet.especie,
+                                                    style: kLabelSmoothStyle,
+                                                  ),
                                                 ),
-                                              ),
-                                            ],
+                                              ],
+                                            ),
                                           ),
-                                        ),
-                                      ],
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(width: 7.5),
-                              Container(
-                                child: Form(
-                                  key: controller.formKey,
+                                    Padding(
+                                      padding: EdgeInsets.only(bottom: 20),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: <Widget>[
+                                          Text(
+                                            "Raça",
+                                            style: kLabelTitleStyle,
+                                          ),
+                                          Container(
+                                            width: size.width * 0.38,
+                                            child: Row(
+                                              children: <Widget>[
+                                                Expanded(
+                                                  child: Text(
+                                                    controller.pet.raca == null
+                                                        ? " - "
+                                                        : controller.pet.raca,
+                                                    style: controller
+                                                                .pet.raca ==
+                                                            "SRD (Sem Raça Definida)"
+                                                        ? TextStyle(
+                                                            color: DefaultColors
+                                                                .secondarySmooth,
+                                                            fontFamily:
+                                                                'Changa',
+                                                            fontSize: 13,
+                                                          )
+                                                        : kLabelSmoothStyle,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(width: size.width * 0.005),
+                                Container(
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     crossAxisAlignment:
@@ -288,8 +291,15 @@ class _AddAdocaoPageState
                                               if (value.isEmpty) {
                                                 return "[O campo é obrigatório]";
                                               }
-                                              if (value.length < 15) {
-                                                return "[Número de telefone Incompleto]";
+                                              if (controller.usuario.usuarioInfo
+                                                  is UsuarioInfoModel) {
+                                                if (value.length < 15) {
+                                                  return "[Número de telefone Incompleto]";
+                                                }
+                                              } else {
+                                                if (value.length < 13) {
+                                                  return "[Telefone Incompleto]";
+                                                }
                                               }
                                               return null;
                                             },
@@ -299,42 +309,54 @@ class _AddAdocaoPageState
                                     ],
                                   ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
+                          Container(
+                            height: size.height * 0.35,
+                            width: size.width * 0.9,
+                            child: CustomTextField(
+                              height: size.height * 0.3,
+                              controller: controller.descricaoController,
+                              focusNode: controller.focusDescricao,
+                              label: "Decrição",
+                              hint: "  ...",
+                              numLines: 5,
+                              maxCaracteres: 215,
+                              heightText: size.height,
+                              textCapitalization: TextCapitalization.sentences,
+                              onFieldSubmitted: (String value) {
+                                FocusScope.of(context).unfocus();
+                              },
+                              validator: (String value) {
+                                if (value.isEmpty) {
+                                  return "[O campo é obrigatório]";
+                                }
+
+                                if (value.length < 3) {
+                                  return "[Descrição deve conter mais de 3 caracteres]";
+                                }
+
+                                return null;
+                              },
+                            ),
                           ),
-                        Container(
-                          height: size.height * 0.35,
-                          width: size.width * 0.9,
-                          child: CustomTextField(
-                            height: size.height * 0.3,
-                            controller: controller.descricaoController,
-                            focusNode: controller.focusDescricao,
-                            label: "Decrição",
-                            hint: "  ...",
-                            numLines: 5,
-                            maxCaracteres: 215,
-                            textCapitalization: TextCapitalization.sentences,
-                            onFieldSubmitted: (String value) {
-                              FocusScope.of(context).unfocus();
-                            },
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 10),
+                            child: Observer(builder: (_) {
+                              return CustomButton(
+                                text: "ADICIONAR PARA ADOÇÃO",
+                                onPressed: controller.addAdocao,
+                                elevation: 0.0,
+                                width: size.width * 0.85,
+                                decoration: kDecorationContainer,
+                                isLoading: controller.isLoading,
+                              );
+                            }),
                           ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 10),
-                          child: Observer(builder: (_) {
-                            return CustomButton(
-                              text: "ADICIONAR PARA ADOÇÃO",
-                              onPressed: controller.addAdocao,
-                              elevation: 0.0,
-                              width: size.width * 0.85,
-                              decoration: kDecorationContainer,
-                              isLoading: controller.isLoading,
-                            );
-                          }),
-                        ),
-                      ],
-                    );
-                  }),
+                        ],
+                      );
+                    }),
+                  ),
                 ),
               ],
             ),
@@ -371,7 +393,9 @@ class _AddAdocaoPageState
                             color: Colors.white,
                             size: 50,
                           )
-                        : controller.image != null ? controller.image : null,
+                        : controller.image != null
+                            ? controller.image
+                            : null,
                   );
                 }),
               ),

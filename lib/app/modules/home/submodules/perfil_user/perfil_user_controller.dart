@@ -3,6 +3,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:petmais/app/modules/home/controllers/animation_drawer_controller.dart';
 import 'package:petmais/app/modules/home/submodules/adocao/adocao_controller.dart';
 import 'package:petmais/app/shared/models/post_adocao/post_adocao_model.dart';
+import 'package:petmais/app/shared/models/usuario/usuario_info_model.dart';
 import 'package:petmais/app/shared/models/usuario/usuario_model.dart';
 import 'package:petmais/app/shared/repository/adocao_remote/adocao_remote_repository.dart';
 
@@ -10,7 +11,6 @@ import '../../home_controller.dart';
 
 part 'perfil_user_controller.g.dart';
 
-@Injectable()
 class PerfilUserController = _PerfilUserControllerBase
     with _$PerfilUserController;
 
@@ -27,12 +27,21 @@ abstract class _PerfilUserControllerBase with Store {
 
   AnimationDrawerController get animationDrawer => this.home.animationDrawer;
 
-  Future<List<PostAdocaoModel>> recuperarPets(int id) async {
-    return await this._adocaoRemoteRepository.listAdocoes(
+  Future<List<PostAdocaoModel>> recuperarPets(int id, dynamic typeUser) async {
+    if(typeUser is UsuarioInfoModel){
+      return await this._adocaoRemoteRepository.listAdocoes(
           id,
           especie: "",
           raca: "",
         );
+    }
+    else{
+      return await this._adocaoRemoteRepository.listOngAdocoes(
+          id,
+          especie: "",
+          raca: "",
+        );
+    }
   }
 
   void changePageConversa() {

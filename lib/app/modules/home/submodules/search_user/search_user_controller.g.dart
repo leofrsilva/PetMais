@@ -3,16 +3,6 @@
 part of 'search_user_controller.dart';
 
 // **************************************************************************
-// InjectionGenerator
-// **************************************************************************
-
-final $SearchUserController = BindInject(
-  (i) => SearchUserController(i<AuthStore>(), i<HomeController>()),
-  singleton: true,
-  lazy: true,
-);
-
-// **************************************************************************
 // StoreGenerator
 // **************************************************************************
 

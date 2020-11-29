@@ -70,7 +70,7 @@ class _ShowPostAdocaoPageState extends State<ShowPostAdocaoPage> {
     }
 
     if(usuario != null){
-      if(post.idDono != usuario.usuarioInfoModel.id){
+      if(post.idDono != usuario.usuarioInfo.id){
         btnEntrarEmContato = Padding(
                         padding: const EdgeInsets.symmetric(vertical: 10),
                         child: CustomButton(

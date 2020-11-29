@@ -43,7 +43,7 @@ class _BottomSheetPostAdocaoState extends State<BottomSheetPostAdocao> {
   );
 
   void _getYearAnimal() {
-    if (post.dataNascimento != null) {
+    if (post.dataNascimento != null && post.dataNascimento.isNotEmpty) {
       print(post.dataNascimento);
       String dataPost = "";
       List nums = post.dataNascimento.split("/");
@@ -51,7 +51,7 @@ class _BottomSheetPostAdocaoState extends State<BottomSheetPostAdocao> {
         dataPost += n;
       });
       final dataNow = DateTime.now();
-      final dataNasc = DateTime.parse(dataPost);
+      final dataNasc = DateTime.tryParse(dataPost);
       int yearDiff = dataNow.year - dataNasc.year;
       int monthDiff = dataNow.month - dataNasc.month;
       int dayDiff = dataNow.day - dataNasc.day;
@@ -71,7 +71,9 @@ class _BottomSheetPostAdocaoState extends State<BottomSheetPostAdocao> {
           yearDiff = yearDiff - 1;
           strYear = yearDiff == 0
               ? ""
-              : yearDiff == 1 ? "$yearDiff Ano" : "$yearDiff Anos";
+              : yearDiff == 1
+                  ? "$yearDiff Ano"
+                  : "$yearDiff Anos";
         }
       } else if (monthDiff > 0) {
         strMonth = monthDiff == 1 ? "$monthDiff Mês" : "$monthDiff Meses";
@@ -79,7 +81,9 @@ class _BottomSheetPostAdocaoState extends State<BottomSheetPostAdocao> {
           monthDiff = monthDiff - 1;
           strMonth = yearDiff == 0
               ? ""
-              : monthDiff == 1 ? "$monthDiff Mês" : "$monthDiff Meses";
+              : monthDiff == 1
+                  ? "$monthDiff Mês"
+                  : "$monthDiff Meses";
         }
       } else {
         if (dayDiff == 0) {
@@ -90,7 +94,6 @@ class _BottomSheetPostAdocaoState extends State<BottomSheetPostAdocao> {
       }
 
       this.idade = strYear + " " + strMonth + " " + strDay;
-
     } else {
       this.idade = "";
     }
@@ -148,7 +151,7 @@ class _BottomSheetPostAdocaoState extends State<BottomSheetPostAdocao> {
     }
 
     if (usuario != null) {
-      if (post.idDono != usuario.usuarioInfoModel.id) {
+      if (post.idDono != usuario.usuarioInfo.id) {
         btnEntrarEmContato = Align(
           alignment: Alignment.center,
           child: CustomButton(
@@ -243,8 +246,14 @@ class _BottomSheetPostAdocaoState extends State<BottomSheetPostAdocao> {
                   Row(children: <Widget>[
                     Expanded(
                       child: Text(
-                          post.descricao.isEmpty ? "..." : post.descricao,
-                          style: styleInf),
+                        post.descricao.isEmpty ? "..." : post.descricao,
+                        style: TextStyle(
+                          color: DefaultColors.secondarySmooth,
+                          fontFamily: "Changa",
+                          fontSize: 16,
+                          height: size.height * 0.0020,
+                        ),
+                      ),
                     ),
                   ]),
                   Padding(

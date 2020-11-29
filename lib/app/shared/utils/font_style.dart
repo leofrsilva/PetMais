@@ -102,10 +102,10 @@ final TextStyle kButtonStyle = TextStyle(
 );
 
 BoxDecoration get kDecorationContainerGradient {
-  return BoxDecoration(
+  return BoxDecoration(    
     borderRadius: BorderRadius.circular(30),
     gradient: LinearGradient(
-        colors: [
+      colors: [
           DefaultColors.secondary,
           DefaultColors.primaryIntense,
         ],
@@ -114,7 +114,8 @@ BoxDecoration get kDecorationContainerGradient {
         stops: [
           0.3,
           0.9,
-        ]),
+        ],
+    )
   );
 }
 
@@ -139,6 +140,13 @@ BoxDecoration get kDecorationContainer {
   return BoxDecoration(
     borderRadius: BorderRadius.circular(30),
     color: DefaultColors.secondary,
+  );
+}
+
+BoxDecoration get kDecorationContainerAux {
+  return BoxDecoration(
+    borderRadius: BorderRadius.circular(30),
+    color: DefaultColors.tertiary,
   );
 }
 
