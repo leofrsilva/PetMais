@@ -42,7 +42,7 @@ class PostAdotation extends StatelessWidget {
           child: Row(
             children: <Widget>[
               _imagePost(postAdotationModel.petImages.imgPrincipal,
-                  postAdotationModel.typeUser),
+                  postAdotationModel.typeUser, size),
               SizedBox(width: 20),
               Container(
                 padding: const EdgeInsets.only(right: 8),
@@ -127,7 +127,7 @@ class PostAdotation extends StatelessWidget {
     );
   }
 
-  Widget _imagePost(String url, TypeUser typerUser) {
+  Widget _imagePost(String url, TypeUser typerUser, Size size) {
     img = Stack(
       children: [
         ClipRRect(
@@ -150,13 +150,22 @@ class PostAdotation extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Opacity(
-                  opacity: 1,
-                  child: Image.asset(
-                    "assets/images/background_ong.png",
-                    fit: BoxFit.contain,
-                    width: 35,
-                    height: 35,
+                  opacity: 0.75,
+                  child: Text(
+                    "ONG",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: DefaultColors.background,
+                      fontFamily: "Changa",
+                      fontSize: size.height * 0.04,
+                    ),
                   ),
+                  // child: Image.asset(
+                  //   "assets/images/background_ong.png",
+                  //   fit: BoxFit.contain,
+                  //   width: 35,
+                  //   height: 35,
+                  // ),
                 ),
               ),
             ),

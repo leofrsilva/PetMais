@@ -6,7 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:petmais/app/modules/auth/widgets/CustomDropdownButton.dart';
+import 'package:petmais/app/shared/widgets/CustomDropdownButton.dart';
 import 'package:petmais/app/shared/models/dados_endereco/dados_endereco_model.dart';
 import 'package:petmais/app/shared/models/usuario/usuario_info_juridico_model.dart';
 import 'package:petmais/app/shared/utils/colors.dart';
@@ -203,7 +203,7 @@ class _PessoaJuridicaPageState
                                   controller.focusTel2.requestFocus();
                                 },
                                 label: "Telefone",
-                                hint: "(00) 90000-0000",
+                                hint: "(00) 00000 0000",
                                 inputFormatters: [
                                   LengthLimitingTextInputFormatter(
                                     UsuarioInfoJuridicoModel.toNumCaracteres()[
@@ -240,7 +240,7 @@ class _PessoaJuridicaPageState
                                 controller.isLoading = false;
                               },
                               label: "Telefone 2",
-                              hint: "(00) 90000-0000",
+                              hint: "(00) 00000 0000",
                               inputFormatters: [
                                 LengthLimitingTextInputFormatter(
                                   UsuarioInfoJuridicoModel.toNumCaracteres()[

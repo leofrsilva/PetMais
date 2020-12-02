@@ -162,7 +162,7 @@ class AdocaoRemoteRepository {
         raca = "SRD (Sem Raça Definida)";
       map["raca"] = raca;
     }
-    if (especie != null && especie.isNotEmpty) {     
+    if (especie != null && especie.isNotEmpty && especie != "Todos") {     
       map["especie"] = especie;
     }
     if (ong != null && ong == true) {     

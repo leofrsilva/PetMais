@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:petmais/app/modules/home/controllers/animation_drawer_controller.dart';
+import 'package:petmais/app/shared/models/usuario/usuario_model.dart';
 import 'package:petmais/app/shared/stores/auth/auth_store.dart';
 
 import '../../home_controller.dart';
@@ -23,4 +24,5 @@ abstract class _PetShopControllerBase with Store {
       this._homeController.animationDrawer;
 
   HomeController get home => this._homeController;
+  UsuarioModel get usuario => this.home.auth.usuario;
 }

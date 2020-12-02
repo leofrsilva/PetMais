@@ -80,7 +80,9 @@ abstract class _AdocaoControllerBase extends Disposable with Store {
               milliseconds: 200,
             ), () {
           bool viewed = false;
-          Modular.to.pushNamed("/home/chat/$viewed", arguments: usuarioChat);
+          String nome = postAdocaoModel.nome;
+          String url = postAdocaoModel.petImages.imgPrincipal.replaceAll("/", "@2@").toString();
+          Modular.to.pushNamed("/home/chat/$viewed/$nome/$url", arguments: usuarioChat);
         });
       }
     });

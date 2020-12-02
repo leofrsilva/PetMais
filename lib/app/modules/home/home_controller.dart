@@ -76,8 +76,7 @@ abstract class _HomeControllerBase extends Disposable with Store {
 
   List<Widget> screensPetshop = <Widget>[
     RouterOutlet(module: PetShopModule()),
-    RouterOutlet(module: PerfilModule()),
-    RouterOutlet(module: SearchUserModule())
+    RouterOutlet(module: PerfilModule()),    
   ];
 
   //? Online

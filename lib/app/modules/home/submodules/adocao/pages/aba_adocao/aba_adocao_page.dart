@@ -9,6 +9,7 @@ import 'package:petmais/app/shared/models/post_adocao/post_adocao_model.dart';
 import 'package:petmais/app/shared/widgets/CustomCheckBox.dart';
 
 import 'package:petmais/app/shared/utils/colors.dart';
+import 'package:petmais/app/shared/widgets/CustomDropdownButton.dart';
 import 'package:petmais/app/shared/widgets/CustomTextField.dart';
 
 import 'aba_adocao_controller.dart';
@@ -25,23 +26,6 @@ class _AbaAdocaoPageState
       controller.recuperarAdocoes();
     });
     return;
-  }
-
-  FocusNode _focusRaca = FocusNode();
-
-  @override
-  void initState() {
-    super.initState();
-    _focusRaca.addListener(() {
-      // print("Has raça focus: ${_focusRaca.hasFocus}");
-      setState(() {});
-    });
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _focusRaca.dispose();
   }
 
   @override
@@ -90,12 +74,12 @@ class _AbaAdocaoPageState
                                   child: Stack(
                                     alignment: Alignment.centerLeft,
                                     children: <Widget>[
-                                      Row(
+                                      Column(
                                         crossAxisAlignment:
-                                            CrossAxisAlignment.center,
+                                            CrossAxisAlignment.stretch,
                                         children: <Widget>[
-                                          _searchForEspecie(size),
-                                          _searchForRaca(size),
+                                          _searchForEspecieRaca(size),
+                                          _searchForOng(size),
                                         ],
                                       ),
                                       Align(
@@ -106,13 +90,11 @@ class _AbaAdocaoPageState
                                             color: DefaultColors.others,
                                           ),
                                           onPressed: () {
-                                            setState(() {
-                                              controller.setIsCat(null);
-                                              controller.setIsDog(null);
-                                              controller.racaController.clear();
-                                              controller.recuperarAdocoes();
-                                              controller.setCloseSearch();
-                                            });
+                                            controller.setIsOnlyONG(false);
+                                            controller.setCloseSearch();
+                                            controller
+                                                .setEspecieSelect("Todos");
+                                            controller.setRacaSelect("");
                                           },
                                         ),
                                       ),
@@ -198,6 +180,11 @@ class _AbaAdocaoPageState
                                                           postAdotationModel:
                                                               post,
                                                           onTap: () async {
+                                                            if (controller
+                                                                .animationDrawer
+                                                                .isShowDrawer) {
+                                                              return;
+                                                            }
                                                             controller.adocao
                                                                 .showPostAdocao(
                                                               post,
@@ -270,18 +257,7 @@ class _AbaAdocaoPageState
           ),
         );
       }),
-      floatingActionButton: _focusRaca.hasFocus
-          ? FloatingActionButton(
-              backgroundColor: DefaultColors.background,
-              child: Icon(
-                Icons.search,
-                color: Colors.white,
-              ),
-              onPressed: () {
-                FocusScope.of(context).unfocus();
-              },
-            )
-          : Observer(builder: (_) {
+      floatingActionButton: Observer(builder: (_) {
               List<SpeedDialChild> listFloatButton = [
                 SpeedDialChild(
                   child: Container(
@@ -324,97 +300,78 @@ class _AbaAdocaoPageState
     );
   }
 
-  Widget _searchForEspecie(Size size) {
+  Widget _searchForEspecieRaca(Size size) {
     return Container(
-      height: size.height * 0.25,
-      width: size.width * 0.45,
-      padding: EdgeInsets.only(left: 8, top: 12),
-      alignment: Alignment.topCenter,
+      height: size.height * 0.14,
+      width: size.width,
+      padding: EdgeInsets.only(
+        left: size.width * 0.025,
+        right: size.width * 0.025,
+        top: size.height * 0.015,
+      ),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Observer(builder: (_) {
-            return CustomCheckBox(
-              visualDensity:
-                  VisualDensity(horizontal: VisualDensity.minimumDensity),
-              text: "Cachorro",
-              value: controller.isDog,
-              onChanged: controller.setIsDog,
-              activeColor: DefaultColors.primary,
-              onTap: () {
-                controller.setIsDog(!controller.isDog);
-              },
+            return Theme(
+              data: ThemeData(
+                canvasColor: Colors.white,
+              ),
+              child: CustomDropdownButton<String>(
+                isTitle: false,
+                height: size.height * 0.06,
+                width: size.width * 0.5,
+                label: "Especie",
+                // hint: "Espécie",
+                items: controller.listEspecie,
+                value: controller.especieSelect,
+                onChanged: controller.setEspecieSelect,
+                isDense: true,
+                validator: (String value) {
+                  if (value.isEmpty) {
+                    return "  [Campo Obrigatório]";
+                  }
+                  return null;
+                },
+              ),
             );
           }),
           Observer(builder: (_) {
-            return CustomCheckBox(
-              visualDensity:
-                  VisualDensity(horizontal: VisualDensity.minimumDensity),
-              text: "Gato",
-              value: controller.isCat,
-              onChanged: controller.setIsCat,
-              activeColor: DefaultColors.primary,
-              onTap: () {
-                controller.setIsCat(!controller.isCat);
-              },
+            return Theme(
+              data: ThemeData(
+                canvasColor: Colors.white,
+              ),
+              child: CustomDropdownButton<String>(
+                isTitle: false,
+                height: size.height * 0.06,
+                width: size.width * 0.5,
+                label: "Raça",
+                hint: "Raça",
+                items: controller.listRaca,
+                value: controller.racaSelect,
+                onChanged: controller.setRacaSelect,
+                isDense: true,
+              ),
             );
           }),
         ],
       ),
-      // CustomRadioButton(
-      //   size: size,
-      //   label: "Especie",
-      //   activeColor: DefaultColors.primary,
-      //   primaryTitle: "Cachorro",
-      //   primaryValue: "cachorro",
-      //   secondyTitle: "Gato",
-      //   secondyValue: "gato",
-      //   groupValue: controller.especie,
-      //   primaryOnChanged: controller.setEspecie,
-      //   secondyOnChanged: controller.setEspecie,
-      // ),
     );
   }
 
-  Widget _searchForRaca(Size size) {
+  Widget _searchForOng(Size size) {
     return Container(
-      height: size.height * 0.25,
-      width: size.width * 0.5,
-      padding: EdgeInsets.only(top: 12),
-      alignment: Alignment.topCenter,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          Observer(builder: (_) {
-            return CustomTextField(
-              isTitle: false,
-              height: size.height * 0.06,
-              heightText: size.height * 0.05,
-              focusNode: _focusRaca,
-              readOnly: controller.animationDrawer.isShowDrawer ? true : false,
-              controller: controller.racaController,
-              textCapitalization: TextCapitalization.sentences,
-              textInputAction: TextInputAction.done,
-              onFieldSubmitted: (String value) {
-                FocusScope.of(context).unfocus();
-              },
-              label: "Raça",
-              hint: "Raça do pet ...",
-              inputFormatters: [
-                LengthLimitingTextInputFormatter(
-                  PetModel.toNumCaracteres()["raca"],
-                ),
-              ],
-              textInputType: TextInputType.text,
-              validator: (String value) {
-                if (value.isEmpty) {
-                  return "    [O campo é obrigatório]";
-                }
-                return null;
-              },
-            );
-          }),
-          SizedBox(height: size.height * 0.02),
+      color: DefaultColors.primary,
+      height: size.height * 0.075,
+      width: size.width * 0.4,
+      padding: EdgeInsets.only(
+          right: size.width * 0.05,
+          left: size.width * 0.01,
+          top: size.height * 0.005),
+      alignment: Alignment.center,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
           Observer(builder: (_) {
             return CustomCheckBox(
               visualDensity:
@@ -428,22 +385,6 @@ class _AbaAdocaoPageState
               },
             );
           }),
-          // RaisedButton.icon(
-          //   onPressed: () {
-          //     setState(() {
-          //       controller.recuperarAdocoes();
-          //     });
-          //   },
-          //   icon: Icon(FontAwesomeIcons.paw),
-          //   label: Text("Buscar"),
-          //   elevation: 0,
-          //   color: DefaultColors.primarySmooth, //Colors.grey[100],
-          //   textColor: DefaultColors.secondarySmooth,
-          //   padding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-          //   shape: ContinuousRectangleBorder(
-          //     borderRadius: BorderRadius.circular(10),
-          //   ),
-          // ),
         ],
       ),
     );

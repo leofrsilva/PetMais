@@ -9,33 +9,34 @@ part of 'aba_adocao_controller.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$AbaAdocaoController on _AbaAdocaoControllerBase, Store {
-  final _$isDogAtom = Atom(name: '_AbaAdocaoControllerBase.isDog');
+  final _$especieSelectAtom =
+      Atom(name: '_AbaAdocaoControllerBase.especieSelect');
 
   @override
-  bool get isDog {
-    _$isDogAtom.reportRead();
-    return super.isDog;
+  String get especieSelect {
+    _$especieSelectAtom.reportRead();
+    return super.especieSelect;
   }
 
   @override
-  set isDog(bool value) {
-    _$isDogAtom.reportWrite(value, super.isDog, () {
-      super.isDog = value;
+  set especieSelect(String value) {
+    _$especieSelectAtom.reportWrite(value, super.especieSelect, () {
+      super.especieSelect = value;
     });
   }
 
-  final _$isCatAtom = Atom(name: '_AbaAdocaoControllerBase.isCat');
+  final _$racaSelectAtom = Atom(name: '_AbaAdocaoControllerBase.racaSelect');
 
   @override
-  bool get isCat {
-    _$isCatAtom.reportRead();
-    return super.isCat;
+  String get racaSelect {
+    _$racaSelectAtom.reportRead();
+    return super.racaSelect;
   }
 
   @override
-  set isCat(bool value) {
-    _$isCatAtom.reportWrite(value, super.isCat, () {
-      super.isCat = value;
+  set racaSelect(String value) {
+    _$racaSelectAtom.reportWrite(value, super.racaSelect, () {
+      super.racaSelect = value;
     });
   }
 
@@ -97,22 +98,22 @@ mixin _$AbaAdocaoController on _AbaAdocaoControllerBase, Store {
       ActionController(name: '_AbaAdocaoControllerBase');
 
   @override
-  dynamic setIsDog(bool value) {
+  dynamic setEspecieSelect(String value) {
     final _$actionInfo = _$_AbaAdocaoControllerBaseActionController.startAction(
-        name: '_AbaAdocaoControllerBase.setIsDog');
+        name: '_AbaAdocaoControllerBase.setEspecieSelect');
     try {
-      return super.setIsDog(value);
+      return super.setEspecieSelect(value);
     } finally {
       _$_AbaAdocaoControllerBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic setIsCat(bool value) {
+  dynamic setRacaSelect(String value) {
     final _$actionInfo = _$_AbaAdocaoControllerBaseActionController.startAction(
-        name: '_AbaAdocaoControllerBase.setIsCat');
+        name: '_AbaAdocaoControllerBase.setRacaSelect');
     try {
-      return super.setIsCat(value);
+      return super.setRacaSelect(value);
     } finally {
       _$_AbaAdocaoControllerBaseActionController.endAction(_$actionInfo);
     }
@@ -176,8 +177,8 @@ mixin _$AbaAdocaoController on _AbaAdocaoControllerBase, Store {
   @override
   String toString() {
     return '''
-isDog: ${isDog},
-isCat: ${isCat},
+especieSelect: ${especieSelect},
+racaSelect: ${racaSelect},
 isUpKeyBoard: ${isUpKeyBoard},
 isSearch: ${isSearch},
 isOnlyONG: ${isOnlyONG}

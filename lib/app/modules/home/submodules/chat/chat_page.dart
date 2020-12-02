@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:petmais/app/modules/home/submodules/chat/models/message/message_model.dart';
+import 'package:petmais/app/shared/models/pet/pet_images_model.dart';
 import 'package:petmais/app/shared/models/usuario/usuario_chat_model.dart';
 import 'package:petmais/app/shared/utils/colors.dart';
 import 'package:petmais/app/shared/utils/font_style.dart';
@@ -14,9 +15,9 @@ import 'chat_controller.dart';
 class ChatPage extends StatefulWidget {
   final UsuarioChatModel usuarioContact;
   final bool viewed;
-  // final String nomePet;
-  // final String urlFotoPet;
-  ChatPage({this.usuarioContact, this.viewed});
+  final String nomePet;
+  final String urlFotoPet;
+  ChatPage({this.usuarioContact, this.viewed, this.nomePet, this.urlFotoPet});
 
   @override
   _ChatPageState createState() => _ChatPageState();
@@ -33,6 +34,13 @@ class _ChatPageState extends ModularState<ChatPage, ChatController> {
     controller.addListenerIsOnline();
     controller.addListenerMessages();
     controller.isNewMessage();
+    if (widget.nomePet != "Null" && widget.urlFotoPet != "Null") {
+      Future.delayed(Duration(milliseconds: 350), () async {
+        String urlFoto = widget.urlFotoPet.replaceAll("@2@", "/").toString();
+        await controller.sendImage(urlFoto);
+        await controller.sendMessageText(msg: "Tenho interrese no " + widget.nomePet);
+      });
+    }
   }
 
   @override

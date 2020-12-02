@@ -5,7 +5,6 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
 import 'package:petmais/app/modules/auth/auth_controller.dart';
 import 'package:petmais/app/shared/models/dados_endereco/dados_endereco_model.dart';
-import 'package:petmais/app/shared/models/usuario/usuario_info_model.dart';
 import 'package:petmais/app/shared/models/usuario/usuario_model.dart';
 import 'package:petmais/app/shared/repository/usuario_remote/usuario_remote_repository.dart';
 part 'cadastro_controller.g.dart';

@@ -3,6 +3,8 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:petmais/app/shared/utils/colors.dart';
 import 'package:petmais/app/shared/utils/font_style.dart';
+import 'pages/meus_produtos/meus_produtos_page.dart';
+import 'pages/pedidos/pedidos_page.dart';
 import 'pet_shop_controller.dart';
 
 class PetShopPage extends StatefulWidget {
@@ -125,7 +127,7 @@ class _PetShopPageState extends ModularState<PetShopPage, PetShopController>
                   // });
                 },
                 tabs: [
-                  Tab(text: "Produtos"),
+                  Tab(text: controller.usuario.isPetShop ? "Meus Produtos" : "Produtos"),
                   Tab(text: "Pedidos"),
                 ],
               ),
@@ -136,30 +138,10 @@ class _PetShopPageState extends ModularState<PetShopPage, PetShopController>
       body: TabBarView(
         controller: controller.tabController,
         children: <Widget>[
-          Observer(builder: (_) {
-            return ClipRRect(
-              borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(
-                    controller.animationDrawer.isShowDrawer ? 40 : 0),
-              ),
-              child: Container(
-                color: Colors.white,
-              ),
-            );
-          }),
-          Observer(builder: (_) {
-            return ClipRRect(
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(
-                    controller.animationDrawer.isShowDrawer ? 40 : 0),
-              ),
-              child: Container(
-                color: Colors.white,
-              ),
-            );
-          }),
+          MeusProdutosPage(),
+          PedidosPage(),
         ],
-      ),
+      ),      
     );
   }
 }

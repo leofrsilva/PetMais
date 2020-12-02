@@ -52,7 +52,6 @@ class _PerfilPageState
                       controller.animationDrawer.isShowDrawer ? 40 : 0)),
               child: Container(
                 height: size.height * 0.575,
-                
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.only(
                       bottomLeft: Radius.circular(
@@ -62,33 +61,38 @@ class _PerfilPageState
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: <Widget>[
                     Container(
-                      height: size.height * 0.25,
+                      height: user.usuarioInfo is UsuarioInfoJuridicoModel
+                          ? size.height * 0.225
+                          : size.height * 0.175,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Expanded(
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 3.0),
-                                  child: Text(
-                                    (user.usuarioInfo as UsuarioInfoJuridicoModel)
-                                        .descricao,
-                                    textAlign: TextAlign.center,
-                                    maxLines: 2,
-                                    style: TextStyle(
-                                      color: DefaultColors.secondarySmooth,
-                                      fontFamily: "Changa",
-                                      height: size.height * 0.00185,
-                                      fontSize: size.height * 0.0275,
+                          if (user.usuarioInfo is UsuarioInfoJuridicoModel)
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Expanded(
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 3.0),
+                                    child: Text(
+                                      (user.usuarioInfo
+                                              as UsuarioInfoJuridicoModel)
+                                          .descricao,
+                                      textAlign: TextAlign.center,
+                                      maxLines: 2,
+                                      style: TextStyle(
+                                        color: DefaultColors.secondarySmooth,
+                                        fontFamily: "Changa",
+                                        height: size.height * 0.00185,
+                                        fontSize: size.height * 0.0275,
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
-                            ],
-                          ),
+                              ],
+                            ),
                           CustomButton(
                             text: "INICIAR CONVERSA",
                             corText: Colors.white,
@@ -113,7 +117,9 @@ class _PerfilPageState
                               Modular.to.pop();
                               Future.delayed(Duration(milliseconds: 200), () {
                                 bool viewed = false;
-                                Modular.to.pushNamed("/home/chat/$viewed",
+                                String nome = "Null";
+                                String url = "Null";
+                                Modular.to.pushNamed("/home/chat/$viewed/$nome/$url",
                                     arguments: usuarioChat);
                               });
                             },
@@ -359,7 +365,9 @@ class _PerfilPageState
       child: Column(
         children: <Widget>[
           Container(
-            height: size.height * 0.0395,
+            height: user.usuarioInfo is UsuarioInfoModel
+                ? size.height * 0.0395
+                : size.height * 0.045,
             margin: EdgeInsets.only(
               top: size.height * 0.0055,
               bottom: size.height * 0.0085,
@@ -389,7 +397,7 @@ class _PerfilPageState
             ),
           ),
           Container(
-            height: size.height * 0.255,
+            height: user.usuarioInfo is UsuarioInfoJuridicoModel ? size.height * 0.275 : size.height * 0.325,
             alignment: Alignment.center,
             child: FutureBuilder<List<PostAdocaoModel>>(
               future: controller.recuperarPets(
@@ -468,8 +476,12 @@ class _PerfilPageState
                                       Future.delayed(
                                           Duration(milliseconds: 200), () {
                                         bool viewed = false;
+                                        String nome = pet.nome;
+                                        String url = pet.petImages.imgPrincipal
+                                            .replaceAll("/", "@2@")
+                                            .toString();
                                         Modular.to.pushNamed(
-                                            "/home/chat/$viewed",
+                                            "/home/chat/$viewed/$nome/$url",
                                             arguments: usuarioChat);
                                       });
                                     }

@@ -17,6 +17,36 @@ mixin _$AddPetController on _AddPetControllerBase, Store {
               name: '_AddPetControllerBase.totalImg'))
           .value;
 
+  final _$especieSelectAtom = Atom(name: '_AddPetControllerBase.especieSelect');
+
+  @override
+  String get especieSelect {
+    _$especieSelectAtom.reportRead();
+    return super.especieSelect;
+  }
+
+  @override
+  set especieSelect(String value) {
+    _$especieSelectAtom.reportWrite(value, super.especieSelect, () {
+      super.especieSelect = value;
+    });
+  }
+
+  final _$racaSelectAtom = Atom(name: '_AddPetControllerBase.racaSelect');
+
+  @override
+  String get racaSelect {
+    _$racaSelectAtom.reportRead();
+    return super.racaSelect;
+  }
+
+  @override
+  set racaSelect(String value) {
+    _$racaSelectAtom.reportWrite(value, super.racaSelect, () {
+      super.racaSelect = value;
+    });
+  }
+
   final _$isErrorAtom = Atom(name: '_AddPetControllerBase.isError');
 
   @override
@@ -96,6 +126,28 @@ mixin _$AddPetController on _AddPetControllerBase, Store {
       ActionController(name: '_AddPetControllerBase');
 
   @override
+  dynamic setEspecieSelect(String value) {
+    final _$actionInfo = _$_AddPetControllerBaseActionController.startAction(
+        name: '_AddPetControllerBase.setEspecieSelect');
+    try {
+      return super.setEspecieSelect(value);
+    } finally {
+      _$_AddPetControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic setRacaSelect(String value) {
+    final _$actionInfo = _$_AddPetControllerBaseActionController.startAction(
+        name: '_AddPetControllerBase.setRacaSelect');
+    try {
+      return super.setRacaSelect(value);
+    } finally {
+      _$_AddPetControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   dynamic setError(bool value) {
     final _$actionInfo = _$_AddPetControllerBaseActionController.startAction(
         name: '_AddPetControllerBase.setError');
@@ -164,6 +216,8 @@ mixin _$AddPetController on _AddPetControllerBase, Store {
   @override
   String toString() {
     return '''
+especieSelect: ${especieSelect},
+racaSelect: ${racaSelect},
 isError: ${isError},
 forAdocao: ${forAdocao},
 typeData: ${typeData},

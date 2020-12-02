@@ -98,65 +98,67 @@ class _AbaConversaPageState
                 );
 
                 return ListTile(
-            contentPadding: EdgeInsets.fromLTRB(16, 8, 16, 8),
-            leading: CircleAvatar(
-              maxRadius: 30,
-              backgroundColor: Colors.grey[400],
-              backgroundImage: conversation.imgUser != "No Photo"
-                  ? NetworkImage(conversation.imgUser)
-                  : null,
-            ),
-            title: Text(
-              conversation.nome,
-              style: TextStyle(
-                color: DefaultColors.secondary,
-                fontWeight: FontWeight.bold,
-                fontSize: 16,
-              ),
-            ),
-            subtitle: conversation.type == "text"
-                ? Text(
-                    conversation.message,
+                  contentPadding: EdgeInsets.fromLTRB(16, 8, 16, 8),
+                  leading: CircleAvatar(
+                    maxRadius: 30,
+                    backgroundColor: Colors.grey[400],
+                    backgroundImage: conversation.imgUser != "No Photo"
+                        ? NetworkImage(conversation.imgUser)
+                        : null,
+                  ),
+                  title: Text(
+                    conversation.nome,
                     style: TextStyle(
-                      color: Colors.grey,
-                      fontSize: 14,
+                      color: DefaultColors.secondary,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
                     ),
-                  )
-                : Row(
-                    children: <Widget>[
-                      Icon(Icons.image, color: Colors.grey, size: 18),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 6.0),
-                        child: Text(
-                          "Foto",
+                  ),
+                  subtitle: conversation.type == "text"
+                      ? Text(
+                          conversation.message,
                           style: TextStyle(
                             color: Colors.grey,
                             fontSize: 14,
                           ),
+                        )
+                      : Row(
+                          children: <Widget>[
+                            Icon(Icons.image, color: Colors.grey, size: 18),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 6.0),
+                              child: Text(
+                                "Foto",
+                                style: TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
-                    ],
-                  ),
-            onTap: () {
-              //Abrir tela de mensagens
-              Modular.to.pushNamed(
-                  "/home/chat/${conversation.viewed}",
-                  arguments: userChat);
-            },
-            trailing: conversation.viewed == true
-                ? Container(
-                    width: 10,
-                    height: 10,
-                  )
-                : Container(
-                    width: 10,
-                    height: 10,
-                    decoration: BoxDecoration(
-                      color: DefaultColors.background,
-                      borderRadius: BorderRadius.circular(100),
-                    ),
-                  ),
-          );
+                  onTap: () {
+                    //Abrir tela de mensagens
+                    String nome = "Null";
+                    String url = "Null";
+                    Modular.to.pushNamed(
+                        "/home/chat/${conversation.viewed}/$nome/$url",
+                        arguments: userChat);
+                  },
+                  trailing: conversation.viewed == true
+                      ? Container(
+                          width: 10,
+                          height: 10,
+                        )
+                      : Container(
+                          width: 10,
+                          height: 10,
+                          decoration: BoxDecoration(
+                            color: DefaultColors.background,
+                            borderRadius: BorderRadius.circular(100),
+                          ),
+                        ),
+                );
               },
             );
           }

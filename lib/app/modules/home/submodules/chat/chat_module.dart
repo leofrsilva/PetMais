@@ -16,10 +16,12 @@ class ChatModule extends ChildModule {
   @override
   List<ModularRouter> get routers => [
         ModularRouter(
-          "/:viewed",
+          "/:viewed/:nome/:url",
           child: (_, args) => ChatPage(
             usuarioContact: args.data,
             viewed: bool.fromEnvironment( args.params["viewed"]),
+            nomePet: args.params["nome"],
+            urlFotoPet: args.params["url"],
           ),
         ),
       ];

@@ -1,5 +1,6 @@
   import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:petmais/app/shared/models/pet/pet_images_model.dart';
 
 const String COLUMN_ID = "id";
@@ -93,6 +94,62 @@ class PetModel {
     return result;
   }
 
+  static List<String> dogs = [
+    "OUTRO",
+    "VIRA_LATA",
+    "PUB",
+    "MALTÊS",
+    "SHIH TZU",
+    "SPITZ ALEMÃO",
+    "BULDOGUE",
+    "PIT BULL",
+    "DACHSHUND",
+    "PASTOR-ALEMÃO",
+    "BASSET",
+    "SCHNAUZER",
+    "POODLE",
+    "ROTTWEILER",
+    "LABRADOR",
+    "PINSCHER",
+    "LHASA APSO",
+    "GOLDEN RETRIEVER",
+    "YORKSHIRE",
+    "BODER COLLIE",
+    "BEAGLE",
+  ];
+
+  static List<String> cats = [
+    "OUTRO",
+    "VIRA_LATA",
+    "PERSA",
+    "Siamês",
+    "HIMALAIA",
+    "MAIN COON",
+    "ANGORÁ",
+    "SIBERIANO",
+    "SPHYNX",
+    "RAGDOLL",
+    "BRITISH SHORTHAIR",
+  ];
+
+  static List<DropdownMenuItem<String>> listDogs(){
+    return PetModel.dogs.map((racaDog) { 
+      return DropdownMenuItem(
+        child: Text(racaDog),
+        value: racaDog,
+      );
+    }).toList();
+  }
+
+  static List<DropdownMenuItem<String>> listCats(){
+    return PetModel.cats.map((racaCat) { 
+      return DropdownMenuItem(
+        child: Text(racaCat),
+        value: racaCat,
+      );
+    }).toList();
+  }
+  
   int get id => this._id;
   set id(int value) => this._id = value;
 

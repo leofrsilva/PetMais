@@ -43,8 +43,9 @@ class _BottomSheetPostAdocaoState extends State<BottomSheetPostAdocao> {
   );
 
   void _getYearAnimal() {
-    if (post.dataNascimento != null && post.dataNascimento.isNotEmpty) {
-      print(post.dataNascimento);
+    if (post.typeUser == TypeUser.juridica) {
+      this.data = "Data de Resgete: " + post.dataNascimento;
+    } else if (post.dataNascimento != null && post.dataNascimento.isNotEmpty) {
       String dataPost = "";
       List nums = post.dataNascimento.split("/");
       nums.reversed.forEach((n) {
@@ -93,9 +94,9 @@ class _BottomSheetPostAdocaoState extends State<BottomSheetPostAdocao> {
         }
       }
 
-      this.idade = strYear + " " + strMonth + " " + strDay;
+      this.data = strYear + " " + strMonth + " " + strDay;
     } else {
-      this.idade = "";
+      this.data = "";
     }
   }
 
@@ -103,7 +104,7 @@ class _BottomSheetPostAdocaoState extends State<BottomSheetPostAdocao> {
   UsuarioModel usuario;
   String raca;
   String sexo;
-  String idade;
+  String data;
   Widget upd = Container();
   Widget delete = Container();
   Widget btnEntrarEmContato = Container();
@@ -267,7 +268,7 @@ class _BottomSheetPostAdocaoState extends State<BottomSheetPostAdocao> {
                         Expanded(
                           child: Text(
                               post.dataNascimento != null
-                                  ? post.especie + "\n" + raca + "\n" + idade
+                                  ? post.especie + "\n" + raca + "\n" + data
                                   : post.especie + "\n" + raca,
                               style: styleInf),
                         ),

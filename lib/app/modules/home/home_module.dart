@@ -1,6 +1,7 @@
 import 'package:petmais/app/modules/home/controllers/animation_drawer_controller.dart';
 import 'package:petmais/app/modules/home/repository/hasura_chat/firestore_chat_repository.dart';
 import 'package:petmais/app/modules/home/submodules/perfil/perfil_module.dart';
+import 'package:petmais/app/modules/home/submodules/pet_shop/submodules/add_produto/add_produto_module.dart';
 import 'package:petmais/app/shared/stores/auth/auth_store.dart';
 
 import 'home_controller.dart';
@@ -36,6 +37,8 @@ class HomeModule extends ChildModule {
         ModularRouter("/addAdocao", module: AddAdocaoModule(), transition: TransitionType.downToUp),
         ModularRouter("/adocaoUpd", module: AdocaoUpdModule(), transition: TransitionType.downToUp),
         ModularRouter("/chat", module: ChatModule(), transition: TransitionType.downToUp),
+
+        ModularRouter("/addProduto", module: AddProdutoModule(), transition: TransitionType.downToUp),
       ];
 
   static Inject get to => Inject<HomeModule>.of();

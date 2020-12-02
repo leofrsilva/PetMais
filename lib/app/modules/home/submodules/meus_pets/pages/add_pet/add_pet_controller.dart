@@ -20,13 +20,15 @@ import 'package:mobx/mobx.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:petmais/app/shared/utils/colors.dart';
 import 'package:petmais/app/shared/utils/font_style.dart';
-import 'package:petmais/app/shared/widgets/CustomRadioButton.dart';
 
 part 'add_pet_controller.g.dart';
 
 class AddPetController = _AddPetControllerBase with _$AddPetController;
 
 abstract class _AddPetControllerBase extends Disposable with Store {
+  Function updateListRaca;
+  setUpdateListRaca(Function value) => this.updateListRaca = value;
+
   BuildContext context;
   setContext(BuildContext contx) => this.context = contx;
 
@@ -37,8 +39,6 @@ abstract class _AddPetControllerBase extends Disposable with Store {
       mask: "00/00/0000",
     );
     this.nomeController = TextEditingController();
-    this.especieController = TextEditingController();
-    this.racaController = TextEditingController();
     this.descricaoController = TextEditingController();
     this.emailController = TextEditingController(
       text: this.usuario.email,
@@ -59,7 +59,6 @@ abstract class _AddPetControllerBase extends Disposable with Store {
     this.focusNome = FocusNode();
     this.focusData = FocusNode();
     this.focusEspecie = FocusNode();
-    this.focusRaca = FocusNode();
     this.focusDescricao = FocusNode();
     this.focusEmail = FocusNode();
     this.focusPhone = FocusNode();
@@ -69,13 +68,10 @@ abstract class _AddPetControllerBase extends Disposable with Store {
 
   TextEditingController nomeController;
   MaskedTextController dataController;
-  TextEditingController especieController;
-  TextEditingController racaController;
 
   FocusNode focusNome;
   FocusNode focusData;
   FocusNode focusEspecie;
-  FocusNode focusRaca;
 
   //? Text Editing Adoção
   PageController pageController;
@@ -88,6 +84,30 @@ abstract class _AddPetControllerBase extends Disposable with Store {
   FocusNode focusPhone;
 
   final formKey = GlobalKey<FormState>();
+
+  @observable
+  String especieSelect;
+  @action
+  setEspecieSelect(String value){
+    this.especieSelect = value;
+    this.listRaca = value == "Cachorro"
+        ? PetModel.listDogs()
+        : PetModel.listCats();
+    this.updateListRaca.call();
+    this.setRacaSelect(null);
+  }
+
+  List<DropdownMenuItem<String>> listEspecie = [
+    DropdownMenuItem(child: Text("Cachorro"), value: "Cachorro"),
+    DropdownMenuItem(child: Text("Gato"), value: "Gato"),
+  ];
+
+  @observable
+  String racaSelect;
+  @action
+  setRacaSelect(String value) => this.racaSelect = value;
+
+  List<DropdownMenuItem<String>> listRaca = [];
 
   @observable
   bool isError = false;
@@ -328,68 +348,69 @@ abstract class _AddPetControllerBase extends Disposable with Store {
 
   //? ------------------------------------------------------------------------
   //?
-  void showEspecie() async {
-    String especieSelected = especieController.text?.trim() ?? "Cachorro";
-    await Modular.to.showDialog(
-      builder: (context) {
-        return StatefulBuilder(builder: (context, setState) {
-          //* SIZE
-          Size size = MediaQuery.of(context).size;
-          return AlertDialog(
-            shape: ContinuousRectangleBorder(
-              borderRadius: BorderRadius.circular(20),
-            ),
-            contentPadding: const EdgeInsets.all(0),
-            actionsPadding: const EdgeInsets.all(0),
-            buttonPadding: const EdgeInsets.all(0),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.only(top: 12.0),
-                  child: CustomRadioButton<String>(
-                    size: size,
-                    primaryTitle: "Cachorro",
-                    secondyTitle: "Gato",
-                    primaryValue: "Cachorro",
-                    secondyValue: "Gato",
-                    groupValue: especieSelected,
-                    primaryOnChanged: (String value) {
-                      setState(() {
-                        especieSelected = value;
-                      });
-                    },
-                    secondyOnChanged: (String value) {
-                      setState(() {
-                        especieSelected = value;
-                      });
-                    },
-                    activeColor: DefaultColors.background,
-                  ),
-                ),
-              ],
-            ),
-            actions: <Widget>[
-              FlatButton(
-                child: Text(
-                  "Ok",
-                  style: TextStyle(
-                    color: DefaultColors.primary,
-                    fontSize: 14,
-                    fontFamily: "RussoOne",
-                  ),
-                ),
-                onPressed: () {
-                  Modular.to.pop();
-                },
-              ),
-            ],
-          );
-        });
-      },
-    );
-    especieController.text = especieSelected;
-  }
+  // void showEspecie() async {
+  //   String especieSelected = especieController.text?.trim() ?? "Cachorro";
+  //   await Modular.to.showDialog(
+  //     builder: (context) {
+  //       return StatefulBuilder(builder: (context, setState) {
+  //         //* SIZE
+  //         Size size = MediaQuery.of(context).size;
+  //         return AlertDialog(
+  //           shape: ContinuousRectangleBorder(
+  //             borderRadius: BorderRadius.circular(20),
+  //           ),
+  //           contentPadding: const EdgeInsets.all(0),
+  //           actionsPadding: const EdgeInsets.all(0),
+  //           buttonPadding: const EdgeInsets.all(0),
+  //           content: Column(
+  //             mainAxisSize: MainAxisSize.min,
+  //             children: <Widget>[
+  //               Padding(
+  //                 padding: const EdgeInsets.only(top: 12.0),
+  //                 child: CustomRadioButton<String>(
+  //                   size: size,
+  //                   primaryTitle: "Cachorro",
+  //                   secondyTitle: "Gato",
+  //                   primaryValue: "Cachorro",
+  //                   secondyValue: "Gato",
+  //                   groupValue: especieSelected,
+  //                   primaryOnChanged: (String value) {
+  //                     setState(() {
+  //                       especieSelected = value;
+  //                     });
+  //                   },
+  //                   secondyOnChanged: (String value) {
+  //                     setState(() {
+  //                       especieSelected = value;
+  //                     });
+  //                   },
+  //                   activeColor: DefaultColors.background,
+  //                 ),
+  //               ),
+  //             ],
+  //           ),
+  //           actions: <Widget>[
+  //             FlatButton(
+  //               child: Text(
+  //                 "Ok",
+  //                 style: TextStyle(
+  //                   color: DefaultColors.primary,
+  //                   fontSize: 14,
+  //                   fontFamily: "RussoOne",
+  //                 ),
+  //               ),
+  //               onPressed: () {
+  //                 Modular.to.pop();
+  //               },
+  //             ),
+  //           ],
+  //         );
+  //       });
+  //     },
+  //   );
+  //   this.especieController.text = especieSelected;
+    
+  // }
 
   //? ------------------------------------------------------------------------
   //? Adicionar PET
@@ -412,10 +433,10 @@ abstract class _AddPetControllerBase extends Disposable with Store {
         idDono: this.usuario.usuarioInfo.id,
         nome: this.nomeController.text.trim(),
         dataNascimento: this.dataController.text.trim(),
-        especie: this.especieController.text.trim(),
-        raca: this.racaController.text.trim().isEmpty
+        especie: this.especieSelect.trim(),
+        raca: this.racaSelect == null
             ? "SRD (Sem Raça Definida)"
-            : this.racaController.text.trim(),
+            : this.racaSelect.trim(),
         sexo: this.valueSexo,
         estado: this.forAdocao ? 1 : 0,
         petImages: petImages,
@@ -554,8 +575,6 @@ abstract class _AddPetControllerBase extends Disposable with Store {
   void dispose() {
     this.nomeController.dispose();
     this.dataController.dispose();
-    this.especieController.dispose();
-    this.racaController.dispose();
     this.descricaoController.dispose();
 
     this.emailController.dispose();
@@ -568,7 +587,6 @@ abstract class _AddPetControllerBase extends Disposable with Store {
     this.focusNome.dispose();
     this.focusData.dispose();
     this.focusEspecie.dispose();
-    this.focusRaca.dispose();
     this.focusDescricao.dispose();
   }
 }

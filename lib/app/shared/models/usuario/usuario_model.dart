@@ -95,18 +95,27 @@ class UsuarioModel {
       COLUMN_EMAIL: this.email,
       COLUMN_IDJ: (this.usuarioInfo as UsuarioInfoJuridicoModel).id,
       COLUMN_NOMEORG: (this.usuarioInfo as UsuarioInfoJuridicoModel).nomeOrg,
-      COLUMN_TELEFONE1: (this.usuarioInfo as UsuarioInfoJuridicoModel).telefone1,
-      COLUMN_TELEFONE2: (this.usuarioInfo as UsuarioInfoJuridicoModel).telefone2,
-      COLUMN_CIDADE: (this.usuarioInfo as UsuarioInfoJuridicoModel).endereco.cidade,
-      COLUMN_ESTADO: (this.usuarioInfo as UsuarioInfoJuridicoModel).endereco.estado ,
+      COLUMN_TELEFONE1:
+          (this.usuarioInfo as UsuarioInfoJuridicoModel).telefone1,
+      COLUMN_TELEFONE2:
+          (this.usuarioInfo as UsuarioInfoJuridicoModel).telefone2,
+      COLUMN_CIDADE:
+          (this.usuarioInfo as UsuarioInfoJuridicoModel).endereco.cidade,
+      COLUMN_ESTADO:
+          (this.usuarioInfo as UsuarioInfoJuridicoModel).endereco.estado,
       COLUMN_FOTOURL: (this.usuarioInfo as UsuarioInfoJuridicoModel).urlFoto,
-      COLUMN_DESCRICAO: (this.usuarioInfo as UsuarioInfoJuridicoModel).descricao,
-      COLUMN_TYPEJURIDICO: (this.usuarioInfo as UsuarioInfoJuridicoModel).typeJuridico,
+      COLUMN_DESCRICAO:
+          (this.usuarioInfo as UsuarioInfoJuridicoModel).descricao,
+      COLUMN_TYPEJURIDICO:
+          (this.usuarioInfo as UsuarioInfoJuridicoModel).typeJuridico,
       COLUMN_RUA: (this.usuarioInfo as UsuarioInfoJuridicoModel).endereco.rua,
-      COLUMN_NUMERO: (this.usuarioInfo as UsuarioInfoJuridicoModel).endereco.numero,
-      COLUMN_BAIRRO: (this.usuarioInfo as UsuarioInfoJuridicoModel).endereco.bairro,
+      COLUMN_NUMERO:
+          (this.usuarioInfo as UsuarioInfoJuridicoModel).endereco.numero,
+      COLUMN_BAIRRO:
+          (this.usuarioInfo as UsuarioInfoJuridicoModel).endereco.bairro,
       COLUMN_CEP: (this.usuarioInfo as UsuarioInfoJuridicoModel).endereco.cep,
-      COLUMN_COMPLEMENTO: (this.usuarioInfo as UsuarioInfoJuridicoModel).endereco.complemento,
+      COLUMN_COMPLEMENTO:
+          (this.usuarioInfo as UsuarioInfoJuridicoModel).endereco.complemento,
     };
     return map;
   }
@@ -117,6 +126,27 @@ class UsuarioModel {
       "senha": 10,
     };
     return result;
+  }
+
+  bool get isJuridico {
+    if (this.usuarioInfo is UsuarioInfoJuridicoModel) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  bool get isPetShop {
+    if (this.usuarioInfo is UsuarioInfoJuridicoModel) {
+      if ((this.usuarioInfo as UsuarioInfoJuridicoModel).typeJuridico ==
+          TypeJuridico.petshop) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
   }
 
   void reset() {

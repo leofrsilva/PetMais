@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
 import 'package:petmais/app/modules/home/controllers/animation_drawer_controller.dart';
+import 'package:petmais/app/shared/models/pet/pet_model.dart';
 import 'package:petmais/app/shared/models/post_adocao/post_adocao_model.dart';
 import 'package:petmais/app/shared/models/usuario/usuario_model.dart';
 
@@ -10,7 +10,7 @@ part 'aba_adocao_controller.g.dart';
 
 class AbaAdocaoController = _AbaAdocaoControllerBase with _$AbaAdocaoController;
 
-abstract class _AbaAdocaoControllerBase extends Disposable with Store {
+abstract class _AbaAdocaoControllerBase with Store {
   // Função para atualizar a lista de adoções
   Function _updateListAdption;
   set updateListAdption(Function value) => this._updateListAdption = value;
@@ -18,31 +18,50 @@ abstract class _AbaAdocaoControllerBase extends Disposable with Store {
 
   final AdocaoController _adocaoController;
   _AbaAdocaoControllerBase(this._adocaoController){
-    racaController = TextEditingController();
+    this.especieSelect = "Todos";
+    this.racaSelect = "";
   }
 
-  AnimationDrawerController get animationDrawer => this._adocaoController.animationDrawer;
+  AnimationDrawerController get animationDrawer =>
+      this._adocaoController.animationDrawer;
   AdocaoController get adocao => this._adocaoController;
   UsuarioModel get usuario => this._adocaoController.auth.usuario;
-  TextEditingController racaController;
 
+  //* Espécie
   @observable
-  bool isDog = false;
-
+  String especieSelect;
   @action
-  setIsDog(bool value){
-    this.isDog = value;
+  setEspecieSelect(String value) {
+    this.especieSelect = value;
+    if(value == "Cachorro"){
+      this.listRaca = PetModel.listDogs();
+    }
+    else if(value == "Gato"){
+      this.listRaca = PetModel.listCats();
+    }
+    else{
+    this.listRaca = [];
+    }
+    this.updateListAdption.call();
+    this.setRacaSelect(null);
+  }
+
+  List<DropdownMenuItem<String>> listEspecie = [
+    DropdownMenuItem(child: Text("Todos"), value: "Todos"),
+    DropdownMenuItem(child: Text("Cachorro"), value: "Cachorro"),
+    DropdownMenuItem(child: Text("Gato"), value: "Gato"),
+  ];
+
+  //* Raça
+  @observable
+  String racaSelect;
+  @action
+  setRacaSelect(String value) {
+    this.racaSelect = value;
     this.updateListAdption.call();
   }
 
-  @observable
-  bool isCat = false;
-
-  @action
-  setIsCat(bool value){
-    this.isCat = value;
-    this.updateListAdption.call();
-  }
+  List<DropdownMenuItem<String>> listRaca = [];
 
   @observable
   bool isUpKeyBoard = false;
@@ -64,7 +83,7 @@ abstract class _AbaAdocaoControllerBase extends Disposable with Store {
   bool isOnlyONG = false;
 
   @action
-  setIsOnlyONG(bool value){
+  setIsOnlyONG(bool value) {
     this.isOnlyONG = value;
     this.updateListAdption.call();
   }
@@ -76,17 +95,13 @@ abstract class _AbaAdocaoControllerBase extends Disposable with Store {
   @action
   Future<List<PostAdocaoModel>> recuperarAdocoes() async {
     String especie;
-    if(this.isDog == true && this.isCat == false){
+    if (this.especieSelect == "Cachorro") {
       especie = "cachorro";
-    }
-    else if(this.isDog == false && this.isCat == true){
+    } else if (this.especieSelect == "Gato") {
       especie = "gato";
     }
-    return await this._adocaoController.listAllAdocoes(especie, racaController.text.trim(), this.isOnlyONG);
-  }
-
-  @override
-  void dispose() {
-    racaController.dispose();
+    return await this
+        ._adocaoController
+        .listAllAdocoes(especie, this.racaSelect, this.isOnlyONG);
   }
 }
