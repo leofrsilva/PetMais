@@ -43,7 +43,6 @@ abstract class _AdocaoControllerBase extends Disposable with Store {
   Future<List<PostAdocaoModel>> listAllAdocoes(String esp, String rac, bool isONG) async {
     final adocaoRepository = AdocaoRemoteRepository();
     return await adocaoRepository.listAllAdocoes(0, especie: esp, raca: rac, ong: isONG);
-
   }
 
   Future showPostAdocao(

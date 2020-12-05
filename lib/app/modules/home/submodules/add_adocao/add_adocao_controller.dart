@@ -62,7 +62,6 @@ abstract class _AddAdocaoControllerBase extends Disposable with Store {
 
   @observable
   String petIdSelect;
-
   @action
   setPetSelect(String value) => this.petIdSelect = value;
 
@@ -76,7 +75,6 @@ abstract class _AddAdocaoControllerBase extends Disposable with Store {
 
   @observable
   Widget image;
-
   @action
   setImage(Widget value) => this.image = value;
   //? -----------------------------------------------------------------------------
@@ -84,21 +82,18 @@ abstract class _AddAdocaoControllerBase extends Disposable with Store {
   // Is Error
   @observable
   bool isError = false;
-
   @action
   setError(bool value) => this.isError = value;
 
   // Is Loading
   @observable
   bool isLoading = false;
-
   @action
   setLoading(bool value) => this.isLoading = value;
 
   // Pet Selecionado
   @observable
   PetModel pet;
-
   @action
   setPet(PetModel value) => this.pet = value;
 

@@ -16,9 +16,6 @@ class _PedidosPageState extends ModularState<PedidosPage, PedidosController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
       body: Column(
         children: <Widget>[],
       ),

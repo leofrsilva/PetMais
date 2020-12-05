@@ -1,4 +1,4 @@
-  import 'dart:convert';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:petmais/app/shared/models/pet/pet_images_model.dart';
@@ -30,17 +30,17 @@ class PetModel {
     String especie,
     String raca,
     String sexo,
-    String dataNascimento,    
+    String dataNascimento,
     int estado,
     PetImagesModel petImages,
-  }){
+  }) {
     this._id = id;
     this._idDono = idDono;
     this._nome = nome;
     this._especie = especie;
     this._raca = raca;
     this._sexo = sexo;
-    this._dataNascimento = dataNascimento;    
+    this._dataNascimento = dataNascimento;
     this._estado = estado;
     this._petImages = petImages;
   }
@@ -57,7 +57,7 @@ class PetModel {
     this.estado = int.tryParse(map[COLUMN_ESTADO]);
   }
 
-   Map<String, dynamic> toMap(){
+  Map<String, dynamic> toMap() {
     Map<String, dynamic> map = {
       COLUMN_IDDONO: this.idDono,
       COLUMN_NOME: this.nome,
@@ -71,7 +71,7 @@ class PetModel {
     return map;
   }
 
-  Map<String, dynamic> toMapUpdate(){
+  Map<String, dynamic> toMapUpdate() {
     Map<String, dynamic> map = {
       COLUMN_ID: this.id,
       COLUMN_IDDONO: this.idDono,
@@ -132,8 +132,8 @@ class PetModel {
     "BRITISH SHORTHAIR",
   ];
 
-  static List<DropdownMenuItem<String>> listDogs(){
-    return PetModel.dogs.map((racaDog) { 
+  static List<DropdownMenuItem<String>> listDogs() {
+    return PetModel.dogs.map((racaDog) {
       return DropdownMenuItem(
         child: Text(racaDog),
         value: racaDog,
@@ -141,15 +141,15 @@ class PetModel {
     }).toList();
   }
 
-  static List<DropdownMenuItem<String>> listCats(){
-    return PetModel.cats.map((racaCat) { 
+  static List<DropdownMenuItem<String>> listCats() {
+    return PetModel.cats.map((racaCat) {
       return DropdownMenuItem(
         child: Text(racaCat),
         value: racaCat,
       );
     }).toList();
   }
-  
+
   int get id => this._id;
   set id(int value) => this._id = value;
 

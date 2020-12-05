@@ -64,14 +64,6 @@ abstract class _AbaAdocaoControllerBase with Store {
   List<DropdownMenuItem<String>> listRaca = [];
 
   @observable
-  bool isUpKeyBoard = false;
-
-  @action
-  setUpKeyBoard() => this.isSearch = true;
-  @action
-  setDownKeyBoard() => this.isSearch = false;
-
-  @observable
   bool isSearch = false;
 
   @action

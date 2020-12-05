@@ -70,50 +70,6 @@ class _PetShopPageState extends ModularState<PetShopPage, PetShopController>
                   fit: BoxFit.cover,
                 ),
               ),
-              actions: <Widget>[
-                // IconButton(
-                //   icon: Icon(
-                //     controller.auth.isLogged
-                //         ? FontAwesomeIcons.signOutAlt
-                //         : FontAwesomeIcons.signInAlt,
-                //     color: Colors.black26,
-                //   ),
-                //   onPressed: () async {
-                //     if (controller.auth.isLogged) {
-                //       Modular.to.showDialog(builder: (_) {
-                //         return AlertDialog(
-                //           backgroundColor: Colors.transparent,
-                //           elevation: 0.0,
-                //           shape: RoundedRectangleBorder(
-                //             borderRadius: BorderRadius.circular(15.0),
-                //           ),
-                //           content: Center(
-                //             child: Container(
-                //               color: Colors.transparent,
-                //               height: 40,
-                //               width: 40,
-                //               child: CircularProgressIndicator(
-                //                 valueColor: AlwaysStoppedAnimation(
-                //                     DefaultColors.primarySmooth),
-                //               ),
-                //             ),
-                //           ),
-                //         );
-                //       });
-
-                //       Future.delayed(Duration(milliseconds: 250))
-                //           .whenComplete(() {
-                //         Modular.to.pop();
-                //         controller.home.setOffline();
-                //         controller.removerUsuarioLocalmente();
-                //         Modular.to.pushNamedAndRemoveUntil("/auth", (_) => false);
-                //       });
-                //     } else {
-                //       Modular.to.pushNamedAndRemoveUntil("/auth", (_) => false);
-                //     }
-                //   },
-                // ),
-              ],
               // actionsIconTheme: DefaultIconTheme.iconTheme,
               bottom: TabBar(
                 controller: controller.tabController,

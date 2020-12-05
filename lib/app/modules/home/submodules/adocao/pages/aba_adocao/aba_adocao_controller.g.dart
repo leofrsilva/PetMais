@@ -40,22 +40,6 @@ mixin _$AbaAdocaoController on _AbaAdocaoControllerBase, Store {
     });
   }
 
-  final _$isUpKeyBoardAtom =
-      Atom(name: '_AbaAdocaoControllerBase.isUpKeyBoard');
-
-  @override
-  bool get isUpKeyBoard {
-    _$isUpKeyBoardAtom.reportRead();
-    return super.isUpKeyBoard;
-  }
-
-  @override
-  set isUpKeyBoard(bool value) {
-    _$isUpKeyBoardAtom.reportWrite(value, super.isUpKeyBoard, () {
-      super.isUpKeyBoard = value;
-    });
-  }
-
   final _$isSearchAtom = Atom(name: '_AbaAdocaoControllerBase.isSearch');
 
   @override
@@ -120,28 +104,6 @@ mixin _$AbaAdocaoController on _AbaAdocaoControllerBase, Store {
   }
 
   @override
-  dynamic setUpKeyBoard() {
-    final _$actionInfo = _$_AbaAdocaoControllerBaseActionController.startAction(
-        name: '_AbaAdocaoControllerBase.setUpKeyBoard');
-    try {
-      return super.setUpKeyBoard();
-    } finally {
-      _$_AbaAdocaoControllerBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  dynamic setDownKeyBoard() {
-    final _$actionInfo = _$_AbaAdocaoControllerBaseActionController.startAction(
-        name: '_AbaAdocaoControllerBase.setDownKeyBoard');
-    try {
-      return super.setDownKeyBoard();
-    } finally {
-      _$_AbaAdocaoControllerBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
   dynamic setShowSearch() {
     final _$actionInfo = _$_AbaAdocaoControllerBaseActionController.startAction(
         name: '_AbaAdocaoControllerBase.setShowSearch');
@@ -179,7 +141,6 @@ mixin _$AbaAdocaoController on _AbaAdocaoControllerBase, Store {
     return '''
 especieSelect: ${especieSelect},
 racaSelect: ${racaSelect},
-isUpKeyBoard: ${isUpKeyBoard},
 isSearch: ${isSearch},
 isOnlyONG: ${isOnlyONG}
     ''';
