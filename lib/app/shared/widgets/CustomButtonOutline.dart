@@ -11,6 +11,7 @@ class CustomButtonOutline extends StatelessWidget {
   final double height;
   final double paddingRaised;
   final BoxDecoration decoration;
+  final Icon icon;
 
   const CustomButtonOutline({
     @required this.onPressed,
@@ -22,6 +23,7 @@ class CustomButtonOutline extends StatelessWidget {
     this.height,
     this.paddingRaised = 7.5,
     this.decoration,
+    this.icon,
   });
 
   @override
@@ -41,17 +43,25 @@ class CustomButtonOutline extends StatelessWidget {
             width: this.width,
             alignment: Alignment.center,
             padding: EdgeInsets.all(this.paddingRaised),
-      decoration: this.decoration,
+            decoration: this.decoration,
             // decoration: ,
-            child: Text(
-              this.text,
-              style: TextStyle(
-                color: this.corText ?? DefaultColors.secondary,
-                letterSpacing: 1.5,
-                fontSize: this.fontsize,
-                fontWeight: FontWeight.bold,
-                fontFamily: "RussoOne",
-              ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  this.text,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: this.corText ?? DefaultColors.secondary,
+                    letterSpacing: 1.5,
+                    fontSize: this.fontsize,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: "RussoOne",
+                  ),
+                ),
+                if (icon != null) this.icon
+              ],
             ),
           ),
         ),

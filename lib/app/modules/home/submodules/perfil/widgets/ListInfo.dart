@@ -12,14 +12,20 @@ class ListInfo extends StatelessWidget {
   final UsuarioModel usuario;
   final AnimationDrawerController animationDrawer;
   final Function onPressedUpd;
+  final bool isPetshop;
 
   Widget listInfo;
 
-  ListInfo({this.usuario, this.animationDrawer, this.onPressedUpd});
+  ListInfo(
+      {this.usuario,
+      this.animationDrawer,
+      this.onPressedUpd,
+      this.isPetshop = false});
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    if (isPetshop) return _listInfoPetshop(size);
     return _listInfo(size);
   }
 
@@ -214,6 +220,64 @@ class ListInfo extends StatelessWidget {
           color: DefaultColors.secondary,
         ),
       ],
+    );
+  }
+
+  Widget _listInfoPetshop(Size size) {
+    UsuarioInfoJuridicoModel user =
+        (this.usuario.usuarioInfo as UsuarioInfoJuridicoModel);
+    // Telefones
+    String tels = user.telefone1;
+    if ((this.usuario.usuarioInfo as UsuarioInfoJuridicoModel).telefone2 !=
+        null) {
+      tels = tels + " | " + user.telefone2;
+    }
+    return Container(
+      child: Stack(
+        children: [
+          Column(
+            children: [
+              SizedBox(height: size.height * 0.0125),
+              _info(
+                " " + this.usuario.email,
+                Padding(
+                  padding: const EdgeInsets.only(right: 4.0),
+                  child: Icon(
+                    Icons.email,
+                    color: DefaultColors.others,
+                  ),
+                ),
+                size,
+              ),
+              _info(
+                tels,
+                Padding(
+                  padding: const EdgeInsets.only(right: 4.0),
+                  child: Icon(
+                    Icons.phone,
+                    color: DefaultColors.others,
+                  ),
+                ),
+                size,
+              ),
+            ],
+          ),
+          Align(
+            alignment: Alignment.topRight,
+            child: Container(
+              // padding: EdgeInsets.only(top: size.height * 0.001),
+              child: IconButton(
+                padding: EdgeInsets.all(0),
+                icon: Icon(
+                  FontAwesomeIcons.userEdit,
+                  color: DefaultColors.secondary,
+                ),
+                onPressed: this.onPressedUpd,
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

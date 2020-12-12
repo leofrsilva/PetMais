@@ -289,7 +289,7 @@ abstract class _PessoaJuridicaControllerBase extends Disposable with Store {
     }
 
     // Img.Image image = Img.decodeImage(fileImage.readAsBytesSync());
-    // Img.Image smallerImg = Img.copyResize(image, width: 500);
+    // Img.Image smallerImg = Img.copyResize(image, width: 256);
 
     // File compressImg = new File("$path/image_$emailUser.jpg")
     //   ..writeAsBytesSync(Img.encodeJpg(smallerImg, quality: 10));

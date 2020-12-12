@@ -3,9 +3,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
 import 'package:petmais/app/modules/home/controllers/animation_drawer_controller.dart';
 import 'package:petmais/app/modules/home/repository/hasura_chat/firestore_chat_repository.dart';
-import 'package:petmais/app/shared/models/usuario/usuario_chat_model.dart';
 import 'package:petmais/app/shared/models/usuario/usuario_info_juridico_model.dart';
-import 'package:petmais/app/shared/models/usuario/usuario_info_model.dart';
 import 'package:petmais/app/shared/repository/usuario_persistence_local/usuario_persistence_local_repository.dart';
 import 'package:petmais/app/shared/stores/auth/auth_store.dart';
 
@@ -14,6 +12,7 @@ import 'submodules/meus_pets/meus_pets_module.dart';
 import 'submodules/perfil/perfil_module.dart';
 import 'submodules/pet_shop/pet_shop_module.dart';
 import 'submodules/search_user/search_user_module.dart';
+import 'submodules/pet_shop/submodules/perfil_petshop/perfil_petshop_module.dart';
 
 part 'home_controller.g.dart';
 
@@ -76,7 +75,7 @@ abstract class _HomeControllerBase extends Disposable with Store {
 
   List<Widget> screensPetshop = <Widget>[
     RouterOutlet(module: PetShopModule()),
-    RouterOutlet(module: PerfilModule()),    
+    RouterOutlet(module: PerfilPetshopModule()),    
   ];
 
   //? Online

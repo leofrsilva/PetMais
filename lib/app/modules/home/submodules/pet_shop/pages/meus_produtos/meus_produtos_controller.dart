@@ -1,8 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:petmais/app/modules/home/controllers/animation_drawer_controller.dart';
+import 'package:petmais/app/modules/home/submodules/pet_shop/submodules/produto/produto_module.dart';
 import 'package:petmais/app/shared/models/produto/produto_model.dart';
 import 'package:petmais/app/shared/models/usuario/usuario_info_juridico_model.dart';
 import 'package:petmais/app/shared/models/usuario/usuario_model.dart';
@@ -16,10 +19,18 @@ class MeusProdutosController = _MeusProdutosControllerBase
     with _$MeusProdutosController;
 
 abstract class _MeusProdutosControllerBase extends Disposable with Store {
+  BuildContext context;
+  setContext(BuildContext value) => this.context = value;
+
   // Função para atualizar a lista de produtos
   Function _updateListProdutos;
   set updateListProdutos(Function value) => this._updateListProdutos = value;
   Function get updateListProdutos => this._updateListProdutos;
+
+  // Função para limpar imagens
+  Function _clearImage;
+  set clearImage(Function value) => this._clearImage = value;
+  Function get clearImage => this._clearImage;
 
   PetShopController _petShopController;
   _MeusProdutosControllerBase(this._petShopController) {
@@ -60,6 +71,165 @@ abstract class _MeusProdutosControllerBase extends Disposable with Store {
   setShowSearch() => this.isSearch = true;
   @action
   setCloseSearch() => this.isSearch = false;
+
+  Future showPostAdocao(ProdutoModel produtoModel, double height) async {
+    // bool isPetshop = this.usuario.isPetShop;
+    Modular.to.showDialog(builder: (_) {
+      String strProd = json.encode(produtoModel.toMap());
+      strProd = strProd.replaceAll("/", "@2@");
+      return RouterOutlet(
+        initialRoute: "/$strProd",
+        module: ProdutoModule(),
+      );
+    }).then((dynamic value) {
+      if (value is int) {
+        int update = value;
+        if (update == 2) {
+          this.clearImage.call();
+        } else if (update == 1) {
+          this.updateListProdutos.call();
+        }
+      }
+    });
+    // Modular.to.showDialog(builder: (_) {
+    //   String strProd = json.encode(produtoModel.toMap());
+    //   strProd = strProd.replaceAll("/", "@2@");
+    //   return Material(
+    //     color: Colors.transparent,
+    //     borderRadius: BorderRadius.only(
+    //       topLeft: Radius.circular(20),
+    //       topRight: Radius.circular(20),
+    //     ),
+    //     child: Container(
+    //       decoration: BoxDecoration(
+    //         color: Colors.white,
+    //         borderRadius: BorderRadius.only(
+    //           topLeft: Radius.circular(20),
+    //           topRight: Radius.circular(20),
+    //         ),
+    //       ),
+    //       height: height * 0.955,
+    //       child: Column(
+    //         children: [
+    //           Container(
+    //             height: height * 0.065,
+    //             margin: EdgeInsets.only(bottom: height * 0.005),
+    //             child: Row(
+    //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    //               children: <Widget>[
+    //                 Container(
+    //                   padding: const EdgeInsets.symmetric(horizontal: 3),
+    //                   decoration: BoxDecoration(
+    //                     borderRadius: BorderRadius.only(
+    //                       topLeft: Radius.circular(20),
+    //                       topRight: Radius.circular(20),
+    //                     ),
+    //                   ),
+    //                   child: IconButton(
+    //                     icon: Icon(Icons.close,
+    //                         color: DefaultColors.tertiary, size: 28),
+    //                     onPressed: () {
+    //                       this.hideProduto();
+    //                     },
+    //                   ),
+    //                 ),
+    //               ],
+    //             ),
+    //           ),
+    //           Expanded(
+    //             child: RouterOutlet(
+    //               initialRoute: "/$strProd",
+    //               module: ProdutoModule(),
+    //             ),
+    //           ),
+    //         ],
+    //       ),
+    //     ),
+    //   );
+    // },);
+    // Modular.to
+    //     .showModalBottomSheet(
+    //   elevation: 6.0,
+    //   clipBehavior: Clip.antiAlias,
+    //   shape: RoundedRectangleBorder(
+    //     borderRadius: BorderRadius.only(
+    //       topLeft: Radius.circular(15),
+    //       topRight: Radius.circular(15),
+    //     ),
+    //   ),
+    //   isScrollControlled: true,
+    //   context: context,
+    //   builder: (context) {
+
+    //   },
+    // )
+    //     .then((_) {
+    //   this.updateListProdutos.call();
+    // });
+    // bool isPetshop = this.usuario.isPetShop;
+    // await showModalBottomSheet(
+    //   elevation: 6.0,
+    //   clipBehavior: Clip.antiAlias,
+    //   shape: RoundedRectangleBorder(
+    //     borderRadius: BorderRadius.only(
+    //       topLeft: Radius.circular(15),
+    //       topRight: Radius.circular(15),
+    //     ),
+    //   ),
+    //   isScrollControlled: true,
+    //   context: context,
+    //   builder: (context) {
+    //     String strProd = json.encode(produtoModel.toMap());
+    //     strProd = strProd.replaceAll("/", "@2@");
+    //     return Container(
+    //       height: height * 0.955,
+    //       child: Column(
+    //         children: [
+    //           Container(
+    //             height: height * 0.065,
+    //             margin: EdgeInsets.only(bottom: height * 0.005),
+    //             child: Row(
+    //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    //               children: <Widget>[
+    //                 Container(
+    //                   padding: const EdgeInsets.symmetric(horizontal: 3),
+    //                   decoration: BoxDecoration(
+    //                     borderRadius: BorderRadius.only(
+    //                       topLeft: Radius.circular(20),
+    //                       topRight: Radius.circular(20),
+    //                     ),
+    //                   ),
+    //                   child: IconButton(
+    //                     icon: Icon(Icons.close,
+    //                         color: DefaultColors.tertiary, size: 28),
+    //                     onPressed: () {
+    //                       this.hideProduto();
+    //                     },
+    //                   ),
+    //                 ),
+    //               ],
+    //             ),
+    //           ),
+    //           Expanded(
+    //             child: RouterOutlet(
+    //               initialRoute: "/$strProd",
+    //               module: ProdutoModule(),
+    //             ),
+    //           ),
+    //         ],
+    //       ),
+    //     );
+    //   },
+    // )
+    // .then((_) {
+    //   this.updateListProdutos.call();
+    // });
+  }
+
+  //* Hide Produto
+  void hideProduto() {
+    this._petShopController.removeShowProduto(context);
+  }
 
   @action
   Future<List<ProdutoModel>> recuperarProdPetShop() async {

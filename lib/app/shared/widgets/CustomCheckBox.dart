@@ -10,6 +10,7 @@ class CustomCheckBox extends StatelessWidget {
   final Function() onTap;
   final Color checkColor;
   final Color activeColor;
+  final Color color;
   final VisualDensity visualDensity;
 
   const CustomCheckBox({
@@ -18,7 +19,9 @@ class CustomCheckBox extends StatelessWidget {
     @required this.text,
     this.checkColor = Colors.green,
     this.activeColor = Colors.white,
-    this.visualDensity = const VisualDensity(vertical: VisualDensity.minimumDensity),
+    this.color,
+    this.visualDensity =
+        const VisualDensity(vertical: VisualDensity.minimumDensity),
     this.onTap,
     this.tristate = false,
   });
@@ -33,20 +36,24 @@ class CustomCheckBox extends StatelessWidget {
           mainAxisSize: MainAxisSize.max,
           children: <Widget>[
             Theme(
-              data: ThemeData(unselectedWidgetColor: DefaultColors.secondary),
-              child: Checkbox(    
-                tristate: this.tristate,            
+              data: ThemeData(unselectedWidgetColor: this.color == null ? DefaultColors.secondary : this.color,),
+              child: Checkbox(
+                tristate: this.tristate,
                 visualDensity: this.visualDensity,
                 value: this.value,
-                checkColor: DefaultColors.surface ?? this.checkColor,
-                activeColor: DefaultColors.secondary ?? this.activeColor,
+                checkColor: DefaultColors.surface ?? this.color,
+                activeColor: this.color == null ? DefaultColors.secondary : this.color,
                 onChanged: this.onChanged,
               ),
             ),
             Text(
-              
               this.text,
-              style: kLabelStyle,
+              style: TextStyle(
+                color:
+                    this.color == null ? DefaultColors.secondary : this.color,
+                fontFamily: 'Changa',
+                fontSize: 15,
+              ),
             ),
           ],
         ),

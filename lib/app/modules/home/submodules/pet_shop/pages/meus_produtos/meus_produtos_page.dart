@@ -27,6 +27,13 @@ class _MeusProdutosPageState
   Widget floatButton = Container();
   Widget produtos;
 
+  void updateImage() {
+    setState(() {
+      imageCache.clear();
+      imageCache.clearLiveImages();
+    });
+  }
+
   Future<void> onRefreshProd() async {
     setState(() {
       controller.recuperarProdPetShop();
@@ -49,6 +56,8 @@ class _MeusProdutosPageState
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     controller.updateListProdutos = this.onRefreshProd;
+    controller.clearImage = this.updateImage;
+    controller.setContext(context);
 
     if (controller.usuario.isPetShop) {
       floatButton = controller.focusNomeProd.hasFocus
@@ -224,6 +233,8 @@ class _MeusProdutosPageState
                     if (snapshot.data != null) {
                       List<ProdutoModel> prods = snapshot.data;
                       if (prods.length > 0) {
+                        int listLast = prods.length - 1;
+
                         defaultWidget = defaultWidget = ClipRRect(
                           borderRadius: BorderRadius.only(
                             bottomLeft: Radius.circular(
@@ -242,11 +253,42 @@ class _MeusProdutosPageState
                                   crossAxisAlignment:
                                       CrossAxisAlignment.stretch,
                                   children: prods.map((prod) {
+                                    int indexNow = prods.indexWhere(
+                                        (produto) => produto.id == prod.id);
+                                    if (indexNow == listLast) {
+                                      return Column(
+                                        children: [
+                                          PostProdutoPetShop(
+                                            height: size.height,
+                                            width: size.width,
+                                            produtoModel: prod,
+                                            onTap: () {
+                                              if (controller.animationDrawer
+                                                  .isShowDrawer) {
+                                                return;
+                                              }
+                                              // Modular.to.pushNamed("/home/produto", arguments: prod);
+                                              controller.showPostAdocao(
+                                                  prod, size.height);
+                                            },
+                                          ),
+                                          SizedBox(height: size.height * 0.12),
+                                        ],
+                                      );
+                                    }
                                     return PostProdutoPetShop(
                                       height: size.height,
                                       width: size.width,
                                       produtoModel: prod,
-                                      onTap: () {},
+                                      onTap: () {
+                                        if (controller
+                                            .animationDrawer.isShowDrawer) {
+                                          return;
+                                        }
+                                        // Modular.to.pushNamed("/home/produto", arguments: prod);
+                                        controller.showPostAdocao(
+                                            prod, size.height);
+                                      },
                                     );
                                   }).toList(),
                                 ),
@@ -304,7 +346,7 @@ class _MeusProdutosPageState
             return Container(
               height: controller.isSearch
                   ? size.height * 0.185
-                  : size.height * 0.125,
+                  : size.height * 0.185,
               width: size.width,
               child: Align(
                 alignment: Alignment.topCenter,
@@ -433,27 +475,27 @@ class _MeusProdutosPageState
                           ),
                         ),
                       ),
-                    if (!controller.isSearch)
-                      Container(
-                        color: Colors.black12,
-                        width: size.width * 0.85,
-                        child: Row(
-                          children: [
-                            Text(
-                              "  Produtos em Destaque",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontFamily: "Changa",
-                                fontWeight: FontWeight.w500,
-                                fontSize: size.height * 0.035,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+                    // if (!controller.isSearch)
+                    //   Container(
+                    //     color: Colors.black12,
+                    //     width: size.width * 0.85,
+                    //     child: Row(
+                    //       children: [
+                    //         Text(
+                    //           "  Produtos em Destaque",
+                    //           style: TextStyle(
+                    //             color: Colors.white,
+                    //             fontFamily: "Changa",
+                    //             fontWeight: FontWeight.w500,
+                    //             fontSize: size.height * 0.035,
+                    //           ),
+                    //         ),
+                    //       ],
+                    //     ),
+                    //   ),
                     Container(
                       // color: controller.isSearch ? Colors.white : Colors.black12,
-                      alignment: Alignment.center,
+                      alignment: Alignment.topCenter,
                       child: GestureDetector(
                         onTap: () {
                           if (controller.isSearch == true) {
@@ -464,18 +506,15 @@ class _MeusProdutosPageState
                           } else {
                             controller.setShowSearch();
                           }
-
-                          // controller.setIsOnlyONG(false);
-                          // controller
-                          //     .setEspecieSelect("Todos");
-                          // controller.setRacaSelect("");
                         },
                         child: Container(
                           height: size.width * 0.12,
                           width: size.width * 0.12,
                           alignment: Alignment.center,
                           margin: EdgeInsets.symmetric(
-                              horizontal: size.height * 0.0055),
+                            horizontal: size.height * 0.0055,
+                            vertical: size.height * 0.0375,
+                          ),
                           decoration: BoxDecoration(
                             color: controller.isSearch
                                 ? DefaultColors.background
@@ -489,6 +528,92 @@ class _MeusProdutosPageState
                         ),
                       ),
                     ),
+                    if (!controller.isSearch)
+                      Expanded(
+                        child: Container(
+                          height: size.height * 0.2,
+                          child: ListView(
+                            scrollDirection: Axis.horizontal,
+                            padding: EdgeInsets.only(top: size.height * 0.0125),
+                            children:
+                                ProdutoModel.listIconCategorias.map((cat) {
+                              return GestureDetector(
+                                onTap: () {
+                                  controller.setCategoriaSelect(cat["title"]);
+                                },
+                                child: Observer(builder: (_) {
+                                  return Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      Container(
+                                        height: size.height * 0.1,
+                                        width: size.height * 0.1,
+                                        margin: EdgeInsets.symmetric(
+                                            horizontal: size.width * 0.025),
+                                        padding:
+                                            EdgeInsets.all(size.width * 0.0025),
+                                        alignment: Alignment.center,
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(50),
+                                          border: Border.all(
+                                            color: DefaultColors.tertiary,
+                                            width: 3,
+                                          ),
+                                        ),
+                                        child: Container(
+                                          height: size.height * 0.0825,
+                                          width: size.height * 0.0825,
+                                          decoration: BoxDecoration(
+                                            color: controller.categoriaSelect ==
+                                                    cat["title"]
+                                                ? Colors.transparent
+                                                : Colors.black12,
+                                            borderRadius:
+                                                BorderRadius.circular(50),
+                                            image: cat["type"] == "image"
+                                                ? DecorationImage(
+                                                    image:
+                                                        AssetImage(cat["img"]),
+                                                    fit: BoxFit.cover,
+                                                    scale: 0.5)
+                                                : null,
+                                          ),
+                                          child: cat["type"] == "icon"
+                                              ? cat["title"] == "Todos"
+                                                  ? Icon(
+                                                      FontAwesomeIcons.cube,
+                                                      color: DefaultColors
+                                                          .background,
+                                                    )
+                                                  : Icon(
+                                                      Icons.more_horiz_outlined,
+                                                      color: DefaultColors
+                                                          .background,
+                                                    )
+                                              : null,
+                                        ),
+                                      ),
+                                      Text(
+                                        cat["title"],
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          color: DefaultColors.background,
+                                          fontFamily: "Changa",
+                                          fontSize: size.height * 0.0225,
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                }),
+                              );
+                            }).toList(),
+                          ),
+                        ),
+                      ),
                   ],
                 ),
               ),
@@ -500,7 +625,7 @@ class _MeusProdutosPageState
                 return Container(
                     height: controller.isSearch
                         ? size.height * 0.185
-                        : size.height * 0.085);
+                        : size.height * 0.125);
               }),
               FutureBuilder(
                 future: controller.recuperarProdPetShop(),
@@ -527,13 +652,14 @@ class _MeusProdutosPageState
                             ),
                           ),
                           child: Observer(builder: (_) {
-                            double height = size.height * 0.853;
+                            double height = size.height * 0.675;
                             if (controller.isSearch)
                               height = size.height * 0.79 - size.height * 0.185;
                             return Container(
+                              alignment: Alignment.topCenter,
                               height: height,
-                              padding:
-                                  EdgeInsets.only(top: size.height * 0.0193),
+                              padding: EdgeInsets.only(
+                                  top: size.height * 0.08),
                               child: RefreshIndicator(
                                 color: DefaultColors.primary,
                                 onRefresh: this.onRefreshProd,
@@ -547,7 +673,15 @@ class _MeusProdutosPageState
                                         height: size.height,
                                         width: size.width,
                                         produtoModel: prod,
-                                        onTap: () {},
+                                        onTap: () {
+                                          if (controller
+                                              .animationDrawer.isShowDrawer) {
+                                            return;
+                                          }
+                                          // Modular.to.pushNamed("/home/produto");
+                                          controller.showPostAdocao(
+                                              prod, size.height);
+                                        },
                                       );
                                     }).toList(),
                                   ),

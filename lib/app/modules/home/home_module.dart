@@ -14,6 +14,8 @@ import 'submodules/perfil_user/perfil_user_module.dart';
 import 'submodules/add_adocao/add_adocao_module.dart';
 import 'submodules/chat/chat_module.dart';
 import 'repository/hasura_chat/firestore_chat_repository.dart';
+import 'submodules/pet_shop/pet_shop_module.dart';
+import 'submodules/pet_shop/submodules/produto/produto_module.dart';
 
 class HomeModule extends ChildModule {
   @override
@@ -38,7 +40,9 @@ class HomeModule extends ChildModule {
         ModularRouter("/adocaoUpd", module: AdocaoUpdModule(), transition: TransitionType.downToUp),
         ModularRouter("/chat", module: ChatModule(), transition: TransitionType.downToUp),
 
+        ModularRouter("/petshop", module: PetShopModule(), transition: TransitionType.downToUp),
         ModularRouter("/addProduto", module: AddProdutoModule(), transition: TransitionType.downToUp),
+        ModularRouter("/produto", module: ProdutoModule(), transition: TransitionType.downToUp),
       ];
 
   static Inject get to => Inject<HomeModule>.of();

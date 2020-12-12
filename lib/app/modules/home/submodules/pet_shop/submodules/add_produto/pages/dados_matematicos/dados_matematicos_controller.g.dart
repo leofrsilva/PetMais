@@ -9,6 +9,21 @@ part of 'dados_matematicos_controller.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$DadosMatematicosController on _DadosMatematicosControllerBase, Store {
+  final _$quantAtom = Atom(name: '_DadosMatematicosControllerBase.quant');
+
+  @override
+  double get quant {
+    _$quantAtom.reportRead();
+    return super.quant;
+  }
+
+  @override
+  set quant(double value) {
+    _$quantAtom.reportWrite(value, super.quant, () {
+      super.quant = value;
+    });
+  }
+
   final _$isDeliveryAtom =
       Atom(name: '_DadosMatematicosControllerBase.isDelivery');
 
@@ -44,6 +59,17 @@ mixin _$DadosMatematicosController on _DadosMatematicosControllerBase, Store {
       ActionController(name: '_DadosMatematicosControllerBase');
 
   @override
+  dynamic setQuantidade(double value) {
+    final _$actionInfo = _$_DadosMatematicosControllerBaseActionController
+        .startAction(name: '_DadosMatematicosControllerBase.setQuantidade');
+    try {
+      return super.setQuantidade(value);
+    } finally {
+      _$_DadosMatematicosControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   dynamic setIsDelivery(bool value) {
     final _$actionInfo = _$_DadosMatematicosControllerBaseActionController
         .startAction(name: '_DadosMatematicosControllerBase.setIsDelivery');
@@ -68,6 +94,7 @@ mixin _$DadosMatematicosController on _DadosMatematicosControllerBase, Store {
   @override
   String toString() {
     return '''
+quant: ${quant},
 isDelivery: ${isDelivery},
 isError: ${isError}
     ''';

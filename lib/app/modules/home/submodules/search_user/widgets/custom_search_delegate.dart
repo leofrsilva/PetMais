@@ -186,17 +186,17 @@ class CustomSearchDelegate extends SearchDelegate<UsuarioModel> {
                     if (nomeSobreNome ==
                         ((usuario.usuarioInfo as UsuarioInfoJuridicoModel)
                             .nomeOrg
-                            .toLowerCase())) {                      
+                            .toLowerCase())) {
                       return Container();
-                    }                    
+                    }
                   }
                   if (user.usuarioInfo is UsuarioInfoJuridicoModel) {
-                        if ((user.usuarioInfo as UsuarioInfoJuridicoModel)
-                                .typeJuridico ==
-                            TypeJuridico.petshop) {
-                          return Container();
-                        }
-                      }
+                    if ((user.usuarioInfo as UsuarioInfoJuridicoModel)
+                            .typeJuridico ==
+                        TypeJuridico.petshop) {
+                      return Container();
+                    }
+                  }
 
                   List<String> comp = nomeSobreNome.split(query.toLowerCase());
                   return ListTile(
@@ -210,10 +210,11 @@ class CustomSearchDelegate extends SearchDelegate<UsuarioModel> {
                           text: query,
                           style: kLabelTitleStyle,
                         ),
-                        TextSpan(
-                          text: comp[1],
-                          style: kLabelTitleSmoothStyle,
-                        ),
+                        if (comp.length == 2)
+                          TextSpan(
+                            text: comp[1],
+                            style: kLabelTitleSmoothStyle,
+                          ),
                       ]),
                     ),
                     subtitle: Text(

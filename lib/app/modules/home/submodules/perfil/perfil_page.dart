@@ -132,7 +132,7 @@ class _PerfilPageState extends ModularState<PerfilPage, PerfilController> {
                 alignment: Alignment.centerLeft,
                 child: Column(
                   children: <Widget>[
-                    SizedBox(height: 25),
+                    SizedBox(height: size.height * 0.04),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [

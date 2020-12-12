@@ -109,8 +109,7 @@ class PostProdutoPetShop extends StatelessWidget {
                             Expanded(
                               child: Text(
                                 " Quantidade: " +
-                                    this.produtoModel.estoque.toString() +
-                                    " und",
+                                    this.produtoModel.estoque.toString(),
                                 maxLines: 1,
                                 style: TextStyle(
                                   height: height * 0.003,
@@ -137,7 +136,7 @@ class PostProdutoPetShop extends StatelessWidget {
                                 padding: EdgeInsets.symmetric(
                                     vertical: height * 0.005),
                                 child: Text(
-                                  "R\$ " + this.produtoModel.price.toString(),
+                                  "R\$ " + this.produtoModel.price.toStringAsFixed(2).replaceFirst(".", ","),
                                   textAlign: TextAlign.start,
                                   style: TextStyle(
                                     height: height * 0.0015,
@@ -165,7 +164,7 @@ class PostProdutoPetShop extends StatelessWidget {
                                                 ((this.produtoModel.desconto /
                                                         100) *
                                                     this.produtoModel.price))
-                                            .toString(),
+                                            .toStringAsFixed(2).replaceFirst(".", ","),
                                     textAlign: TextAlign.start,
                                     style: TextStyle(
                                       height: height * 0.0015,
@@ -198,7 +197,7 @@ class PostProdutoPetShop extends StatelessWidget {
                             Expanded(
                               child: Text(
                                 "Desconto: " +
-                                    this.produtoModel.desconto.toString() +
+                                    this.produtoModel.desconto.toStringAsFixed(2).replaceFirst(".", ",") +
                                     "%",
                                 textAlign: TextAlign.start,
                                 style: TextStyle(

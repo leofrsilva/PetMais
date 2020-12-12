@@ -123,6 +123,7 @@ abstract class _ChatControllerBase extends Disposable with Store {
         message: textMessage,
       );
       message.data = await DateNow.getDate();
+      // message.data = Timestamp.now();
       //Salvando menssagem para o Remetente
       _saveMessage(this.usuario.id.toString(),
           this.usuarioContact.id.toString(), message);
@@ -253,6 +254,7 @@ abstract class _ChatControllerBase extends Disposable with Store {
         message: textMessage,
       );
       message.data = await DateNow.getDate();
+      // message.data = Timestamp.now();
       //Salvando menssagem para o Remetente
       _saveMessage(this.usuario.id.toString(),
           this.usuarioContact.id.toString(), message);

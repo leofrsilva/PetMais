@@ -58,12 +58,16 @@ class DadosEnderecoModel {
 
   String toLogadouro() {
     return this.rua +
-        ", " +
+        ', ' +
         this.numero +
-        " " +
+        '-' +
         this.bairro +
-        ", " +
-        this.cidade;
+        '/' +
+        this.cidade +
+        '-' +
+        this.estado +
+        ',' +
+        this.cep;
   }
 
   static Map<String, int> toNumCaracteres() {

@@ -84,7 +84,7 @@ class _PetShopPageState extends ModularState<PetShopPage, PetShopController>
                 },
                 tabs: [
                   Tab(text: controller.usuario.isPetShop ? "Meus Produtos" : "Produtos"),
-                  Tab(text: "Pedidos"),
+                  Tab(text: controller.usuario.isPetShop ? "Pedidos" : "Meus Pedidos"),
                 ],
               ),
             );

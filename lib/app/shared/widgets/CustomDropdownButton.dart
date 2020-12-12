@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:petmais/app/shared/utils/colors.dart';
 import 'package:petmais/app/shared/utils/font_style.dart';
 // import 'package:modulo_login/app/modules/auth/utils/StylesTexts.dart';
 
@@ -12,6 +13,7 @@ class CustomDropdownButton<T> extends StatelessWidget {
   final Function(T) onChanged;
   final String label;
   final Color color;
+  final Color colorLabel;
   final IconData icon;
   final String hint;
   final Function(T) onSaved;
@@ -28,11 +30,12 @@ class CustomDropdownButton<T> extends StatelessWidget {
     @required this.items,
     @required this.value,
     @required this.label,
-    @required this.onChanged,
+     this.onChanged,
     this.height,
     this.width,
     this.hint,
     this.color = Colors.black26,
+    this.colorLabel,
     this.onSaved,
     this.validator,
     this.contentPadding = const EdgeInsets.only(top: 15.0),
@@ -49,7 +52,14 @@ class CustomDropdownButton<T> extends StatelessWidget {
           if (this.isTitle)
             Text(
               this.label,
-              style: kLabelTitleStyle,
+              style: TextStyle(
+                color: this.colorLabel == null
+                    ? DefaultColors.secondary
+                    : this.colorLabel,
+                fontFamily: 'OpenSans', //GoogleFonts.montserrat().fontFamily,
+                fontWeight: FontWeight.w500,
+                fontSize: 18,
+              ),
             ),
           Container(
             alignment: this.alignment,

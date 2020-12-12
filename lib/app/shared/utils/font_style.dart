@@ -43,6 +43,16 @@ final kLabelTitleAppBarStyle = TextStyle(
   // fontWeight: FontWeight.w500,
 );
 
+final kLabelTitleAppBarStylePetShop = TextStyle(
+  color: Colors.black26,
+  fontSize: 24,
+  fontFamily: "Roboto",
+  letterSpacing: 0,
+  wordSpacing: 0,
+  // fontFamily: 'OpenSans', //GoogleFonts.montserrat().fontFamily,
+  // fontWeight: FontWeight.w500,
+);
+
 final kLabelTitleAuxStyle = TextStyle(
   color: Colors.white,
   fontSize: 24,

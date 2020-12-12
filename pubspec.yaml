@@ -44,6 +44,7 @@ dependencies:
   network_to_file_image: ^2.3.6
   path_provider: ^1.6.14
   shared_preferences: ^0.5.10
+  spinner_input: ^0.1.2
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -58,7 +59,6 @@ flutter_icons:
   image_path: "dev_assets/Logo_PetMais.png"
   adaptive_icon_background: "#66FFB3"
   adaptive_icon_foreground: "dev_assets/Logo_PetMais_Adaptive.png"
-
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -84,6 +84,12 @@ flutter:
     - assets/images/paw/addPaw.png
     - assets/images/paw/circlePaw.png
     - assets/images/paw/searchPaw.png
+    - assets/images/categorias/acessorios.png
+    - assets/images/categorias/brinquedos.png
+    - assets/images/categorias/mantimento.png
+    - assets/images/categorias/racao.png
+    - assets/images/categorias/tosa.png
+    - assets/images/categorias/perfumaria.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

@@ -12,13 +12,15 @@ class CustomTextField extends StatelessWidget {
   final String label;
   final Color colorLabel;
   final Color color;
+  final Color colorText;
   final Color colorBorder;
   final TextInputType textInputType;
   final TextCapitalization textCapitalization;
   final List<TextInputFormatter> inputFormatters;
   final TextInputAction textInputAction;
   final Function(String) onFieldSubmitted;
-  final Function onEditingComplete;  final Function onTap;
+  final Function onEditingComplete;
+  final Function onTap;
   final IconData icon;
   final String hint;
   final bool readOnly;
@@ -51,6 +53,7 @@ class CustomTextField extends StatelessWidget {
     this.onEditingComplete,
     this.onTap,
     this.color = Colors.black26,
+    this.colorText,
     this.colorBorder,
     this.readOnly = false,
     this.isPass = false,
@@ -105,7 +108,9 @@ class CustomTextField extends StatelessWidget {
             maxLines: this.numLines ?? 1,
             maxLength: this.maxCaracteres,
             style: TextStyle(
-              color: DefaultColors.secondarySmooth,
+              color: this.colorText == null
+                  ? DefaultColors.secondarySmooth
+                  : this.colorText,
               fontFamily: "Changa",
               fontSize: 16,
               height: this.heightText != null ? heightText * 0.002 : null,

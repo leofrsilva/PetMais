@@ -89,6 +89,7 @@ class _PessoaJuridicaPageState
                               canvasColor: Colors.white,
                             ),
                             child: CustomDropdownButton<TypeJuridico>(
+                              isDense: true,
                               height: size.height * 0.055,
                               label: "Função",
                               hint: "ONG",

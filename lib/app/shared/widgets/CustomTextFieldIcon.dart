@@ -5,6 +5,7 @@ import 'package:petmais/app/shared/utils/font_style.dart';
 // import 'package:modulo_login/app/modules/auth/utils/StylesTexts.dart';
 
 class CustomTextFieldIcon extends StatelessWidget {
+  final bool isTitle;
   final bool enabled;
   final double height;
   final TextEditingController controller;
@@ -12,6 +13,8 @@ class CustomTextFieldIcon extends StatelessWidget {
   final Function(String) onChanged;
   final String label;
   final Color color;
+  final Color colorLabel;
+  final Color colorText;
   final TextInputType textInputType;
   final List<TextInputFormatter> inputFormatters;
   final TextInputAction textInputAction;
@@ -29,12 +32,14 @@ class CustomTextFieldIcon extends StatelessWidget {
   final Function() onPressedIcon;
 
   const CustomTextFieldIcon({
+    this.isTitle = true,
     this.enabled,
     this.controller,
     this.focusNode,
     this.icon,
     this.sufixIcon,
     @required this.label,
+    this.colorLabel,
     this.onChanged,
     this.hint,
     this.textInputType = TextInputType.text,
@@ -42,6 +47,7 @@ class CustomTextFieldIcon extends StatelessWidget {
     this.textInputAction,
     this.onFieldSubmitted,
     this.color = Colors.black26,
+    this.colorText,
     this.isPass = false,
     this.onPressedVisiblePass,
     this.onSaved,
@@ -57,10 +63,17 @@ class CustomTextFieldIcon extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Text(
-          this.label,
-          style: kLabelTitleStyle,
-        ),
+        if (isTitle)
+          Text(
+            this.label,
+            style: TextStyle(
+              color: this.colorLabel ?? DefaultColors.secondary,
+              fontFamily: 'OpenSans', //GoogleFonts.montserrat().fontFamily,
+              fontWeight:
+                  this.colorLabel != null ? FontWeight.w700 : FontWeight.w500,
+              fontSize: 18,
+            ),
+          ),
         Container(
           alignment: Alignment.centerLeft,
           height: this.height,
@@ -83,9 +96,9 @@ class CustomTextFieldIcon extends StatelessWidget {
                   onSaved: this.onSaved,
                   validator: this.validator,
                   style: TextStyle(
-                    color: this.enabled == false
-                        ? Colors.grey
-                        : DefaultColors.secondarySmooth,
+                    color: this.colorText == null
+                        ? DefaultColors.secondarySmooth
+                        : this.colorText,
                     fontFamily: "Changa",
                   ),
                   decoration: InputDecoration(

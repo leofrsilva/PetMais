@@ -37,4 +37,8 @@ abstract class _PetShopControllerBase with Store {
         nameProd: nProd,
         namePetShop: nPetShop);
   }
+
+  void removeShowProduto(BuildContext contex){
+    Modular.to.pop(contex);
+  }
 }

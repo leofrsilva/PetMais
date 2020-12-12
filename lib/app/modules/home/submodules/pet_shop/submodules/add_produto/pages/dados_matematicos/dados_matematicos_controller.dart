@@ -1,12 +1,15 @@
+import 'package:flushbar/flushbar_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
-import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:petmais/app/shared/utils/colors.dart';
 
 import '../../add_produto_controller.dart';
+
 part 'dados_matematicos_controller.g.dart';
 
+@Injectable()
 class DadosMatematicosController = _DadosMatematicosControllerBase
     with _$DadosMatematicosController;
 
@@ -16,25 +19,36 @@ abstract class _DadosMatematicosControllerBase extends Disposable with Store {
 
   AddProdutoController _addProdutoController;
   _DadosMatematicosControllerBase(this._addProdutoController) {
-    this.precoController = MoneyMaskedTextController(leftSymbol: 'R\$ ',);
-    this.descontoController = MaskedTextController(
-      mask: "000,00",
+    this.freteController = MoneyMaskedTextController(
+      leftSymbol: 'R\$ ',
     );
-    this.estoqueController = TextEditingController();
-    this.focusPreco = FocusNode();
+    this.precoController = MoneyMaskedTextController(
+      leftSymbol: 'R\$ ',
+    );
+    this.descontoController = MoneyMaskedTextController(
+      rightSymbol: ' %',
+    );
     this.focusDesconto = FocusNode();
+    this.focusFrete = FocusNode();
+    this.setQuantidade(1);
   }
 
   AddProdutoController get addProd => this._addProdutoController;
 
   MoneyMaskedTextController precoController;
-  MaskedTextController descontoController;
-  TextEditingController estoqueController;
+  MoneyMaskedTextController freteController;
+  MoneyMaskedTextController descontoController;
 
-  FocusNode focusPreco;
   FocusNode focusDesconto;
+  FocusNode focusFrete;
 
   final formKey = GlobalKey<FormState>();
+
+  //* Quantidade
+  @observable
+  double quant = 0;
+  @action
+  setQuantidade(double value) => this.quant = value;
 
   //* Is Delivery
   @observable
@@ -48,14 +62,73 @@ abstract class _DadosMatematicosControllerBase extends Disposable with Store {
   @action
   setError(bool value) => this.isError = value;
 
-  Future cadatrar(){
-    if(this.formKey.currentState.validate()){
+  Future cadatrar() async {
+    if (this.formKey.currentState.validate()) {
       setError(false);
       //* Converte o valor de Desconto
-      double desconto = double.tryParse(this.descontoController.text.replaceAll(",", "."));
-      print(desconto);
-    }
-    else{
+      double desconto = double.tryParse(this
+          .descontoController
+          .text
+          .replaceAll(",", ".")
+          .trim()
+          .toString()
+          .replaceAll("%", ""));
+      double preco = double.tryParse(this
+          .precoController
+          .text
+          .replaceAll(",", ".")
+          .trim()
+          .toString()
+          .replaceAll("R\$", ""));
+      double frete = double.tryParse(this
+          .freteController
+          .text
+          .replaceAll(",", ".")
+          .trim()
+          .toString()
+          .replaceAll("R\$", ""));
+      int quantidade = this.quant.toInt();
+      int delivery = this.isDelivery ? 1 : 0;
+      this.addProd.setDadosMatematicos(
+            preco: preco,
+            desconto: desconto,
+            estoque: quantidade,
+            valKm: frete,
+            delivery: delivery,
+          );
+      //* Show Loading
+      this.showLoading();
+      await this
+          .addProd
+          .registrerProd(this.addProd.produto, false)
+          .then((String result) {
+        //* Hide Loading
+        this.hideLoading();
+        if (result == "Falha no Envio" || result == "Not Send") {
+          //? Mensagem de Erro
+          FlushbarHelper.createError(
+            duration: Duration(milliseconds: 1500),
+            message: "Erro ao Enviar Imagem!",
+          )..show(this.context);
+        } else if (result == "Registered") {
+          //? Retorna para lista de Produtos
+          Modular.to.pop();
+        } else if (result == "Falha na Conexão") {
+          //? Mensagem de Erro
+          FlushbarHelper.createError(
+            duration: Duration(milliseconds: 1500),
+            message: "Erro na Conexão!",
+          )..show(this.context);
+        } else {
+          //? Dados do Cadastro Incorreto
+          FlushbarHelper.createInformation(
+            duration: Duration(milliseconds: 1750),
+            title: "Cadastro",
+            message: "Algum dado está Incorreto!",
+          )..show(this.context);
+        }
+      });
+    } else {
       setError(true);
     }
   }
@@ -97,9 +170,10 @@ abstract class _DadosMatematicosControllerBase extends Disposable with Store {
 
   @override
   void dispose() {
+    this.freteController.dispose();
     this.precoController.dispose();
     this.descontoController.dispose();
-    this.focusPreco.dispose();
     this.focusDesconto.dispose();
+    this.focusFrete.dispose();
   }
 }

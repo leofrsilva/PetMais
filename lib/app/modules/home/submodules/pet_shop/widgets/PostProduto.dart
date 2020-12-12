@@ -76,7 +76,12 @@ class PostProduto extends StatelessWidget {
           borderRadius: BorderRadius.circular(20),
           child: Row(
             children: [
-              _imagePost(this.produtoModel.imgProd, this.height, this.width),
+              _imagePost(
+                this.produtoModel.imgProd,
+                this.produtoModel.estoque,
+                this.height,
+                this.width,
+              ),
               SizedBox(width: 20),
               Container(
                 padding: const EdgeInsets.only(right: 8),
@@ -137,7 +142,7 @@ class PostProduto extends StatelessWidget {
                               padding: EdgeInsets.symmetric(
                                   vertical: height * 0.005),
                               child: Text(
-                                "R\$ " + this.produtoModel.price.toString(),
+                                "R\$ " + this.produtoModel.price.toStringAsFixed(2).replaceFirst(".", ","),
                                 textAlign: this.produtoModel.desconto != 0.0
                                     ? TextAlign.start
                                     : TextAlign.end,
@@ -168,7 +173,7 @@ class PostProduto extends StatelessWidget {
                             Expanded(
                               child: Text(
                                 "- " +
-                                    this.produtoModel.desconto.toString() +
+                                    this.produtoModel.desconto.toStringAsFixed(2).replaceFirst(".", ",") +
                                     "%",
                                 textAlign: TextAlign.start,
                                 style: TextStyle(
@@ -193,7 +198,7 @@ class PostProduto extends StatelessWidget {
                                                 ((this.produtoModel.desconto /
                                                         100) *
                                                     this.produtoModel.price))
-                                            .toString(),
+                                            .toStringAsFixed(2).replaceFirst(".", ","),
                                     textAlign: TextAlign.end,
                                     style: TextStyle(
                                       height: height * 0.001,
@@ -220,7 +225,40 @@ class PostProduto extends StatelessWidget {
     );
   }
 
-  Widget _imagePost(String img, double height, double width) {
+  Widget _imagePost(String img, int estoque, double height, double width) {
+    if (estoque == 0) {
+      return Stack(
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(20),
+            child: Image.network(
+              img,
+              fit: BoxFit.cover,
+              width: 150,
+              height: 150,
+            ),
+          ),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(20),
+            child: Container(
+              width: 150,
+              height: 150,
+              color: Colors.black38,
+              alignment: Alignment.bottomCenter,
+              child: Text(
+                "Indisponível",
+                style: TextStyle(
+                  color: Colors.red,
+                  fontFamily: "Changa",
+                  fontWeight: FontWeight.w600,
+                  fontSize: height * 0.0335,
+                ),
+              ),
+            ),
+          ),
+        ],
+      );
+    }
     return ClipRRect(
       borderRadius: BorderRadius.circular(20),
       child: Image.network(
