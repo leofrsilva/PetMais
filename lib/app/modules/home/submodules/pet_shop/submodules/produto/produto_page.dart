@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:petmais/app/modules/home/submodules/pet_shop/submodules/produto/pages/update_produto/update_produto_page.dart';
 import 'package:petmais/app/shared/models/produto/produto_model.dart';
+import 'package:petmais/app/shared/models/usuario/usuario_info_juridico_model.dart';
+import 'package:petmais/app/shared/models/usuario/usuario_model.dart';
 import 'package:petmais/app/shared/utils/colors.dart';
 import 'package:petmais/app/shared/widgets/CustomButtonOutline.dart';
 import 'produto_controller.dart';
 
 class ProdutoPage extends StatefulWidget {
   final ProdutoModel produto;
-  const ProdutoPage({this.produto});
+  final int showPerfil;
+  const ProdutoPage({this.produto, this.showPerfil});
 
   @override
   _ProdutoPageState createState() => _ProdutoPageState();
@@ -232,7 +234,12 @@ class _ProdutoPageState extends ModularState<ProdutoPage, ProdutoController>
                               padding: EdgeInsets.symmetric(
                                   vertical: size.height * 0.025),
                               child: Text(
-                                "R\$ " + this.produto.price.toStringAsFixed(2).replaceFirst(".", ","),
+                                "R\$ " +
+                                    this
+                                        .produto
+                                        .price
+                                        .toStringAsFixed(2)
+                                        .replaceFirst(".", ","),
                                 textAlign: this.produto.desconto != 0.0
                                     ? TextAlign.start
                                     : TextAlign.end,
@@ -260,7 +267,11 @@ class _ProdutoPageState extends ModularState<ProdutoPage, ProdutoController>
                                     Expanded(
                                       child: Text(
                                         "- " +
-                                            this.produto.desconto.toStringAsFixed(2).replaceFirst(".", ",") +
+                                            this
+                                                .produto
+                                                .desconto
+                                                .toStringAsFixed(2)
+                                                .replaceFirst(".", ",") +
                                             "%",
                                         textAlign: TextAlign.start,
                                         style: TextStyle(
@@ -288,7 +299,8 @@ class _ProdutoPageState extends ModularState<ProdutoPage, ProdutoController>
                                                                     .desconto /
                                                                 100) *
                                                             this.produto.price))
-                                                    .toStringAsFixed(2).replaceFirst(".", ","),
+                                                    .toStringAsFixed(2)
+                                                    .replaceFirst(".", ","),
                                             textAlign: TextAlign.end,
                                             style: TextStyle(
                                               height: size.height * 0.001,
@@ -432,22 +444,27 @@ class _ProdutoPageState extends ModularState<ProdutoPage, ProdutoController>
                                 ],
                               ),
                             ),
-                            Container(
-                              height: size.height * 0.2,
-                              width: size.width * 0.425,
-                              margin: EdgeInsets.all(size.height * 0.01),
-                              decoration: BoxDecoration(
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.black26,
-                                    offset: Offset(1.0, 1.0),
-                                    blurRadius: 3,
+                            GestureDetector(
+                              onTap: () {
+                                if (widget.showPerfil == 1) Modular.to.pop(3);
+                              },
+                              child: Container(
+                                height: size.height * 0.2,
+                                width: size.width * 0.425,
+                                margin: EdgeInsets.all(size.height * 0.01),
+                                decoration: BoxDecoration(
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black26,
+                                      offset: Offset(1.0, 1.0),
+                                      blurRadius: 3,
+                                    ),
+                                  ],
+                                  borderRadius: BorderRadius.circular(10),
+                                  image: DecorationImage(
+                                    image: NetworkImage(this.produto.imgShop),
+                                    fit: BoxFit.cover,
                                   ),
-                                ],
-                                borderRadius: BorderRadius.circular(10),
-                                image: DecorationImage(
-                                  image: NetworkImage(this.produto.imgShop),
-                                  fit: BoxFit.cover,
                                 ),
                               ),
                             ),
@@ -482,17 +499,37 @@ class _ProdutoPageState extends ModularState<ProdutoPage, ProdutoController>
                       : Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Container(
-                                alignment: Alignment.centerLeft,
+                            CustomButtonOutline(
+                              width: size.width * 0.45,
+                              text: "Fazer Pedido",
+                              icon: Container(
+                                padding:
+                                    EdgeInsets.only(left: size.height * 0.0085),
                                 child: Image.asset(
                                   "assets/images/delivery.png",
-                                  width: size.height * 0.06,
-                                  height: size.height * 0.06,
-                                )),
-                            SizedBox(width: size.width * 0.03),
+                                  width: size.height * 0.04,
+                                  height: size.height * 0.04,
+                                ),
+                              ),
+                              fontsize: size.height * 0.02,
+                              corText: DefaultColors.background,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(20),
+                                border: Border.all(
+                                  color: DefaultColors.background,
+                                  width: 2,
+                                ),
+                              ),
+                              onPressed: () {
+                                controller.fazerPedido(this.produto, size);
+                              },
+                            ),
+                            SizedBox(width: size.width * 0.025),
                             CustomButtonOutline(
-                              width: size.width * 0.5,
-                              text: "Fazer Pedido",
+                              width: size.width * 0.45,
+                              text: "Código de retirada",
+                              fontsize: size.height * 0.0185,
                               corText: DefaultColors.tertiary,
                               decoration: BoxDecoration(
                                 color: DefaultColors.background,
@@ -503,7 +540,8 @@ class _ProdutoPageState extends ModularState<ProdutoPage, ProdutoController>
                                 ),
                               ),
                               onPressed: () {
-                                controller.fazerPedido(this.produto, size);
+                                controller.gerarCodigoDeRetirada(
+                                    this.produto, size);
                               },
                             ),
                           ],

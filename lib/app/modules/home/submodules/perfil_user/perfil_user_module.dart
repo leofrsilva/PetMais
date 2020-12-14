@@ -16,6 +16,7 @@ class PerfilUserModule extends ChildModule {
               i.get<AdocaoController>(),
             )),
         Bind((i) => AdocaoRemoteRepository()),
+
       ];
 
   @override

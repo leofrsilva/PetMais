@@ -200,7 +200,7 @@ class _LoginComumPageState
                         //----------------------------------------
                         //SizedBox(height: size.height * 0.025),
                         Container(
-                          height: size.height * 0.33,
+                          height: size.height * 0.32,
                           child: Column(
                             children: <Widget>[
                               Observer(builder: (_) {

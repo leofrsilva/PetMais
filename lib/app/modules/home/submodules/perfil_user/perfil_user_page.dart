@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:petmais/app/modules/home/pages/show_post_adocao/show_post_adocao_page.dart';
 import 'package:petmais/app/modules/home/widgets/BottomSheetPostAdocao.dart';
 import 'package:petmais/app/shared/models/post_adocao/post_adocao_model.dart';
 import 'package:petmais/app/shared/models/usuario/usuario_chat_model.dart';
@@ -119,7 +118,8 @@ class _PerfilPageState
                                 bool viewed = false;
                                 String nome = "Null";
                                 String url = "Null";
-                                Modular.to.pushNamed("/home/chat/$viewed/$nome/$url",
+                                Modular.to.pushNamed(
+                                    "/home/chat/$viewed/$nome/$url",
                                     arguments: usuarioChat);
                               });
                             },
@@ -397,7 +397,9 @@ class _PerfilPageState
             ),
           ),
           Container(
-            height: user.usuarioInfo is UsuarioInfoJuridicoModel ? size.height * 0.275 : size.height * 0.325,
+            height: user.usuarioInfo is UsuarioInfoJuridicoModel
+                ? size.height * 0.275
+                : size.height * 0.325,
             alignment: Alignment.center,
             child: FutureBuilder<List<PostAdocaoModel>>(
               future: controller.recuperarPets(

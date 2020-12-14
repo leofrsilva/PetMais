@@ -4,8 +4,6 @@ import 'package:http_parser/http_parser.dart';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:intl/date_symbol_data_local.dart';
-import 'package:intl/intl.dart';
 import 'package:petmais/app/shared/models/produto/produto_model.dart';
 import 'package:petmais/app/shared/models/pedido/pedido_model.dart';
 
@@ -66,7 +64,7 @@ class PetShopRepository {
       return {"Result": "Falha na Conexão"};
     }
   }
-  
+
   //* Delete Imagem
   Future<Map<String, dynamic>> deleteProduto(int id) async {
     final dio = Modular.get<Dio>();
@@ -89,7 +87,7 @@ class PetShopRepository {
       return {"Result": "Falha na Conexão"};
     }
   }
-  
+
   //* Upload de Image do Produto
   Future<Map<String, dynamic>> uploadImageProduto(File image, bool loading,
       {String imgDepreciada}) async {
@@ -166,12 +164,10 @@ class PetShopRepository {
           return [];
         } else {
           List<ProdutoModel> prods = listResults(response.data);
-          prods.sort(
-            (a, b){
-             return DateTime.tryParse(a.dataRegistro)
+          prods.sort((a, b) {
+            return DateTime.tryParse(a.dataRegistro)
                 .compareTo(DateTime.tryParse(b.dataRegistro));
-            }
-          );
+          });
           return prods.reversed.toList();
         }
       } else {
@@ -208,10 +204,8 @@ class PetShopRepository {
           return [];
         } else {
           List<PedidoModel> pedidos = listResultsPedidos(response.data);
-          pedidos.sort((a, b)
-              =>
-              DateTime.tryParse(a.dataPedido)
-                  .compareTo(DateTime.tryParse(b.dataPedido)));
+          pedidos.sort((a, b) => DateTime.tryParse(a.dataPedido)
+              .compareTo(DateTime.tryParse(b.dataPedido)));
           return pedidos.reversed.toList();
         }
       } else {
@@ -258,8 +252,7 @@ class PetShopRepository {
   }
 
   //* Calcular Frete
-  Future<Map<String, dynamic>> cacularFrete(
-     Map<String, dynamic> map) async {
+  Future<Map<String, dynamic>> cacularFrete(Map<String, dynamic> map) async {
     final dio = Modular.get<Dio>();
     String link = "/functions/getDistancePrice.php";
     FormData formData = FormData.fromMap(map);
@@ -281,8 +274,7 @@ class PetShopRepository {
   }
 
   //* Pedido com Entrega
-  Future<Map<String, dynamic>> pedidoPorEntrega(
-      PedidoModel pedido) async {
+  Future<Map<String, dynamic>> pedidoPorEntrega(PedidoModel pedido) async {
     final dio = Modular.get<Dio>();
     String link = "/functions/registrations/registroPedidoEntrega.php";
     FormData formData = FormData.fromMap(pedido.toMapEntrega());
@@ -308,7 +300,7 @@ class PetShopRepository {
   Future<String> changeStatus(int id, String status) async {
     final dio = Modular.get<Dio>();
     String link = "/functions/updates/updateEstadoPedido.php";
-    Map<String, dynamic> map ={
+    Map<String, dynamic> map = {
       "id": id,
       "estado": status,
     };
@@ -318,6 +310,39 @@ class PetShopRepository {
       Response response = await dio
           .post(link, data: formData)
           .timeout(Duration(milliseconds: 10000));
+      if (response.statusCode == 200) {
+        Map<String, dynamic> result = json.decode(response.data.trim());
+        return result["Result"];
+      } else {
+        return "Falha na Conexão";
+      }
+    } catch (e) {
+      print(e);
+      return "Falha na Conexão";
+    }
+  }
+
+  //* Enviar Reporte
+  Future<String> sendReport({
+    int idUser,
+    int idPetshop,
+    String nomeUser,
+    String message,
+  }) async {
+    final dio = Modular.get<Dio>();
+    String link = "/functions/reports/sendReport.php";
+    FormData formData = FormData.fromMap({
+      "idUser": idUser,
+      "idPetshop": idPetshop,
+      "nomeUser": nomeUser,
+      "message": message,
+    });
+
+    try {
+      Response response = await dio
+          .post(link, data: formData)
+          .timeout(Duration(milliseconds: 10000));
+
       if (response.statusCode == 200) {
         Map<String, dynamic> result = json.decode(response.data.trim());
         return result["Result"];

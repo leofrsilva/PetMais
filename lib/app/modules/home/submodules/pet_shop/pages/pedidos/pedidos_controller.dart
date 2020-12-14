@@ -4,11 +4,13 @@ import 'package:mobx/mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:petmais/app/modules/home/controllers/animation_drawer_controller.dart';
 import 'package:petmais/app/shared/models/pedido/pedido_model.dart';
+import 'package:petmais/app/shared/models/usuario/usuario_chat_model.dart';
+import 'package:petmais/app/shared/models/usuario/usuario_info_model.dart';
 import 'package:petmais/app/shared/models/usuario/usuario_model.dart';
 import 'package:petmais/app/shared/repository/pet_shop/pet_shop_repository.dart';
 import 'package:petmais/app/shared/utils/colors.dart';
-import 'package:petmais/app/shared/utils/font_style.dart';
 import 'package:petmais/app/shared/widgets/CustomButtonOutline.dart';
+import 'package:petmais/app/shared/widgets/CustomTextField.dart';
 
 import '../../pet_shop_controller.dart';
 
@@ -17,7 +19,7 @@ part 'pedidos_controller.g.dart';
 @Injectable()
 class PedidosController = _PedidosControllerBase with _$PedidosController;
 
-abstract class _PedidosControllerBase with Store {
+abstract class _PedidosControllerBase extends Disposable with Store {
   BuildContext context;
   setContext(BuildContext value) => this.context = value;
 
@@ -25,12 +27,19 @@ abstract class _PedidosControllerBase with Store {
   setUpdatePedidos(Function value) => this.updatePedidos = value;
 
   PetShopController _petShopController;
-  _PedidosControllerBase(this._petShopController);
+  _PedidosControllerBase(this._petShopController) {
+    this.descricaoController = TextEditingController();
+    this.focusDescricao = FocusNode();
+  }
 
   AnimationDrawerController get animationDrawer =>
       this._petShopController.animationDrawer;
   PetShopController get petshop => this._petShopController;
   UsuarioModel get usuario => this._petShopController.auth.usuario;
+
+  TextEditingController descricaoController;
+
+  FocusNode focusDescricao;
 
   Future<List<PedidoModel>> recuperarPedidos() async {
     final petShopRepository = PetShopRepository();
@@ -418,7 +427,7 @@ abstract class _PedidosControllerBase with Store {
     // if (pedido.estado != null) {
     //   if (pedido.estado == "Entregue" || pedido.estado == "Cancelado") return;
     // }
-    await Modular.to.showDialog(
+    dynamic retorno = await Modular.to.showDialog(
         barrierDismissible: false,
         builder: (_) {
           return Material(
@@ -457,6 +466,13 @@ abstract class _PedidosControllerBase with Store {
                                     ),
                                   ),
                                 ),
+                                SizedBox(width: size.width * 0.01),
+                                IconButton(
+                                    icon: Icon(Icons.close,
+                                        color: Colors.black26),
+                                    onPressed: () {
+                                      Modular.to.pop(false);
+                                    }),
                               ],
                             ),
                             Row(
@@ -544,7 +560,7 @@ abstract class _PedidosControllerBase with Store {
                                 ),
                               ),
                               onPressed: () {
-                                Modular.to.pop(false);
+                                Modular.to.pop(1);
                               },
                             ),
                             SizedBox(width: size.width * 0.025),
@@ -562,9 +578,7 @@ abstract class _PedidosControllerBase with Store {
                                 ),
                               ),
                               onPressed: () {
-                                
-                                  Modular.to.pop(true);
-                                
+                                Modular.to.pop(0);
                               },
                             ),
                           ],
@@ -577,6 +591,182 @@ abstract class _PedidosControllerBase with Store {
             ),
           );
         });
+    if (retorno is int) {
+      if (retorno == 1) {
+        UsuarioChatModel userChat = UsuarioChatModel(
+          identifier: pedido.idPetshop,
+          name: pedido.nomePetshop,
+          image: pedido.imagemPetshop,
+          isShop: true,
+        );
+        //Abrir tela de mensagens
+        bool viewed = false;
+        String nome = "Null";
+        String url = "Null";
+        Modular.to
+            .pushNamed("/home/chat/$viewed/$nome/$url", arguments: userChat);
+      } else if (retorno == 0) {
+        dynamic resposta = await Modular.to.showDialog(
+            barrierDismissible: false,
+            builder: (_) {
+              return Material(
+                color: Colors.transparent,
+                borderRadius: BorderRadius.circular(15),
+                child: Center(
+                  child: Container(
+                    width: size.width * 0.95,
+                    height: size.height * 0.55,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    padding:
+                        EdgeInsets.symmetric(horizontal: size.width * 0.045),
+                    child: StatefulBuilder(
+                        builder: (BuildContext context, setState) {
+                      return GestureDetector(
+                        onTap: (){
+                          this.focusDescricao.unfocus();
+                        },
+                                              child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: <Widget>[
+                            Expanded(
+                              child: Column(
+                                children: [
+                                  SizedBox(height: size.height * 0.05),
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: Text(
+                                          "Reporta algum erro ou observação do Pet Shop:",
+                                          style: TextStyle(
+                                            color: DefaultColors.backgroundSmooth,
+                                            fontSize: size.height * 0.0275,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(height: size.height * 0.01),
+                                  CustomTextField(
+                                    height: size.height * 0.3,
+                                    controller: this.descricaoController,
+                                    focusNode: this.focusDescricao,
+                                    colorText: DefaultColors.background,
+                                    label: "Decrição",
+                                    isTitle: false,
+                                    hint: "  ...",
+                                    numLines: 5,
+                                    maxCaracteres: 215,
+                                    heightText: size.height,
+                                    textCapitalization:
+                                        TextCapitalization.sentences,
+                                    textInputAction: TextInputAction.done,
+                                    onFieldSubmitted: (String value) {
+                                      this.focusDescricao.unfocus();
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Container(
+                              margin: EdgeInsets.only(bottom: size.height * 0.02),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: <Widget>[
+                                  CustomButtonOutline(
+                                    height: size.height * 0.065,
+                                    width: size.width * 0.5,
+                                    text: "Cancelar",                                  
+                                    fontsize: size.height * 0.0175,
+                                    corText: DefaultColors.background,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(50),
+                                      border: Border.all(
+                                        color: DefaultColors.background,
+                                        width: 2,
+                                      ),
+                                    ),
+                                    onPressed: () {
+                                      Modular.to.pop(0);
+                                    },
+                                  ),
+                                  SizedBox(width: size.width * 0.025),
+                                  CustomButtonOutline(
+                                    height: size.height * 0.065,
+                                    width: size.width * 0.275,
+                                    text: "Enviar",
+                                    fontsize: size.height * 0.0175,
+                                    corText: DefaultColors.background,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(50),
+                                      border: Border.all(
+                                        color: DefaultColors.background,
+                                        width: 2,
+                                      ),
+                                    ),
+                                    onPressed: () {
+                                      if (this.descricaoController.text.isEmpty ||
+                                          this.descricaoController.text.length <
+                                              3) {
+                                        Modular.to.pop(0);
+                                      } else {
+                                        Modular.to.pop(1);
+                                      }
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    }),
+                  ),
+                ),
+              );
+            });
+        if (resposta is int) {
+          if (resposta == 1) {
+            final petShopRepository = PetShopRepository();
+            //* Show Loading
+            this.showLoading();
+            await petShopRepository
+                .sendReport(
+                    idPetshop: pedido.idPetshop,
+                    idUser: this.usuario.usuarioInfo.id,
+                    nomeUser:
+                        (this.usuario.usuarioInfo as UsuarioInfoModel).nome,
+                    message: this.descricaoController.text)
+                .then((String result) {
+              //* Hide Loading
+              this.hideLoading();
+              if (result == "Send") {
+                 FlushbarHelper.createSuccess(
+              duration: Duration(milliseconds: 1500),
+              message: "Sucesso ao enviar a mensagem!",
+            )..show(this.context);
+              } else if (result == "Not Send" || result == "No Fields were instantiated") {
+                //? Problema na Exclusão
+            FlushbarHelper.createInformation(
+              duration: Duration(milliseconds: 1500),
+              message: "Não foi possivel enviar a menssagem!",
+            )..show(this.context);
+              } else if (result == "Falha na Conexão") {
+                //? Mensagem de Erro
+                FlushbarHelper.createError(
+                  duration: Duration(milliseconds: 1500),
+                  message: "Erro na Conexão!",
+                )..show(this.context);
+              }
+            });
+          }
+        }
+      }
+    }
   }
 
   showLoading() {
@@ -614,5 +804,11 @@ abstract class _PedidosControllerBase with Store {
 
   hideLoading() {
     Modular.to.pop();
+  }
+
+  @override
+  void dispose() {
+    this.descricaoController.dispose();
+    this.focusDescricao.dispose();
   }
 }

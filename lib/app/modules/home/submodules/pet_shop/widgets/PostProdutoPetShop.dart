@@ -62,12 +62,11 @@ class PostProdutoPetShop extends StatelessWidget {
                               this.produtoModel.nameProd,
                               style: TextStyle(
                                 height: height * 0.0015,
-
                                 color: DefaultColors.secondary,
                                 fontFamily:
                                     'Changa', //GoogleFonts.montserrat().fontFamily,
                                 fontWeight: FontWeight.w500,
-                                fontSize: height * 0.032,
+                                fontSize: height * 0.03,
                               ),
                             ),
                           ),
@@ -87,7 +86,7 @@ class PostProdutoPetShop extends StatelessWidget {
                                 fontFamily:
                                     'Changa', //GoogleFonts.montserrat().fontFamily,
                                 fontWeight: FontWeight.w500,
-                                fontSize: height * 0.028,
+                                fontSize: height * 0.0275,
                               ),
                             ),
                           ),
@@ -104,6 +103,7 @@ class PostProdutoPetShop extends StatelessWidget {
                             bottomRight: Radius.circular(20),
                           ),
                         ),
+                        padding: EdgeInsets.only(top: height * 0.012, bottom: height * 0.0025),
                         child: Row(
                           children: <Widget>[
                             Expanded(
@@ -112,12 +112,12 @@ class PostProdutoPetShop extends StatelessWidget {
                                     this.produtoModel.estoque.toString(),
                                 maxLines: 1,
                                 style: TextStyle(
-                                  height: height * 0.003,
+                                  height: height * 0.0015,
                                   color: Colors.white,
                                   fontFamily:
                                       'Changa', //GoogleFonts.montserrat().fontFamily,
                                   fontWeight: FontWeight.w600,
-                                  fontSize: height * 0.0245,
+                                  fontSize: height * 0.024,
                                 ),
                               ),
                             ),
@@ -191,6 +191,7 @@ class PostProdutoPetShop extends StatelessWidget {
                             bottomRight: Radius.circular(20),
                           ),
                         ),
+                        padding: EdgeInsets.only(top: height * 0.012, bottom: height * 0.0025),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: <Widget>[
@@ -201,7 +202,7 @@ class PostProdutoPetShop extends StatelessWidget {
                                     "%",
                                 textAlign: TextAlign.start,
                                 style: TextStyle(
-                                  height: height * 0.003,
+                                  height: height * 0.0015,
 
                                   color: Colors.white,
                                   fontFamily:

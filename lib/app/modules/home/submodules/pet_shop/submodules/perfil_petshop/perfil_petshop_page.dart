@@ -3,7 +3,8 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:petmais/app/modules/home/submodules/perfil/widgets/ListInfo.dart';
+import 'package:petmais/app/modules/home/submodules/pet_shop/submodules/graphics/graphics_module.dart';
+import 'package:petmais/app/modules/home/widgets/ListInfo.dart';
 import 'package:petmais/app/shared/models/usuario/usuario_info_juridico_model.dart';
 import 'package:petmais/app/shared/models/usuario/usuario_info_model.dart';
 import 'package:petmais/app/shared/utils/colors.dart';
@@ -24,6 +25,7 @@ class _PerfilPetshopPageState
 
   @override
   Widget build(BuildContext context) {
+    controller.setContext(context);
     Size size = MediaQuery.of(context).size;
 
     return Scaffold(
@@ -43,28 +45,30 @@ class _PerfilPetshopPageState
           child: Column(
             children: <Widget>[
               _headerPerfil(size),
-              Expanded(
-                child: ClipRRect(
-                  borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(
-                          controller.animationDrawer.isShowDrawer ? 40 : 0)),
-                  child: Container(
-                    height: size.height * 0.69,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                          bottomLeft: Radius.circular(
-                              controller.animationDrawer.isShowDrawer
-                                  ? 40
-                                  : 0)),
-                    ),
-                    child: ListView(
-                      padding: const EdgeInsets.all(0),
-                      children: [
-                        _listInfo(size),
-                      ],
-                    ),
+              ClipRRect(
+                borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(
+                        controller.animationDrawer.isShowDrawer ? 40 : 0)),
+                child: Container(
+                  height: size.height * 0.285,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(
+                            controller.animationDrawer.isShowDrawer ? 40 : 0)),
+                  ),
+                  child: ListView(
+                    padding: const EdgeInsets.all(0),
+                    children: [
+                      _listInfo(size),
+                    ],
                   ),
                 ),
+              ),
+              Container(
+                width: size.width,
+                height: size.width * 0.6,
+                alignment: Alignment.center,
+                child: RouterOutlet(module: GraphicsModule()),
               ),
             ],
           ),
@@ -196,7 +200,7 @@ class _PerfilPetshopPageState
   Widget _photoPerfil(double height) {
     return Container(
       width: height * 0.2,
-      height: height * 0.19,
+      height: height * 0.2,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.only(topRight: Radius.circular(50)),
         boxShadow: <BoxShadow>[

@@ -19,10 +19,11 @@ class UsuarioModel {
   String _typeUser;
   dynamic _usuarioInfo;
 
-  UsuarioModel({String email, String senha, TypeUser type}) {
+  UsuarioModel({String email, String senha, TypeUser type, dynamic userInfo}) {
     this.email = email;
     this.senha = senha;
     this.typeUser = type ?? TypeUser.fisica;
+    this._usuarioInfo = userInfo;
   }
 
   UsuarioModel.fromMap(Map map) {

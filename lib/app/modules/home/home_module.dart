@@ -10,6 +10,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'home_page.dart';
 import 'submodules/adocao_upd/adocao_upd_module.dart';
 import 'submodules/perfil_pet/perfil_pet_module.dart';
+import 'submodules/perfil_petshop/perfil_petshop_module.dart';
 import 'submodules/perfil_user/perfil_user_module.dart';
 import 'submodules/add_adocao/add_adocao_module.dart';
 import 'submodules/chat/chat_module.dart';
@@ -36,6 +37,7 @@ class HomeModule extends ChildModule {
         ModularRouter("/perfil", module: PerfilModule()),
         ModularRouter("/perfilUser", module: PerfilUserModule(), transition: TransitionType.downToUp),
         ModularRouter("/perfilPet", module: PerfilPetModule(), transition: TransitionType.downToUp),
+        ModularRouter("/perfilPetshop", module: PerfilPetshopModule(), transition: TransitionType.downToUp),
         ModularRouter("/addAdocao", module: AddAdocaoModule(), transition: TransitionType.downToUp),
         ModularRouter("/adocaoUpd", module: AdocaoUpdModule(), transition: TransitionType.downToUp),
         ModularRouter("/chat", module: ChatModule(), transition: TransitionType.downToUp),

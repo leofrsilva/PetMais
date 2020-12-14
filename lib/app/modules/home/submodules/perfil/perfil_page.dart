@@ -14,7 +14,7 @@ import 'package:petmais/app/shared/models/usuario/usuario_info_juridico_model.da
 import 'package:petmais/app/shared/models/usuario/usuario_info_model.dart';
 import 'package:petmais/app/shared/utils/NoGlowBehavior.dart';
 import 'package:petmais/app/shared/utils/colors.dart';
-import 'widgets/ListInfo.dart';
+import '../../widgets/ListInfo.dart';
 import 'perfil_controller.dart';
 
 class PerfilPage extends StatefulWidget {

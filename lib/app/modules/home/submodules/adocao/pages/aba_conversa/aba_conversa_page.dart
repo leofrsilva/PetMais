@@ -40,7 +40,7 @@ class _AbaConversaPageState
     );
   }
 
-  Widget logado() {
+  Widget logado(Size size) {
     return StreamBuilder<QuerySnapshot>(
       stream: controller.conversations.stream,
       builder: (context, snapshot) {
@@ -87,9 +87,26 @@ class _AbaConversaPageState
                 ConversationModel conversation =
                     ConversationModel.fromMap(item.data());
 
-                if (conversation.idDestinatario == null) {
+                if (conversation.idDestinatario == null &&
+                    conversas.length == 1) {
+                  return Container(
+                    height: size.height * 0.8,
+                    child: Center(
+                      child: Text(
+                        "Você não tem nenhuma mensagem ainda :( ",
+                        style: TextStyle(
+                          color: DefaultColors.background,
+                          fontSize: 15.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  );
+                }
+                if (conversation.idDestinatario == null || conversation.isShop == true) {
                   return Container();
                 }
+              
 
                 UsuarioChatModel userChat = UsuarioChatModel(
                   identifier: int.tryParse(conversation.idDestinatario),
@@ -327,7 +344,7 @@ class _AbaConversaPageState
                   controller.animationDrawer.isShowDrawer ? 40 : 0),
             ),
           ),
-          child: controller.auth.isLogged ? logado() : noLogado(size),
+          child: controller.auth.isLogged ? logado(size) : noLogado(size),
         ),
       );
     });

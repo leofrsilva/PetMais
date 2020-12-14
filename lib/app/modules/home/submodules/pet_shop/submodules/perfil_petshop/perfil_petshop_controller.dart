@@ -41,12 +41,8 @@ abstract class _PerfilPetshopControllerBase with Store {
   AnimationDrawerController get animationDrawer => this.home.animationDrawer;
 
   void showUpdUser() async {
-    var result;
-    if (this.usuario.usuarioInfo is UsuarioInfoModel) {
-      result = await Navigator.of(context).pushNamed("/updateUser");
-    } else {
-      result = await Navigator.of(context).pushNamed("/updateUserJuridico");
-    }
+    var result = await Navigator.of(context).pushNamed("/updatePetshop");
+ 
     if (result != null) {
       FlushbarHelper.createSuccess(
         duration: Duration(milliseconds: 1750),
@@ -206,6 +202,22 @@ abstract class _PerfilPetshopControllerBase with Store {
         }
       });
     }
+  }
+
+  //* Check Email
+  Future<String> checkEmail(String email, {bool isLoading}) async {
+    final usuarioRepository = UsuarioRemoteRepository();
+    Map<String, dynamic> result;
+    result = await usuarioRepository.checkEmail(email, loading: isLoading);
+    return result["Result"];
+  }
+
+  //* Update Pet Shop
+  Future<String> update(UsuarioModel usuario) async {
+    final usuarioRepository = UsuarioRemoteRepository();
+    Map<String, dynamic> result;
+    result = await usuarioRepository.updateUser(usuario);
+    return result["Result"];
   }
 
   //? Loading

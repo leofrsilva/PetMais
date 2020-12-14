@@ -19,6 +19,7 @@ import 'package:petmais/app/shared/repository/usuario_remote/usuario_remote_repo
 import 'package:petmais/app/shared/stores/auth/auth_store.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:petmais/app/shared/utils/colors.dart';
+import 'package:petmais/app/shared/models/usuario/usuario_model.dart';
 
 part 'chat_controller.g.dart';
 
@@ -38,11 +39,12 @@ abstract class _ChatControllerBase extends Disposable with Store {
   TextEditingController messageController;
   FocusNode focusMessage;
 
-  UsuarioChatModel get usuario => _authStore.usuarioChat;
+  UsuarioChatModel get usuarioChat => _authStore.usuarioChat;
+  UsuarioModel get usuario => _authStore.usuario;
 
-  UsuarioChatModel _usuarioContact;
-  set usuarioContact(UsuarioChatModel value) => this._usuarioContact = value;
-  UsuarioChatModel get usuarioContact => this._usuarioContact;
+  UsuarioChatModel _userContact;
+  set userContact(UsuarioChatModel value) => this._userContact = value;
+  UsuarioChatModel get userContact => this._userContact;
 
   // Visualizado
   bool _viewed;
@@ -53,15 +55,15 @@ abstract class _ChatControllerBase extends Disposable with Store {
     if (this.viewed == false) {
       await this._chatRepository.setViewed(
             true,
-            this.usuario.id.toString(),
-            this.usuarioContact.id.toString(),
+            this.usuarioChat.id.toString(),
+            this.userContact.id.toString(),
           );
     } else if (isOnlineInChat != null) {
       if (isOnlineInChat = true) {
         await this._chatRepository.setViewed(
               true,
-              this.usuario.id.toString(),
-              this.usuarioContact.id.toString(),
+              this.usuarioChat.id.toString(),
+              this.userContact.id.toString(),
             );
       }
     }
@@ -79,8 +81,8 @@ abstract class _ChatControllerBase extends Disposable with Store {
     //Stream<QuerySnapshot>
     try {
       final stream = this._chatRepository.listMessage(
-            this.usuario.id.toString(),
-            this.usuarioContact.id.toString(),
+            this.usuarioChat.id.toString(),
+            this.userContact.id.toString(),
           );
 
       stream.listen((dados) {
@@ -99,7 +101,7 @@ abstract class _ChatControllerBase extends Disposable with Store {
     try {
       //Stream<QuerySnapshot>
       final stream = this._chatRepository.checkStatus(
-            this.usuarioContact.id.toString(),
+            this.userContact.id.toString(),
           );
       stream.listen((dados) {
         if (!_controllerIsOnline.isClosed) {
@@ -113,23 +115,23 @@ abstract class _ChatControllerBase extends Disposable with Store {
 
   //?----------------------------------------------
   //? Enviar Mensagem
-  Future sendMessageText({String msg}) async {
+  Future sendMessageText({String msg, Timestamp data}) async {
     String textMessage = msg ?? this.messageController.text.trim();
     if (textMessage.isNotEmpty) {
       this.messageController.clear();
       MessageModel message = MessageModel(
-        idUsuario: this.usuario.id.toString(),
+        idUsuario: this.usuarioChat.id.toString(),
         type: "text",
         message: textMessage,
       );
-      message.data = await DateNow.getDate();
+      message.data = data != null ? data : await DateNow.getDate();
       // message.data = Timestamp.now();
       //Salvando menssagem para o Remetente
-      _saveMessage(this.usuario.id.toString(),
-          this.usuarioContact.id.toString(), message);
+      _saveMessage(this.usuarioChat.id.toString(),
+          this.userContact.id.toString(), message);
       //Salvando menssagem para o Destinatário
-      _saveMessage(this.usuarioContact.id.toString(),
-          this.usuario.id.toString(), message);
+      _saveMessage(this.userContact.id.toString(),
+          this.usuarioChat.id.toString(), message);
 
       _salvarConversa(message);
     }
@@ -141,25 +143,39 @@ abstract class _ChatControllerBase extends Disposable with Store {
   }
 
   Future _salvarConversa(MessageModel msg) async {
+    bool shop = this.userContact.isPetshop != null
+        ? this.userContact.isPetshop == true
+            ? true
+            : false
+        : false;
+    if (shop == false) {
+      if (this.usuario.isPetShop != null) {
+        if (this.usuario.isPetShop) {
+          shop = true;
+        }
+      }
+    }
     ConversationModel cRemetente = ConversationModel(
-      idRemetente: this.usuario.id.toString(),
-      idDestinatario: this.usuarioContact.id.toString(),
-      nome: this.usuarioContact.name,
-      imgUser: this.usuarioContact.image,
+      idRemetente: this.usuarioChat.id.toString(),
+      idDestinatario: this.userContact.id.toString(),
+      nome: this.userContact.name,
+      imgUser: this.userContact.image,
       type: msg.type,
       message: msg.message,
       viewed: true,
+      shop: shop,
     );
     this._chatRepository.addConversation(cRemetente);
 
     ConversationModel cDestinatario = ConversationModel(
-      idRemetente: this.usuarioContact.id.toString(),
-      idDestinatario: this.usuario.id.toString(),
-      nome: this.usuario.name,
-      imgUser: this.usuario.image,
+      idRemetente: this.userContact.id.toString(),
+      idDestinatario: this.usuarioChat.id.toString(),
+      nome: this.usuarioChat.name,
+      imgUser: this.usuarioChat.image,
       type: msg.type,
       message: msg.message,
       viewed: false,
+      shop: shop,
     );
     this._chatRepository.addConversation(cDestinatario);
   }
@@ -245,24 +261,26 @@ abstract class _ChatControllerBase extends Disposable with Store {
     }
   }
 
-  Future sendImage(String urlImage) async {
+  // ignore: missing_return
+  Future<Timestamp> sendImage(String urlImage) async {
     String textMessage = urlImage;
     if (textMessage.isNotEmpty) {
       MessageModel message = MessageModel(
-        idUsuario: this.usuario.id.toString(),
+        idUsuario: this.usuarioChat.id.toString(),
         type: "image",
         message: textMessage,
       );
       message.data = await DateNow.getDate();
       // message.data = Timestamp.now();
       //Salvando menssagem para o Remetente
-      _saveMessage(this.usuario.id.toString(),
-          this.usuarioContact.id.toString(), message);
+      _saveMessage(this.usuarioChat.id.toString(),
+          this.userContact.id.toString(), message);
       //Salvando menssagem para o Destinatário
-      _saveMessage(this.usuarioContact.id.toString(),
-          this.usuario.id.toString(), message);
+      _saveMessage(this.userContact.id.toString(),
+          this.usuarioChat.id.toString(), message);
 
       _salvarConversa(message);
+      return message.data;
     }
   }
 
@@ -289,8 +307,8 @@ abstract class _ChatControllerBase extends Disposable with Store {
     } catch (e) {
       print(e);
       return "Falha no Envio";
-    }  
     }
+  }
 
   @override
   void dispose() {

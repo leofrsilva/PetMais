@@ -72,13 +72,13 @@ abstract class _MeusProdutosControllerBase extends Disposable with Store {
   @action
   setCloseSearch() => this.isSearch = false;
 
-  Future showPostAdocao(ProdutoModel produtoModel, double height) async {
+  Future showPostProduto(ProdutoModel produtoModel, double height) async {
     // bool isPetshop = this.usuario.isPetShop;
     Modular.to.showDialog(builder: (_) {
       String strProd = json.encode(produtoModel.toMap());
       strProd = strProd.replaceAll("/", "@2@");
       return RouterOutlet(
-        initialRoute: "/$strProd",
+        initialRoute: "/$strProd/1",
         module: ProdutoModule(),
       );
     }).then((dynamic value) {
@@ -88,6 +88,18 @@ abstract class _MeusProdutosControllerBase extends Disposable with Store {
           this.clearImage.call();
         } else if (update == 1) {
           this.updateListProdutos.call();
+        } else if (update == 3) {
+          UsuarioInfoJuridicoModel userInfo = UsuarioInfoJuridicoModel(
+            identifier: produtoModel.idPetShop,
+            nome: produtoModel.nomeEmpresa,
+            tel1: produtoModel.telefone,
+            tel2: produtoModel.telefone2,
+            desc: produtoModel.descricaoPetShop,
+            endStr: produtoModel.endereco,
+            type: TypeJuridico.petshop,
+            urlFoto: produtoModel.imgShop,
+          );
+          Modular.to.pushNamed("/home/perfilPetshop", arguments: userInfo);
         }
       }
     });

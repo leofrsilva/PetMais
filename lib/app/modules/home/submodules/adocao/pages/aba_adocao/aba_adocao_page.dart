@@ -163,14 +163,12 @@ class _AbaAdocaoPageState
                                                     CrossAxisAlignment.stretch,
                                                 children: posts.map((post) {
                                                   //i++;
-                                                  if (controller.usuario !=
-                                                      null) {
+                                                  
                                                     return Column(
                                                       children: <Widget>[
                                                         PostAdotation(
                                                           idDono: controller
-                                                                      .usuario
-                                                                      .usuarioInfo ==
+                                                                      .usuario ==
                                                                   null
                                                               ? 0
                                                               : controller
@@ -205,9 +203,7 @@ class _AbaAdocaoPageState
                                                         ),
                                                       ],
                                                     );
-                                                  } else {
-                                                    return Container();
-                                                  }
+                                                  
                                                 }).toList(),
                                               ),
                                             ),

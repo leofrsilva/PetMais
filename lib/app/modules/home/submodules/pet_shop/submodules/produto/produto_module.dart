@@ -21,10 +21,13 @@ class ProdutoModule extends ChildModule {
   @override
   List<ModularRouter> get routers => [
         ModularRouter(
-          "/:jsonprod",
+          "/:jsonprod/:showPerfil",
           child: (_, args) => ProdutoPage(
-            produto: ProdutoModel.fromMap(json.decode(
-                args.params["jsonprod"].toString().replaceAll("@2@", "/"))),
+            produto: ProdutoModel.fromMap(
+              json.decode(
+                  args.params["jsonprod"].toString().replaceAll("@2@", "/")),
+            ),
+            showPerfil: int.tryParse(args.params["showPerfil"].toString()),
           ),
         ),
       ];

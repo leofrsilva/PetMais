@@ -29,7 +29,7 @@ class _ChatPageState extends ModularState<ChatPage, ChatController> {
   @override
   void initState() {
     super.initState();
-    controller.usuarioContact = widget.usuarioContact;
+    controller.userContact = widget.usuarioContact;
     controller.setViewed(widget.viewed);
     controller.addListenerIsOnline();
     controller.addListenerMessages();
@@ -37,8 +37,11 @@ class _ChatPageState extends ModularState<ChatPage, ChatController> {
     if (widget.nomePet != "Null" && widget.urlFotoPet != "Null") {
       Future.delayed(Duration(milliseconds: 350), () async {
         String urlFoto = widget.urlFotoPet.replaceAll("@2@", "/").toString();
-        await controller.sendImage(urlFoto);
-        await controller.sendMessageText(msg: "Tenho interrese no " + widget.nomePet);
+        final data = await controller.sendImage(urlFoto);
+        Future.delayed(Duration(milliseconds: 250), () async {
+          await controller.sendMessageText(
+            msg: "Tenho interrese no " + widget.nomePet, data: data);
+        });
       });
     }
   }
@@ -48,6 +51,11 @@ class _ChatPageState extends ModularState<ChatPage, ChatController> {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: controller.userContact.isPetshop != null
+            ? controller.userContact.isPetshop == true
+                ? DefaultColors.tertiary
+                : DefaultColors.primary
+            : DefaultColors.primary,
         iconTheme: IconThemeData(
           color: Colors.black26,
         ),
@@ -56,8 +64,8 @@ class _ChatPageState extends ModularState<ChatPage, ChatController> {
             CircleAvatar(
               maxRadius: 20,
               backgroundColor: Colors.grey.withOpacity(0.5),
-              backgroundImage: controller.usuarioContact.image != "No Photo"
-                  ? NetworkImage(controller.usuarioContact.image)
+              backgroundImage: controller.userContact.image != "No Photo"
+                  ? NetworkImage(controller.userContact.image)
                   : null,
             ),
             Padding(
@@ -69,39 +77,43 @@ class _ChatPageState extends ModularState<ChatPage, ChatController> {
                   Container(
                     width: size.width * 0.6,
                     child: Text(
-                      controller.usuarioContact.name,
+                      controller.userContact.name,
                       maxLines: 1,
                       style: TextStyle(
-                        color: DefaultColors.secondary,
+                        color: controller.userContact.isPetshop != null
+                            ? controller.userContact.isPetshop == true
+                                ? DefaultColors.background
+                                : DefaultColors.secondary
+                            : DefaultColors.secondary,
                         fontSize: 20,
                         fontFamily: "Roboto",
                       ),
                     ),
                   ),
-                  // StreamBuilder<DocumentSnapshot>(
-                  //   stream: controller.isOnline.stream,
-                  //   builder: (context, snapshot) {
-                  //     if (snapshot.connectionState == ConnectionState.active) {
-                  //       if (snapshot.hasError) {
-                  //         return Container();
-                  //       } else if (snapshot != null && snapshot.data != null) {
-                  //         DocumentSnapshot user = snapshot.data;
-                  //         bool status = user["status"];
-                  //         if (status == true) {
-                  //           return Text(
-                  //             "Online",
-                  //             textAlign: TextAlign.start,
-                  //             style: TextStyle(
-                  //                 fontSize: 12, color: Colors.black26),
-                  //           );
-                  //         } else {
-                  //           return Container();
-                  //         }
-                  //       }
-                  //     }
-                  //     return Container();
-                  //   },
-                  // ),
+                  StreamBuilder<DocumentSnapshot>(
+                    stream: controller.isOnline.stream,
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.active) {
+                        if (snapshot.hasError) {
+                          return Container();
+                        } else if (snapshot != null && snapshot.data != null) {
+                          DocumentSnapshot user = snapshot.data;
+                          bool status = user["status"];
+                          if (status == true) {
+                            return Text(
+                              "Online",
+                              textAlign: TextAlign.start,
+                              style: TextStyle(
+                                  fontSize: 12, color: Colors.black26),
+                            );
+                          } else {
+                            return Container();
+                          }
+                        }
+                      }
+                      return Container();
+                    },
+                  ),
                 ],
               ),
             ),
@@ -163,7 +175,7 @@ class _ChatPageState extends ModularState<ChatPage, ChatController> {
                       AlignmentDirectional alignment =
                           AlignmentDirectional.centerEnd;
                       Color cor = DefaultColors.secondary;
-                      if (controller.usuario.id !=
+                      if (controller.usuarioChat.id !=
                           int.tryParse(message.idUsuario)) {
                         cor = Colors.orangeAccent;
                         alignment = AlignmentDirectional.centerStart;

@@ -824,9 +824,8 @@ abstract class _ProdutoControllerBase extends Disposable with Store {
                   duration: Duration(milliseconds: 1500),
                   message: "Pedido feito com Sucesso",
                 )..show(this.context);
-                Future.delayed(Duration(milliseconds: 1500), () {
                   Modular.to.pop();
-                });
+                
               } else if (result["Result"] == "Falha na Conexão") {
                 //? Mensagem de Erro
                 FlushbarHelper.createError(
@@ -849,6 +848,12 @@ abstract class _ProdutoControllerBase extends Disposable with Store {
           FlushbarHelper.createError(
             duration: Duration(milliseconds: 1500),
             message: "Erro ao Calcular Frete!",
+          )..show(this.context);
+        } else if (result["Result"] == "Falha na Conexão") {
+          //? Mensagem de Erro
+          FlushbarHelper.createError(
+            duration: Duration(milliseconds: 1500),
+            message: "Erro na Conexão!",
           )..show(this.context);
         } else {
           //? Mensagem de Erro

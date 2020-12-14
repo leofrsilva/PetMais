@@ -3,6 +3,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:petmais/app/shared/utils/colors.dart';
 import 'package:petmais/app/shared/utils/font_style.dart';
+import 'pages/aba_conversas_petshop/aba_conversas_petshop_page.dart';
 import 'pages/meus_produtos/meus_produtos_page.dart';
 import 'pages/pedidos/pedidos_page.dart';
 import 'pet_shop_controller.dart';
@@ -23,7 +24,7 @@ class _PetShopPageState extends ModularState<PetShopPage, PetShopController>
   void initState() {
     super.initState();
     controller.setTaController(TabController(
-      length: 2,
+      length: controller.usuario.isPetShop == false ? 3 : 2,
       vsync: this,
     ));
   }
@@ -77,14 +78,32 @@ class _PetShopPageState extends ModularState<PetShopPage, PetShopController>
                 indicatorWeight: 4,
                 labelStyle: kLabelTabStyle,
                 labelColor: DefaultColors.background,
+                isScrollable: true,
                 onTap: (index) {
                   // setState(() {
                   //   tab = index;
                   // });
                 },
                 tabs: [
-                  Tab(text: controller.usuario.isPetShop ? "Meus Produtos" : "Produtos"),
-                  Tab(text: controller.usuario.isPetShop ? "Pedidos" : "Meus Pedidos"),
+                  Container(
+                    width: controller.usuario.isPetShop == false ?  size.width * 0.265 : size.width * 0.4,
+                    child: Tab(
+                        text: controller.usuario.isPetShop
+                            ? "Meus Produtos"
+                            : "Produtos"),
+                  ),
+                  Container(
+                    width: controller.usuario.isPetShop == false ? size.width * 0.375 : size.width * 0.4,
+                    child: Tab(
+                        text: controller.usuario.isPetShop
+                            ? "Pedidos"
+                            : "Meus Pedidos"),
+                  ),
+                  if (controller.usuario.isPetShop == false)
+                    Container(
+                      width: size.width * 0.12,
+                      child: Tab(icon: Icon(Icons.message_outlined)),
+                    ),
                 ],
               ),
             );
@@ -96,8 +115,10 @@ class _PetShopPageState extends ModularState<PetShopPage, PetShopController>
         children: <Widget>[
           MeusProdutosPage(),
           PedidosPage(),
+          if (controller.usuario.isPetShop == false)
+          AbaConversasPetshopPage(),
         ],
-      ),      
+      ),
     );
   }
 }

@@ -8,12 +8,14 @@ class UsuarioChatModel {
   String _name;
   String _image;
   bool _status;
+  bool _isPetshop;
 
-  UsuarioChatModel({int identifier, String name, String image, bool status}) {
+  UsuarioChatModel({int identifier, String name, String image, bool status, bool isShop}) {
     this.id = identifier;
     this.name = name;
     this.image = image;
     this.status = status;
+    this.isPetshop = isShop;
   }
 
   UsuarioChatModel.fromMap(Map map) {
@@ -44,4 +46,7 @@ class UsuarioChatModel {
 
   bool get status => this._status;
   set status(bool value) => this._status = value;
+
+  bool get isPetshop => this._isPetshop;
+  set isPetshop(bool value) => this._isPetshop = value;
 }

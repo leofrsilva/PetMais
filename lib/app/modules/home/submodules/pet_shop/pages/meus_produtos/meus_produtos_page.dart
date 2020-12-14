@@ -268,7 +268,7 @@ class _MeusProdutosPageState
                                                 return;
                                               }
                                               // Modular.to.pushNamed("/home/produto", arguments: prod);
-                                              controller.showPostAdocao(
+                                              controller.showPostProduto(
                                                   prod, size.height);
                                             },
                                           ),
@@ -286,7 +286,7 @@ class _MeusProdutosPageState
                                           return;
                                         }
                                         // Modular.to.pushNamed("/home/produto", arguments: prod);
-                                        controller.showPostAdocao(
+                                        controller.showPostProduto(
                                             prod, size.height);
                                       },
                                     );
@@ -679,7 +679,7 @@ class _MeusProdutosPageState
                                             return;
                                           }
                                           // Modular.to.pushNamed("/home/produto");
-                                          controller.showPostAdocao(
+                                          controller.showPostProduto(
                                               prod, size.height);
                                         },
                                       );

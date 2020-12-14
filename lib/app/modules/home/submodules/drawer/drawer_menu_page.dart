@@ -30,7 +30,7 @@ class _DrawerMenuPageState
   }
 
   void updateInfo() {
-    setState(() { });
+    setState(() {});
   }
 
   @override
@@ -205,7 +205,7 @@ class _DrawerMenuPageState
             _tiles(
               title: "PERFIL",
               icon: Icons.account_circle,
-              selected: controller.opSelected == 2 ? true : false,
+              selected: removeAdocao ? controller.opSelected == 1 ? true : false : controller.opSelected == 2 ? true : false,
               onTap: () {
                 if (removeAdocao) {
                   controller.setOpSelected(1);
@@ -225,19 +225,30 @@ class _DrawerMenuPageState
                   controller.animationDrawer.closeDrawer();
                 },
               ),
-            _tiles(
-              title: "USUÁRIOS",
-              icon: Icons.search,
-              selected: controller.opSelected == 4 ? true : false,
-              onTap: () async {
-                if (removeAdocao) {
+            if (!removeAdocao)
+              _tiles(
+                title: "USUÁRIOS",
+                icon: Icons.search,
+                selected: controller.opSelected == 4 ? true : false,
+                onTap: () async {
+                  if (removeAdocao) {
+                    controller.setOpSelected(2);
+                  } else {
+                    controller.setOpSelected(4);
+                  }
+                  controller.animationDrawer.closeDrawer();
+                },
+              ),
+            if (removeAdocao)
+              _tiles(
+                title: "CHAT",
+                icon: Icons.message_outlined,
+                selected: controller.opSelected == 2 ? true : false,
+                onTap: () async {
                   controller.setOpSelected(2);
-                } else {
-                  controller.setOpSelected(4);
-                }
-                controller.animationDrawer.closeDrawer();
-              },
-            ),
+                  controller.animationDrawer.closeDrawer();
+                },
+              ),
             Divider(),
             _tiles(
               title: "SAIR",

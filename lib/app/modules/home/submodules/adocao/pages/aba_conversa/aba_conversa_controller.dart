@@ -5,7 +5,6 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
 import 'package:petmais/app/modules/home/controllers/animation_drawer_controller.dart';
 import 'package:petmais/app/modules/home/repository/hasura_chat/firestore_chat_repository.dart';
-import 'package:petmais/app/modules/home/submodules/adocao/models/conversation/conversation_model.dart';
 import 'package:petmais/app/shared/models/usuario/usuario_chat_model.dart';
 
 import 'package:petmais/app/shared/stores/auth/auth_store.dart';

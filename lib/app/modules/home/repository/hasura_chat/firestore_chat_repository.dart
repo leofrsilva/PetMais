@@ -65,7 +65,7 @@ class FirestoreChatRepository {
     return usuarioChat;
   }
 
-  //* Criar Conversation
+  //* List Conversation
   Stream<QuerySnapshot> listConversation(String identifir) {
     return store
         .collection("conversas")

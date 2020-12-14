@@ -11,7 +11,7 @@ class CustomButtonOutline extends StatelessWidget {
   final double height;
   final double paddingRaised;
   final BoxDecoration decoration;
-  final Icon icon;
+  final Widget icon;
 
   const CustomButtonOutline({
     @required this.onPressed,

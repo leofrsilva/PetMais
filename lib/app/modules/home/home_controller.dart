@@ -8,6 +8,7 @@ import 'package:petmais/app/shared/repository/usuario_persistence_local/usuario_
 import 'package:petmais/app/shared/stores/auth/auth_store.dart';
 
 import 'submodules/adocao/adocao_module.dart';
+import 'submodules/chat_petshop/chat_petshop_module.dart';
 import 'submodules/meus_pets/meus_pets_module.dart';
 import 'submodules/perfil/perfil_module.dart';
 import 'submodules/pet_shop/pet_shop_module.dart';
@@ -31,15 +32,18 @@ abstract class _HomeControllerBase extends Disposable with Store {
   _HomeControllerBase(this._authStore, this._animationDrawerController,
       this._firestoreChatRepository) {
     int initPage = 1;
-    if ((this.auth.usuario.usuarioInfo is UsuarioInfoJuridicoModel)) {
-      if ((this.auth.usuario.usuarioInfo as UsuarioInfoJuridicoModel)
-              .typeJuridico ==
-          TypeJuridico.petshop) {
-        modulesScreen = screensPetshop;
-        initPage = 0;
+    if (this.auth.usuario != null) {
+      if ((this.auth.usuario.usuarioInfo is UsuarioInfoJuridicoModel)) {
+        if ((this.auth.usuario.usuarioInfo as UsuarioInfoJuridicoModel)
+                .typeJuridico ==
+            TypeJuridico.petshop) {
+          modulesScreen = screensPetshop;
+          initPage = 0;
+          screen = 0;
+        }
       }
     }
-
+    
     pageController = PageController(initialPage: initPage, keepPage: false);
   }
 
@@ -75,7 +79,8 @@ abstract class _HomeControllerBase extends Disposable with Store {
 
   List<Widget> screensPetshop = <Widget>[
     RouterOutlet(module: PetShopModule()),
-    RouterOutlet(module: PerfilPetshopModule()),    
+    RouterOutlet(module: PerfilPetshopModule()),
+    RouterOutlet(module: ChatPetshopModule()),
   ];
 
   //? Online

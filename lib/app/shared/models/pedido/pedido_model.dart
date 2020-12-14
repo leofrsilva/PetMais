@@ -20,6 +20,7 @@ const String COLUMN_NOMEPROD = "nomeProduto";
 const String COLUMN_IMGPROD = "imagemProduto";
 const String COLUMN_IDPETSHOP = "idPetshop";
 const String COLUMN_NOMEPETSHOP = "nomePetshop";
+const String COLUMN_IMGPETSHOP = "imagemPetshop";
 const String COLUMN_ENDERECOPETSHOP = "enderecoPetshop";
 const String COLUMN_EMPRODUCAO = "emProducao";
 
@@ -41,6 +42,7 @@ class PedidoModel {
   String _imagemProduto;
   int _idPetshop;
   String _nomePetshop;
+  String _imagemPetshop;
   String _enderecoPetshop;
   int _emProducao;
 
@@ -131,6 +133,9 @@ class PedidoModel {
   String get nomePetshop => _nomePetshop;
   set nomePetshop(String value) => this._nomePetshop = value;
 
+  String get imagemPetshop => _imagemPetshop;
+  set imagemPetshop(String value) => this._imagemPetshop = value;
+
   String get nomeProduto => _nomeProduto;
   set nomeProduto(String value) => this._nomeProduto = value;
 
@@ -161,6 +166,7 @@ class PedidoModel {
     _imagemProduto = UsuarioRemoteRepository.URL + "/files/" + json[COLUMN_IMGPROD];
     _idPetshop = json[COLUMN_IDPETSHOP];
     _nomePetshop = json[COLUMN_NOMEPETSHOP];
+    _imagemPetshop = UsuarioRemoteRepository.URL + "/files/" + json[COLUMN_IMGPETSHOP];
     _enderecoPetshop = json[COLUMN_ENDERECOPETSHOP];
     _emProducao = int.tryParse(json[COLUMN_EMPRODUCAO]);
   }

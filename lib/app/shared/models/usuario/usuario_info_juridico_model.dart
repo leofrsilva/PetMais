@@ -25,6 +25,7 @@ class UsuarioInfoJuridicoModel {
   String _telefone2;
   String _descricao;
   DadosEnderecoModel _endereco;
+  String _enderecoStr;
   TypeJuridico _typeJuridico;
 
   UsuarioInfoJuridicoModel({
@@ -36,6 +37,7 @@ class UsuarioInfoJuridicoModel {
     String tel2,
     String desc,
     DadosEnderecoModel endereco,
+    String endStr,
     TypeJuridico type,
   }) {
     this.id = identifier ?? 0;
@@ -46,6 +48,7 @@ class UsuarioInfoJuridicoModel {
     this._telefone2 = tel2;
     this._descricao = desc;
     this._endereco = endereco;
+    this._enderecoStr = endStr;
     this._typeJuridico = type;
   }
 
@@ -117,6 +120,9 @@ class UsuarioInfoJuridicoModel {
 
   DadosEnderecoModel get endereco => this._endereco;
   set endereco(DadosEnderecoModel value) => this._endereco = value;
+
+  String get enderecoStr => this._enderecoStr;
+  set enderecoStr(String value) => this._enderecoStr = value;
 
   TypeJuridico get typeJuridico => this._typeJuridico;
   set typeJuridico(TypeJuridico value) => this._typeJuridico = value;
