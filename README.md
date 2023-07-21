@@ -5,7 +5,7 @@ Aplicativo para facilitar a vida de donos de pets, promovendo uma comunidade que
 
 ![petshop120x120](https://github.com/leofrsilva/PetMais/assets/54557647/e00e758c-1718-4b66-a970-0b7accff55fb)
 
-O app também visa o fornecimento da busca de pets shops na região onde o usuário se encontra buscando as mais próximas e as com melhor custo benefício.
+O app também visa a divuação de produtos de petshop e o contato do cliente por meio de um Chat.
 
 -----------------
 
